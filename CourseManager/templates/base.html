@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar">
+
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+    {% block errors %}
+            {% for message in get_flashed_messages() %}
+                <div class="message">{{message}}</div>
+            {% endfor %}
+        {% endblock %}
+</body>
+</html>
