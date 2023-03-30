@@ -1,0 +1,9 @@
+.navbar {
+    list-style-type: none;
+    display: inline;
+    padding: 1em;
+}
+nav {
+    position: relative;
+    top: 1em;
+}
