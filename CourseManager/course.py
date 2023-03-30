@@ -6,14 +6,22 @@
 class Course:
     def __init__(self,courseNumber,courseTitle,theoryHours,labHours,
                  homeworkHours,description,domainID,term): 
-        if not isinstance(name,str):
-            raise Exception("Firstname should be a string")
-        if not isinstance(street,str):
-            raise Exception("street should be a string")
-        if not isinstance(city,str):
-            raise Exception("city should be a string")
-        if not isinstance(province,str):
-            raise Exception("province should be a string")
+        if not isinstance(courseNumber,str):
+            raise TypeError()
+        if not isinstance(courseTitle,str):
+            raise TypeError()
+        if not isinstance(theoryHours,int):
+            raise TypeError()
+        if not isinstance(labHours,int):
+            raise TypeError()
+        if not isinstance(homeworkHours,int):
+            raise TypeError()
+        if not isinstance(description,str):
+            raise TypeError()
+        if not isinstance(domainID,str):
+            raise TypeError()
+        if not isinstance(term,str):
+            raise TypeError()
         self.courseNumber=courseNumber
         self.courseTitle=courseTitle
         self.theoryHours=theoryHours
@@ -23,7 +31,7 @@ class Course:
         self.domainID=domainID
         self.term=term
     def __str__(self):
-        return f'Name:{self.name}:  street:{self.street},  city:{self.city},  province:{self.province}'
+        return f''
     def __eq__(self, obj):
         if not isinstance(obj,Course):
             raise Exception("Not a course object")
@@ -33,6 +41,6 @@ class Course:
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not an Address")
-        #return Address(json['name'],json['street'],json['city'],json['province'])
+        #return Cpourse(json['name'],json['street'],json['city'],json['province'])
     def to_json(self):
         #return jsonify(self.__dict__)
