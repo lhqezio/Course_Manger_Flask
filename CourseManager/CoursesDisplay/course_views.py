@@ -16,6 +16,9 @@ def display_courses():
 @bp.route('/<course_id>')
 def display_course(course_id):
     if get_db().get_course(course_id):
-        return render_template("specific_course.html", course=get_db().get_course(course_id))
+        course = get_db().get_course(course_id)
+        return render_template("specific_course.html", course=course,
+                               domain=get_db().get_domain(course.domain_id),
+                               term=get_db().get_term(course.term_id))
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))
