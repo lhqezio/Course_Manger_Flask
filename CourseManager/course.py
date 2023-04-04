@@ -45,7 +45,7 @@ class Course:
                       json['homeworkHours'],json['description'],json['domainID'],json['termID'])
     def to_json(self):
         return jsonify(self.__dict__)
-
+    
 class CourseForm(FlaskForm):
     courseNumber = StringField('course number',validators=[DataRequired()])
     courseTitle = StringField('course title',validators=[DataRequired()])
