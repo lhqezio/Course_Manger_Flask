@@ -53,5 +53,5 @@ class CourseForm(FlaskForm):
     labHours = IntegerField('lab hours',validators=[DataRequired()]),
     homeworkHours = IntegerField('homework hours',validators=[DataRequired()])
     description = StringField('description',validators=[DataRequired()])
-    domainID = StringField('domain id',validators=[DataRequired()])
-    termID = StringField('term id',validators=[DataRequired()])
+    domainID = IntegerField('domain id',validators=[DataRequired()])
+    termID = IntegerField('term id',validators=[DataRequired()])
