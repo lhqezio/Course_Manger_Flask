@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 
 class Course:
     def __init__(self,courseNumber,courseTitle,theoryHours,labHours,
-                 homeworkHours,description,domainID,term): 
+                 homeworkHours,description,domainID,termID): 
         if not isinstance(courseNumber,str):
             raise TypeError()
         if not isinstance(courseTitle,str):
@@ -20,7 +20,7 @@ class Course:
             raise TypeError()
         if not isinstance(domainID,str):
             raise TypeError()
-        if not isinstance(term,str):
+        if not isinstance(termID,str):
             raise TypeError()
         self.courseNumber=courseNumber
         self.courseTitle=courseTitle
@@ -29,22 +29,20 @@ class Course:
         self.homeworkHours=homeworkHours
         self.description=description
         self.domainID=domainID
-        self.term=term
+        self.termID=termID
     def __str__(self):
         return f'{self.courseNumber} {self.courseTitle}: {self.theoryHours}-{self.labHours}-{self.homeworkHours}'
     def __repr__(self):
         return f'{self.courseNumber} {self.courseTitle}: {self.theoryHours}-{self.labHours}-{self.homeworkHours}'
-    def __eq__(self, obj):
-        if not isinstance(obj,Course):
+    def __eq__(self, other):
+        if not isinstance(other,Course):
             raise Exception("Not a course object")
-        if(self.courseNumber!=obj.courseNumber):
-            return False
-        return True
+        return self.__dict__ == other.__dict__
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not a course")
         return Course(json['courseNumber'],json['courseTitle'],json['theoryHours'],json['labHours'],
-                      json['homeworkHours'],json['description'],json['domainID'],json['term'])
+                      json['homeworkHours'],json['description'],json['domainID'],json['termID'])
     def to_json(self):
         return jsonify(self.__dict__)
 
@@ -56,4 +54,4 @@ class CourseForm(FlaskForm):
     homeworkHours = IntegerField('homework hours',validators=[DataRequired()])
     description = StringField('description',validators=[DataRequired()])
     domainID = StringField('domain id',validators=[DataRequired()])
-    term = StringField('term',validators=[DataRequired()])
+    termID = StringField('term id',validators=[DataRequired()])
