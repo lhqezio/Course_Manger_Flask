@@ -36,21 +36,74 @@ class Database:
             self.__conn = None
 
     def get_domains(self):
-        pass
+        domains = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select domain_id, domain, description from domains')
+            for row in results:
+                domain = Domain(domain=row[1],
+                    description=row[2])
+                domain.id = row[0]
+                domains.append(domain)
+        return domains
 
     def get_terms(self):
-        pass
+        terms = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select term_id, term_name from terms')
+            for row in results:
+                term = Term(id=row[0],domain=row[1],
+                    description=row[2])
+                terms.append(term)
+        return terms
     
+    def get_course(self,course_id):
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE COURSE_ID LIKE :course_id',course_id=course_id)
+            if results.rowcount is not 1:
+                raise oracledb.Error
+            for row in results:
+                course = Course()
+        return course
+    def get_courses_from_domain(self,domain_id):
+        courses = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES')
+            for row in results:
+                course = Course()
+                courses.append(course)
+        return courses
     def get_courses_from_term(self,term_id):
-        pass
+        courses = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE TERM_ID LIKE :term_id',term_id = term_id)
+            for row in results:
+                course = Course()
+                courses.append(course)
+        return courses
     
-    def get_courses(self):
-        pass
+    def get_courses_from_domain(self,domain_id):
+        courses = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE DOMAIN_ID LIKE :domain_id',domain_id = domain_id)
+            for row in results:
+                course = Course()
+                courses.append(course)
+        return courses
+        
 
     def get_competencies(self,course_id):
         pass 
-    
+
+    def get_competenciesa_from_courses(self,course_id):
+        pass 
+
     def get_elems(self,comp_id):
+        pass
+
+    def get_elems_from_competencies(self,comp_id):
+        pass
+
+    def get_elems_from_courses(self,comp_id):
         pass
 
     def edit_course(self,course=None):
