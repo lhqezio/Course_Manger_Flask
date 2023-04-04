@@ -18,6 +18,8 @@ class User(UserMixin):
         self.password = password
         self.name = name
         self.avatarPath = avatarPath
+    #to_stringify
+    #to_json
 
 class SignupForm(FlaskForm):
     email = EmailField('email')
