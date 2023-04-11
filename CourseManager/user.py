@@ -5,30 +5,26 @@ from wtforms.validators import DataRequired
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, email, name, password, avatarPath=None):
+    def __init__(self, email, name, hashed_password, avatar_path=None):
         if not isinstance(email, str):
             raise TypeError()
-        if not isinstance(password, str):
+        if not isinstance(hashed_password, str):
             raise TypeError()
         if not isinstance(name, str):
             raise TypeError()
-        if avatarPath and not isinstance(avatarPath, str):
+        if avatar_path and not isinstance(avatar_path, str):
             raise TypeError()
         self.email = email
-        self.password = password
+        self.hashed_password = hashed_password
         self.name = name
-        self.avatarPath = avatarPath
-    def from_json(json):
-        return User(json["email"],json["name"],json["password"],json["avatarPath"])
-    def to_json(self):
-        return jsonify(dict(self))
+        self.avatar_path = avatar_path
 
 class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
-    password = PasswordField('password',validators=[DataRequired()])
+    hashed_password = PasswordField('password',validators=[DataRequired()])
     name = StringField('name',validators=[DataRequired()])
 
 class LoginForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
-    password = PasswordField('password',validators=[DataRequired()])
+    hashed_password = PasswordField('password',validators=[DataRequired()])
     remember_me = BooleanField('remember me',validators=[DataRequired()])
