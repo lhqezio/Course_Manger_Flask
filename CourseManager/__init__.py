@@ -1,6 +1,7 @@
 from flask import Flask
 import secrets
 from CoursesDisplay.course_views import bp as course_views
+from CoursesDisplay.competency_views import bp as competency_views
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -14,6 +15,7 @@ def create_app(test_config=None):
 def init_app(app):
     app.teardown_appcontext(cleanup)
     app.register_blueprint(course_views)
+    app.register_blueprint(competency_views)
     with app.app_context():
         db = get_db()
 
