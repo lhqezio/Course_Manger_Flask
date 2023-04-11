@@ -1,7 +1,8 @@
 from flask import Flask
 import secrets
-from CoursesDisplay.course_views import bp as course_views
-from CoursesDisplay.competency_views import bp as competency_views
+from CourseManager.CoursesDisplay.course_views import bp as course_views
+from CourseManager.CoursesDisplay.competency_views import bp as competency_views
+from CourseManager.dbmanager import *
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
