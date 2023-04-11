@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Competencies{% endblock %}
+{% block content %}
+    <table>
+        {% for competency in competencies %}
+        <tr>
+            <td>{{competency.competencyId}}</td>
+            <td>{{competency.competency}}</td>
+            <td>{{competency.competencyAchievement}}</td>
+            <td>{{competency.competencyType}}</td>
+        </tr>
+        {% endfor %}      
+    </table>
+{% endblock %}
