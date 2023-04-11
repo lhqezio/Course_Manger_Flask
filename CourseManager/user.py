@@ -24,7 +24,7 @@ class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
     hashed_password = PasswordField('password',validators=[DataRequired()])
     name = StringField('name',validators=[DataRequired()])
-    avatar(FileField,"avatar",validators=[FileAllowed({"jpg","png","tiff"}),'Images Only'])
+    avatar = FileField("avatar",validators=[FileAllowed({"jpg","png","tiff"})])
 
 class LoginForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
