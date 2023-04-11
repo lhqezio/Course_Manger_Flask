@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{course.title}}{% endblock %}
+{% block content %}
+    <h2>{{domain.title}}</h2>
+    <h3>Term {{term.id}}</h3>
+    <table>
+        <tr>
+            <td>{{course.id}}</td>
+            <td>{{course.title}}</td>
+            <td>{{course.theory_hours}}</td>
+            <td>{{course.lab_hours}}</td>
+            <td>{{course.work_hours}}</td>
+            <td>{{course.description}}</td>
+        </tr>
+    </table>
+{% endblock %}
