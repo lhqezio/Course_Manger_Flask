@@ -57,7 +57,6 @@ class Database:
                                              host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
 
 
-    ###########################################################################
     def get_domains(self):
         domains = []
         with self.__get_cursor() as cursor:
@@ -159,38 +158,49 @@ class Database:
                 course_elems.append(element)
         return course_elems
     
-    #>>>>>>>>>
+    def get_competency(self,competency_id):
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select competency_id,competency,competency_achievement,competency_type from xompetencies where competency_id = :id',id=competency_id)
+            if results.rowcount is not 1:
+                raise oracledb.Error
+            for row in results:
+                competency = Competency(row[0],row[1],row[2],row[3])
+                return competency
 
     def add_course(self,course=None):
         with self.__get_cursor() as cursor:
             if(course is not None):
-                cursor.execute()
-        pass
+                cursor.execute('insert into courses values(:id,:title,:thrs,:lhrs,:hhrs,:descr,:dom_id,:term_id)',
+                               id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
+                               hhrs=course.homework_hours,descr=course.description,dom_id=course.domain_id,term_id=course.term_id)
 
     def update_course(self,course=None):
         with self.__get_cursor() as cursor:
             if(course is not None):
-                cursor.execute()
+                cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,homework_hours=:hhrs,description=:descr,domain_id=:dom_id,term_id=:term_id WHERE course_id=:id',
+                               id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
+                               hhrs=course.homework_hours,descr=course.description,dom_id=course.domain_id,term_id=course.term_id)
         pass
     def delete_course(self,course=None):
         with self.__get_cursor() as cursor:
             if(course is not None):
-                cursor.execute()
-        pass
+                cursor.execute('delete from courses where course_id=:id',id=course.course_number)
 
-    def add_competency(self,course=None):
+    def add_competency(self,competency=None):
         with self.__get_cursor() as cursor:
-            if(course is not None):
-                cursor.execute()
-        pass
+            if(competency is not None):
+                cursor.execute('insert into competencies values(:id,:name,:achievement,:type)',
+                               id=competency.competency_id,name=competency.competency,
+                               achievement=competency.competency_achievement,type=competency.competency_type)
 
-    def update_competency(self,course=None):
+    def update_competency(self,competency=None):
         with self.__get_cursor() as cursor:
-            if(course is not None):
-                cursor.execute()
-        pass
-    def delete_ccompetency(self,course=None):
+            if(competency is not None):
+                cursor.execute('update competencies set competency=:name,competency_achievement=:achievement,competency_type=:type WHERE competency_id=:id',
+                               id=competency.competency_id,name=competency.competency,
+                               achievement=competency.competency_achievement,type=competency.competency_type)
+
+    def delete_ccompetency(self,competency=None):
         with self.__get_cursor() as cursor:
-            if(course is not None):
-                cursor.execute()
-        pass
+            if(competency is not None):
+                cursor.execute('delete from competencies where competency_id=:id',id=competency.competency_id)
