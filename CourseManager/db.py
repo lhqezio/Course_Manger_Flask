@@ -198,7 +198,7 @@ class Database:
             cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,homework_hours=:hhrs,description=:descr,domain_id=:dom_id,term_id=:term_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             hhrs=course.homework_hours,descr=course.description,dom_id=course.domain_id,term_id=course.term_id)
-        pass
+                            
     def delete_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
