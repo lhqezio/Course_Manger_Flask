@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 
 class Competency:
     def __init__(self,competency_id,competency,competency_achievement,competency_type):
-        if not isinstance(competency_id,int):
+        if not isinstance(competency_id,str):
             raise TypeError()
         if not isinstance(competency,str):
             raise TypeError()

@@ -83,7 +83,7 @@ class Database:
             raise TypeError()
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE COURSE_ID LIKE :course_id',course_id=course_id)
-            if results.rowcount is not 1:
+            if results.rowcount != 1:
                 raise oracledb.Error
             for row in results:
                 course = Course()
@@ -177,7 +177,7 @@ class Database:
             raise TypeError()
         with self.__get_cursor() as cursor:
             results = cursor.execute('select competency_id,competency,competency_achievement,competency_type from xompetencies where competency_id = :id',id=competency_id)
-            if results.rowcount is not 1:
+            if results.rowcount != 1:
                 raise oracledb.Error
             for row in results:
                 competency = Competency(row[0],row[1],row[2],row[3])
