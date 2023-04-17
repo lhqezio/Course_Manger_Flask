@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 import oracledb
+from CourseManager.dbmanager import *
 
 bp = Blueprint('competency', __name__, url_prefix='/competencies')
 

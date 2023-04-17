@@ -226,3 +226,25 @@ class Database:
             raise TypeError()
         with self.__get_cursor() as cursor:
             cursor.execute('delete from competencies where competency_id=:id',id=competency.competency_id)
+
+    def get_user(self, email):
+        if not isinstance(email, str):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select id, email, password, name from blogapp_users where email=:email', email=email)
+            for row in results:
+                user = User(id=row[0], email=row[1],
+                    password=row[2], name=row[3])
+                return user
+        return None
+    
+    def get_user_by_id(self, id):
+        if not isinstance(id, int):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select id, email, password, name from blogapp_users where id=:id', id=id)
+            for row in results:
+                user = User(id=row[0], email=row[1],
+                    password=row[2], name=row[3])
+                return user
+        return None

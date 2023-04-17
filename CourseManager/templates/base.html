@@ -8,7 +8,15 @@
 <body>
     <nav class="navbar">
         <ul class="navbar">
-
+            <li class="navbar"><a href="{{ url_for('home.index') }}">Home</a></li>
+            <li class="navbar"><a href="{{ url_for('course.display_courses')}}">Courses</a></li>
+            <li class="navbar"><a href="{{ url_for('competency.display_competencies')}}">Competencies</a></li>
+            <li class="navbar"><a href="{{ url_for('element.display_elements')}}">Elements</a></li>
+            {% block user %}
+            <li class="navbar" id="user">
+                <a href="{{ url_for('auth.login')}}">Login</a>
+            </li>
+            {% endblock %}
         </ul>
     </nav>
 
