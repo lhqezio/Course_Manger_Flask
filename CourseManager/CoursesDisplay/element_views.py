@@ -7,7 +7,7 @@ bp = Blueprint('element', __name__, url_prefix='/elements')
 @bp.route('/')
 def display_elements():
     try:
-        return render_template("elements.html", elements=get_db().get_elements())
+        return render_template("elements.html", elements=get_db().get_elems())
     except oracledb.Error as e:
         flash("Something went wrong..")
         flash("Cannot reach the database")

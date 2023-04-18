@@ -140,6 +140,12 @@ class Database:
                 competency = Competency(row[0],row[1],row[2],row[3])
                 course_competencies.append(competency)
         return course_competencies
+    
+    def get_element(self, elem_id):
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select element_order, element, element_criteria, competency_id from elements where competency_id=:id', id=elem_id)
+            for row in results:
+                return Element(elem_id, row[0], row[1], row[2], row[3])
 
     def get_elems(self):
         elements = [] 
