@@ -217,8 +217,8 @@ class Database:
             cursor.execute('insert into courses values(:id,:title,:thrs,:lhrs,:hhrs,:descr,:dom_id,:term_id)',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
-
-    def update_course(self,course=None): #update FKs
+           
+    def update_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
         with self.__get_cursor() as cursor:
@@ -242,7 +242,7 @@ class Database:
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
 
-    def update_competency(self,competency=None):  #update FKs
+    def update_competency(self,competency=None):
         if not isinstance(competency, Competency):
             raise TypeError()
         with self.__get_cursor() as cursor:
@@ -250,7 +250,7 @@ class Database:
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
 
-    def delete_ccompetency(self,competency=None):
+    def delete_competency(self,competency=None):
         if not isinstance(competency, Competency):
             raise TypeError()
         with self.__get_cursor() as cursor:
