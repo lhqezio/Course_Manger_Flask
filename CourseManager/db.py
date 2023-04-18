@@ -56,25 +56,34 @@ class Database:
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
                                 host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
 
+    def get_domain(self, dom_id):
+            with self.__get_cursor() as cursor:
+                results = cursor.execute('select domain, description from domains where domain_id=:id', id=dom_id)
+                for row in results:
+                    return Domain(dom_id, domain=row[0], description=row[1])
 
     def get_domains(self):
         domains = []
         with self.__get_cursor() as cursor:
             results = cursor.execute('select domain_id, domain, description from domains')
             for row in results:
-                domain = Domain(domain=row[1],
-                    description=row[2])
-                domain.id = row[0]
+                domain = Domain(id=row[0], domain=row[1], description=row[2])
                 domains.append(domain)
         return domains
+
+    def get_term(self, term_id):
+            terms = []
+            with self.__get_cursor() as cursor:
+                results = cursor.execute('select term_name from terms where term_id=:id', id=term_id)
+                for row in results:
+                    return Term(term_id, row[0])
 
     def get_terms(self):
         terms = []
         with self.__get_cursor() as cursor:
             results = cursor.execute('select term_id, term_name from terms')
             for row in results:
-                term = Term(id=row[0],domain=row[1],
-                    description=row[2])
+                term = Term(row[0], row[1])
                 terms.append(term)
         return terms
     
@@ -86,7 +95,7 @@ class Database:
             if results.rowcount != 1:
                 raise oracledb.Error
             for row in results:
-                course = Course()
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
         return course
     def get_courses_from_domain(self,domain_id):
         if not isinstance(domain_id, str):
@@ -95,7 +104,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES')
             for row in results:
-                course = Course()
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
                 courses.append(course)
         return courses
     def get_courses_from_term(self,term_id):
@@ -105,7 +114,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE TERM_ID LIKE :term_id',term_id = term_id)
             for row in results:
-                course = Course()
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
                 courses.append(course)
         return courses
     
@@ -116,7 +125,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE DOMAIN_ID LIKE :domain_id',domain_id = domain_id)
             for row in results:
-                course = Course()
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
                 courses.append(course)
         return courses
         
