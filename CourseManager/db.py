@@ -95,7 +95,7 @@ class Database:
             if results.rowcount != 1:
                 raise oracledb.Error
             for row in results:
-                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], self.get_domain(row[6]), self.get_term(row[7]))
         return course
     def get_courses_from_domain(self,domain_id):
         if not isinstance(domain_id, str):
@@ -104,7 +104,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES')
             for row in results:
-                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], self.get_domain(row[6]), self.get_term(row[7]))
                 courses.append(course)
         return courses
     def get_courses_from_term(self,term_id):
@@ -114,7 +114,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE TERM_ID LIKE :term_id',term_id = term_id)
             for row in results:
-                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], self.get_domain(row[6]), self.get_term(row[7]))
                 courses.append(course)
         return courses
     
@@ -125,7 +125,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE DOMAIN_ID LIKE :domain_id',domain_id = domain_id)
             for row in results:
-                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], get_domain(row[6]), get_term(row[7]))
+                course = Course(row[0], row[1], row[2], row[3], row[4], row[5], self.get_domain(row[6]), self.get_term(row[7]))
                 courses.append(course)
         return courses
         
