@@ -4,6 +4,7 @@ from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 from CourseManager.domain import Domain
 from CourseManager.term import Term
+from CourseManager.competency import Competency
 
 class Course:
     def __init__(self,course_number,course_title,theory_hours,lab_hours,
@@ -24,6 +25,9 @@ class Course:
             raise TypeError()
         if not isinstance(term,Term):
             raise TypeError()
+        for comp in competencies:
+            if not isinstance(comp,Competency):
+                raise TypeError()
         self.course_number=course_number
         self.course_title=course_title
         self.theory_hours=theory_hours
