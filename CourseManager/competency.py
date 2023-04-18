@@ -2,9 +2,10 @@ from flask_wtf import FlaskForm
 from flask import jsonify
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
+from CourseManager.element import Element
 
 class Competency:
-    def __init__(self,competency_id,competency,competency_achievement,competency_type):
+    def __init__(self,competency_id,competency,competency_achievement,competency_type,elements):
         if not isinstance(competency_id,int):
             raise TypeError()
         if not isinstance(competency,str):
@@ -13,10 +14,14 @@ class Competency:
             raise TypeError()
         if not isinstance(competency_type,str):
             raise TypeError()
+        for el in elements:
+            if not isinstance(el,Element):
+                raise TypeError()
         self.competency_id=competency_id
         self.competency=competency
         self.competency_achievement=competency_achievement
         self.competency_type=competency_type
+        self.elements=elements
     def __str__(self):
         return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
     def __repr__(self):
@@ -28,7 +33,7 @@ class Competency:
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not a competency")
-        return Competency(json['competency_id'],json['competency'],json['competency_achievement'],json['competency_type'])
+        return Competency(json['competency_id'],json['competency'],json['competency_achievement'],json['competency_type'],json['elements'])
     def to_json(self):
         return jsonify(self.__dict__)
     
