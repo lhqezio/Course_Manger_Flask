@@ -2,6 +2,9 @@ import os
 import oracledb
 from CourseManager.course import Course
 from CourseManager.competency import Competency
+from CourseManager.user import User
+from CourseManager.term import Term
+from CourseManager.domain import Domain
 
 class Database:
     def __init__(self):
@@ -78,6 +81,14 @@ class Database:
                 terms.append(term)
         return terms
     
+    def get_term_for_course(self,term_id):
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select term_id, term_name from terms where term_id=:id',id=term_id)
+            for row in results:
+                term = Term(id=row[0],domain=row[1],
+                    description=row[2])
+                return term
+    
     def get_course(self,course_id):
         if not isinstance(course_id, str):
             raise TypeError()
@@ -86,8 +97,10 @@ class Database:
             if results.rowcount is not 1:
                 raise oracledb.Error
             for row in results:
+                course_competencies=self.get_competencies_from_courses(row.course_id)
+                course_term=self.get_competencies_from_courses(row.course_id)
                 course = Course()
-        return course
+                return course
     def get_courses_from_domain(self,domain_id):
         if not isinstance(domain_id, str):
             raise TypeError()
@@ -95,7 +108,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES')
             for row in results:
-                course = Course()
+                course = Course(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
                 courses.append(course)
         return courses
     def get_courses_from_term(self,term_id):
