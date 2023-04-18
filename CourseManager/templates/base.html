@@ -21,11 +21,16 @@
     </nav>
 
     {% block content %}
+        <section id="content">
+
+        </section>
     {% endblock %}
     {% block errors %}
+        <section id="errors">
             {% for message in get_flashed_messages() %}
-                <div class="message">{{message}}</div>
+            <div class="message">{{message}}</div>
             {% endfor %}
+        </section>
         {% endblock %}
 </body>
 </html>

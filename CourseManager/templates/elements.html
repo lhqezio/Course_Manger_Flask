@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Elements{% endblock %}
+{% block content %}
+    <table>
+        {% for element in elements %}
+        <tr>
+            <td>{{element.id}}</td>
+            <td>{{element.element}}</td>
+            <td>{{element.criteria}}</td>
+        </tr>
+        {% endfor %}      
+    </table>
+{% endblock %}

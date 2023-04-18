@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Element {{element.id}}{% endblock %}
+{% block content %}
+    <table>
+        <tr>
+            <td>{{element.id}}</td>
+            <td>{{element.element}}</td>
+            <td>{{element.criteria}}</td>
+        </tr>    
+    </table>
+{% endblock %}
