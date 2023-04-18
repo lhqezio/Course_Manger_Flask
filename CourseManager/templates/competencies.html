@@ -8,6 +8,16 @@
             <td>{{competency.competency}}</td>
             <td>{{competency.competencyAchievement}}</td>
             <td>{{competency.competencyType}}</td>
+            <td>
+                <table>
+                    {% for element in competency.elements %}
+                    <tr>
+                        <td>{{element.id}}</td>
+                        <td>{{element.element}}</td>
+                        <td>{{element.criteria}}</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
         {% endfor %}      
     </table>
