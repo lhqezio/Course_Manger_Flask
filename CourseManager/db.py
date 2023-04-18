@@ -5,6 +5,7 @@ from CourseManager.competency import Competency
 from CourseManager.user import User
 from CourseManager.term import Term
 from CourseManager.domain import Domain
+from CourseManager.element import Element
 
 class Database:
     def __init__(self):
@@ -81,44 +82,53 @@ class Database:
                 terms.append(term)
         return terms
     
-    def get_term_for_course(self,term_id):
+    def get_term_for_course(self,course_id):
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select term_id, term_name from terms where term_id=:id',id=term_id)
+            results = cursor.execute('select term_id, term_name from view_courses_terms where course_id=:id',id=course_id)
             for row in results:
                 term = Term(id=row[0],domain=row[1],
                     description=row[2])
                 return term
+            
+    def get_domain_for_course(self,course_id):
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select domain_id,domain,domain_description from view_courses_domains where course_id=:id',id=course_id)
+            for row in results:
+                domain = Domain(domain_id=row[0],domain=row[1],
+                    domain_description=row[2])
+                return domain
+            
+    def get_elems_from_course(self,course_id):
+        if not isinstance(course_id, str):
+            raise TypeError()
+        course_elems = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_courses_elements_competencies where course_id=:id',id=course_id)
+            for row in results:
+                element = Element(row[0],row[1],row[2],row[3],row[4])
+                course_elems.append(element)
+        return course_elems
     
     def get_course(self,course_id):
         if not isinstance(course_id, str):
             raise TypeError()
         with self.__get_cursor() as cursor:
-            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE COURSE_ID LIKE :course_id',course_id=course_id)
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION FROM COURSES WHERE COURSE_ID LIKE :course_id',course_id=course_id)
             if results.rowcount is not 1:
                 raise oracledb.Error
             for row in results:
+                term=self.get_term_for_course(row.course_id)
+                domain=self.get_domain_for_course(row.course_id)
                 course_competencies=self.get_competencies_from_courses(row.course_id)
-                course_term=self.get_competencies_from_courses(row.course_id)
-                course = Course()
+                course = Course(row[0],row[1],row[2],row[3],row[4],row[5],domain,term,course_competencies)
                 return course
-    def get_courses_from_domain(self,domain_id):
-        if not isinstance(domain_id, str):
-            raise TypeError()
-        courses = []
+    
+    def get_courses(self):
+        courses=[]
         with self.__get_cursor() as cursor:
-            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES')
+            results = cursor.execute('SELECT COURSE_ID from courses')
             for row in results:
-                course = Course(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
-                courses.append(course)
-        return courses
-    def get_courses_from_term(self,term_id):
-        if not isinstance(term_id, str):
-            raise TypeError()
-        courses = []
-        with self.__get_cursor() as cursor:
-            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE TERM_ID LIKE :term_id',term_id = term_id)
-            for row in results:
-                course = Course()
+                course = self.get_course(row[0])
                 courses.append(course)
         return courses
     
@@ -127,13 +137,23 @@ class Database:
             raise TypeError()
         courses = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION, DOMAIN_ID,TERM_ID FROM COURSES WHERE DOMAIN_ID LIKE :domain_id',domain_id = domain_id)
+            results = cursor.execute('SELECT COURSE_ID FROM view_courses_domains where domain_id=:id',id=domain_id)
             for row in results:
-                course = Course()
+                course = self.get_course(row.course_id)
                 courses.append(course)
         return courses
-        
-
+    
+    def get_courses_from_term(self,term_id):
+        if not isinstance(term_id, str):
+            raise TypeError()
+        courses = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('SELECT COURSE_ID WHERE TERM_ID = :term_id',term_id = term_id)
+            for row in results:
+                course = self.get_course(row.course_id)
+                courses.append(course)
+        return courses
+    
     def get_competencies(self):
         competencies = [] 
         with self.__get_cursor() as cursor:
@@ -174,17 +194,6 @@ class Database:
                 competency_elems.append(element)
         return competency_elems
     
-    def get_elems_from_course(self,course_id):
-        if not isinstance(course_id, str):
-            raise TypeError()
-        course_elems = []
-        with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_courses_elements_competencies where course_id=:id',id=course_id)
-            for row in results:
-                element = Element(row[0],row[1],row[2],row[3],row[4])
-                course_elems.append(element)
-        return course_elems
-    
     def get_competency(self,competency_id):
         if not isinstance(competency_id, str):
             raise TypeError()
@@ -195,6 +204,8 @@ class Database:
             for row in results:
                 competency = Competency(row[0],row[1],row[2],row[3])
                 return competency
+            
+            #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     def add_course(self,course=None):
         if not isinstance(course, Course):
