@@ -10,7 +10,7 @@ class Element:
             raise TypeError()
         if not isinstance(element_criteria,str):
             raise TypeError()
-        if not isinstance(competency_id,int):
+        if not isinstance(competency_id,str):
             raise TypeError()
         self.element_id=element_id
         self.element_order=element_order

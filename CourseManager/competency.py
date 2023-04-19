@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 from CourseManager.element import Element
 
 class Competency:
-    def __init__(self,competency_id,competency,competency_achievement,competency_type):
+    def __init__(self,competency_id,competency,competency_achievement,competency_type,elements):
         if not isinstance(competency_id,str):
             raise TypeError()
         if not isinstance(competency,str):
