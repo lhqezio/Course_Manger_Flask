@@ -33,7 +33,11 @@ class Competency:
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not a competency")
-        return Competency(json['competency_id'],json['competency'],json['competency_achievement'],json['competency_type'],json['elements'])
+        elements=[]
+        for el in json['elements']:
+            element=Element.from_json(el)
+            elements.append(element)
+        return Competency(json['competency_id'],json['competency'],json['competency_achievement'],json['competency_type'],elements)
     def to_json(self):
         return jsonify(self.__dict__)
     
