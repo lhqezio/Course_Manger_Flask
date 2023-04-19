@@ -89,6 +89,7 @@ class Database:
                 term = Term(id=row[0],domain=row[1],
                     description=row[2])
                 return term
+            return None
             
     def get_domain_for_course(self,course_id):
         with self.__get_cursor() as cursor:
@@ -97,6 +98,7 @@ class Database:
                 domain = Domain(domain_id=row[0],domain=row[1],
                     domain_description=row[2])
                 return domain
+            return None
             
     def get_elems_from_course(self,course_id):
         if not isinstance(course_id, str):
@@ -122,6 +124,7 @@ class Database:
                 course_competencies=self.get_competencies_from_courses(row.course_id)
                 course = Course(row[0],row[1],row[2],row[3],row[4],row[5],domain,term,course_competencies)
                 return course
+        return None
     
     def get_courses(self):
         courses=[]
@@ -154,8 +157,6 @@ class Database:
                 courses.append(course)
         return courses
     
-    #COMPETENCY
-    
     def get_elems_from_competency(self,competency_id):
         if not isinstance(competency_id, int):
             raise TypeError()
@@ -178,6 +179,7 @@ class Database:
                 elements=self.get_elems_from_competency(competency_id)
                 competency = Competency(row[0],row[1],row[2],row[3],elements)
                 return competency
+        return None
     
     def get_competencies(self):
         competencies = [] 
