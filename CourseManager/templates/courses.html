@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}Courses{% endblock %}
+{% block title %}{{courses[0].domain.domain}} Courses{% endblock %}
 {% block content %}
-    {% for domain in domains %}
-        <h2>{{domain.title}}</h2>
-        {% for term in terms %}
-            <h3>Term {{term.id}}</h3>
-            <table>
-                {% for course in courses %}
-                    <tr>
-                        <td>{{course.id}}</td>
-                        <td>{{course.title}}</td>
-                        <td>{{course.theory_hours}}</td>
-                        <td>{{course.lab_hours}}</td>
-                        <td>{{course.work_hours}}</td>
-                        <td>{{course.description}}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endfor %}
+    <h2>{{courses[0].domain.domain}}</h2>
+    {% for term in terms %}
+        <h3>Term {{term.term_id}}</h3>
+        <table>
+            {% for course in courses %}
+            {% if course.term.term_id == term.term_id %}
+            <tr>
+                <td>{{course.course_number}}</td>
+                <td>{{course.course_title}}</td>
+                <td>{{course.theory_hours}}</td>
+                <td>{{course.lab_hours}}</td>
+                <td>{{course.homework_hours}}</td>
+                <td>{{course.description}}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
     {% endfor %}
 {% endblock %}
