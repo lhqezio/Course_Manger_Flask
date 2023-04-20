@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}Elements{% endblock %}
 {% block content %}
-    <table>
+    <table class="data" id="elements">
+        <tr>
+            <th>ID</th>
+            <th>Element</th>
+            <th>Criteria</th>
+        </tr>
         {% for element in elements %}
         <tr>
-            <td>{{element.id}}</td>
+            <td>{{element.element_id}}</td>
             <td>{{element.element}}</td>
-            <td>{{element.criteria}}</td>
+            <td>{{element.element_criteria}}</td>
         </tr>
         {% endfor %}      
     </table>

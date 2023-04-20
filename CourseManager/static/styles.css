@@ -15,3 +15,10 @@
 #user {
     margin-left: auto;
 }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+#competency-elements tr {
+    border: none;
+}
