@@ -5,7 +5,7 @@
         <label id="course-form-label" for="form">Edit Course Form: </label> <br><br>
         {{form.csrf_token}}
         {{ form.course_number.label }}
-        {{ form.course_number() }}
+        <input type="text"  value="{{course.course_number}}" name="course_number" readonly>
         {{ form.course_title.label }}
         {{ form.course_title() }}
         {{ form.theory_hours.label }}
@@ -17,9 +17,17 @@
         {{ form.description.label }}
         {{ form.description() }}
         {{ form.domain_id.label }}
-        {{ form.domain_id() }}
+        <select name="domain_id">
+            {%for domain in domains%}
+                <option value="{{domain.domain_id}}">{{domain.domain}}</option>
+            {%endfor%}
+        </select>
         {{ form.term_id.label }}
-        {{ form.term_id() }}
+        <select name="term_id">
+            {%for term in terms%}
+                <option value="{{term.term_id}}">{{term.term_name}}</option>
+            {%endfor%}
+        </select>
         <input id="button" type="submit" />
     </form>
 {% endblock %}
