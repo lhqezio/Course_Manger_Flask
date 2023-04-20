@@ -296,7 +296,7 @@ class Database:
         if not isinstance(email, str):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from blogapp_users where email=:email', email=email)
+            results = cursor.execute('select id, email, password, name from coursemanager_users where email=:email', email=email)
             for row in results:
                 user = User(id=row[0], email=row[1],
                     password=row[2], name=row[3])
@@ -307,7 +307,7 @@ class Database:
         if not isinstance(id, int):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from blogapp_users where id=:id', id=id)
+            results = cursor.execute('select id, email, password, name from coursemanager_users where id=:id', id=id)
             for row in results:
                 user = User(id=row[0], email=row[1],
                     password=row[2], name=row[3])
