@@ -24,7 +24,12 @@ def display_course(course_id):
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))
 @bp.route('/editcourse/<course_id>')
+
 def edit_course(course_id):
+    if get_db().get_course(course_id):
+        if 
+        course = get_db().get_course(course_id)
+    return render_template("edit_course.html", course=course,)
     
 @bp.route('/addcourse/<course_id>')
 def add_course(course_id):
