@@ -23,3 +23,8 @@ def display_course(course_id):
                                term=get_db().get_term(course.term_id))
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))
+@bp.route('/editcourse/<course_id>')
+def edit_course(course_id):
+    
+@bp.route('/addcourse/<course_id>')
+def add_course(course_id):
