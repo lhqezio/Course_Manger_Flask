@@ -2,9 +2,11 @@ from flask import Flask
 import secrets
 from CourseManager.CoursesDisplay.course_views import bp as course_views
 from CourseManager.CoursesDisplay.competency_views import bp as competency_views
-from CourseManager.dbmanager import * 
+from CourseManager.CoursesDisplay.element_views import bp as element_views
+from CourseManager.CoursesDisplay.home_views import bp as home_views
+from CourseManager.dbmanager import *
 from CourseManager.auth_view import bp as auth_bp
-from CourseManager.CoursesDisplay.home_views import bp as home_bp
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -17,10 +19,13 @@ def create_app(test_config=None):
     return app
 def init_app(app):
     app.teardown_appcontext(cleanup)
+    app.cli.add_command(init_db_command)
     app.register_blueprint(course_views)
     app.register_blueprint(competency_views)
+    app.register_blueprint(home_views)
+    app.register_blueprint(element_views)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(home_bp)
+
     with app.app_context():
         db = get_db()
 

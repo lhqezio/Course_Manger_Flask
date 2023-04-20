@@ -35,7 +35,7 @@ create table elements (element_id number generated always as identity PRIMARY KE
                         element_order number NOT NULL, 
                         element varchar2(250) NOT NULL,
                         element_criteria varchar2(500) NOT NULL, 
-                        competency_id REFERENCES competencies(competency_id));
+                        competency_id REFERENCES competencies(competency_id)) ON DELETE CASCADE;
                     
 --Courses_Elements (Bridging)
 create table courses_elements (course_id REFERENCES courses(course_id) ON DELETE CASCADE, 
