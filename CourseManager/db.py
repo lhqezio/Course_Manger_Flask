@@ -6,7 +6,7 @@ from CourseManager.user import User
 from CourseManager.term import Term
 from CourseManager.domain import Domain
 from CourseManager.element import Element
-
+from CourseManager.user import User
 class Database:
     def __init__(self):
         self.__user = os.environ['DBUSER']
@@ -323,3 +323,10 @@ class Database:
                     password=row[2], name=row[3])
                 users.append(user)
         return users
+    
+    def update_user(user,old_email):
+        if not isinstance(user, User):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name where email=:old_email',
+                email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email)

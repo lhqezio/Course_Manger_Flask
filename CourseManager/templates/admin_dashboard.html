@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if current_user.is_authenticated and current_user.has_role('admin') %}
+    <h1>Welcome to the Admin Dashboard</h1>
+    {% if users %}
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>{{ user.email }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.role }}</td>
+              <td>
+                <form action="{{ url_for('.admin_dashboard') }}" method="POST">
+                  <input type="hidden" name="old_email" value="{{ user.email }}">
+                  <input type="text" name="email" placeholder="Email">
+                  <input type="text" name="name" placeholder="Name">
+                  <input type="text" name="role" placeholder="Role">
+                  <input type="text" name="password" placeholder="Password">
+                  <button type="submit">Update</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No users found.</p>
+    {% endif %}
+  {% else %}
+    <p>Access denied. You must be an admin to view this page.</p>
+  {% endif %}
+{% endblock %}
