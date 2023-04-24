@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask import jsonify
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, TextAreaField, SelectField
 from wtforms.validators import DataRequired
 from CourseManager.domain import Domain
 from CourseManager.term import Term
@@ -50,8 +50,12 @@ class Course:
             raise TypeError("Not a course")
         term=Term.from_json(json['term'])
         domain=Domain.from_json(json['domain'])
+        competencies=[]
+        for comp in json['competencies']:
+            comp=Competency.from_json(comp)
+            competencies.append(comp)
         return Course(json['course_number'],json['course_title'],json['theory_hours'],json['lab_hours'],
-                      json['homework_hours'],json['description'],domain,term,[])
+                      json['homework_hours'],json['description'],domain,term,competencies)
     def to_json(self):
         return jsonify(self.__dict__)
     
@@ -61,6 +65,6 @@ class CourseForm(FlaskForm):
     theory_hours = IntegerField('theory hours',validators=[DataRequired()])
     lab_hours = IntegerField('lab hours',validators=[DataRequired()]),
     homework_hours = IntegerField('homework hours',validators=[DataRequired()])
-    description = StringField('description',validators=[DataRequired()])
-    domain_id = IntegerField('domain id',validators=[DataRequired()])
-    term_id = IntegerField('term id',validators=[DataRequired()])
+    description = TextAreaField('description',validators=[DataRequired()])
+    domain_id = SelectField('domain id',choices=[(1,'Term 1 Fall'),(2,'Term 2 Winter'), (3,'Term 3 Fall'), (4,'Term 4 Winter'),(5,'Term 5 Fall'), (6,'Term 6 Winter')],validators=[DataRequired()])
+    term_id = SelectField('term id',choices=[(1,'Term 1 Fall'),(2,'Term 2 Winter'), (3,'Term 3 Fall'), (4,'Term 4 Winter'),(5,'Term 5 Fall'), (6,'Term 6 Winter')],validators=[DataRequired()])
