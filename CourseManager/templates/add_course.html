@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Course Edit{% endblock %}
+{% block content %}
+    <form name="form" id="new_course" method="POST">
+        <label id="course-form-label" for="form">New Course Form: </label> <br><br>
+        {{form.csrf_token}}
+        {{ form.course_number.label }}
+        {{ form.course_number()}}
+        {{ form.course_title.label }}
+        {{ form.course_title()}}
+        {{ form.theory_hours.label }}
+        {{ form.theory_hours() }}
+        {{ form.lab_hours.label }}
+        {{ form.lab_hours() }}
+        {{ form.homework_hours.label }}
+        {{ form.homework_hours() }}
+        {{ form.description.label }}
+        {{ form.description() }}
+        {{ form.domain_id.label }}
+        {{ form.domain_id() }}
+        {{ form.term_id.label }}
+        {{ form.term_id() }}
+        <input id="button" type="submit" />
+    </form>
+{% endblock %}
