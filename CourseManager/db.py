@@ -313,3 +313,13 @@ class Database:
                     password=row[2], name=row[3])
                 return user
         return None
+
+    def get_users(self):
+        users = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select id, email, password, name from coursemanager_users')
+            for row in results:
+                user = User(id=row[0], email=row[1],
+                    password=row[2], name=row[3])
+                users.append(user)
+        return users
