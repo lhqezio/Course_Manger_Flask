@@ -5,29 +5,21 @@
         <label id="course-form-label" for="form">Edit Course Form: </label> <br><br>
         {{form.csrf_token}}
         {{ form.course_number.label }}
-        <input type="text"  value="{{course.course_number}}" name="course_number" readonly>
+        {{ form.course_number(value=course.course_number readonly=true)}}
         {{ form.course_title.label }}
-        {{ form.course_title() }}
+        {{ form.course_title(value=course.course_title)}}
         {{ form.theory_hours.label }}
-        {{ form.theory_hours() }}
+        {{ form.theory_hours(value=course.theory_hours) }}
         {{ form.lab_hours.label }}
-        {{ form.lab_hours() }}
+        {{ form.lab_hours(value=course.lab_hours) }}
         {{ form.homework_hours.label }}
-        {{ form.homework_hours() }}
+        {{ form.homework_hours(value=course.homework_hours) }}
         {{ form.description.label }}
-        {{ form.description() }}
+        {{ form.description(value=course.description) }}
         {{ form.domain_id.label }}
-        <select name="domain_id">
-            {%for domain in domains%}
-                <option value="{{domain.domain_id}}">{{domain.domain}}</option>
-            {%endfor%}
-        </select>
+        {{ form.domain_id(value=course.domain_id) }}
         {{ form.term_id.label }}
-        <select name="term_id">
-            {%for term in terms%}
-                <option value="{{term.term_id}}">{{term.term_name}}</option>
-            {%endfor%}
-        </select>
+        {{ form.term_id(value=course.term_id) }}
         <input id="button" type="submit" />
     </form>
 {% endblock %}

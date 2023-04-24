@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request, escape
 import oracledb
 from CourseManager.dbmanager import *
 from CourseManager.course import Course,CourseForm
@@ -25,17 +25,24 @@ def display_course(course_id):
         return render_template("specific_course.html", course=get_db().get_course(course_id))
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))
-@bp.route('/editcourse/<course_id>')
 
-@bp.route('/edit/<course_id>', methods=['POST'])
+@bp.route('/edit-course/<course_id>', methods=['POST'])
 def edit_course(course_id):
+    course_id=escape(course_id)
     db=get_db()
     if db.get_course(course_id):
         course = db.get_course(course_id)
-        form=CourseForm
+        form=CourseForm()
+        domains=[]
+        for dom in db.get_domains():
+            domains.append(f'{dom.domain_id}',f'{dom.domain}')
+        terms=[]
+        for term in db.get_terms():
+            terms.append((f'{term.term_id}',f'{term.term_name}'))
+        form.domain_id.choices=domains
+        form.term_id.choices=terms
         if request.method == 'POST':
             if form.validate_on_submit():
-                course_number=form.course_number.data
                 course_title=form.course_title.data
                 theory_hours=form.theory_hours.data
                 lab_hours=form.lab_hours.data
@@ -43,14 +50,48 @@ def edit_course(course_id):
                 description=form.description.data
                 domain_id=form.domain_id.data
                 term_id=form.term_id.data
-                course = Course(course_number, course_title,theory_hours,lab_hours,homework_hours,description,domain_id,term_id)
+                course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain_id,term_id)
                 try:
-                    db.update_course(course=None)
+                    db.update_course(course)
+                    redirect(url_for('display_course'),course_id=course_id)
                 except:
                     flash('Course update DB Error')
             else:
                 flash('Invalid input')
-        return render_template("edit_course.html", course=course, form=form, terms=db.get_terms(), domains=db.get_domains())
+        return render_template("edit_course.html", course=course, form=form)
     else:
+        flash('Course doesn\'t exist')
         redirect(url_for('display_courses'))
+
+@bp.route('/add-course/', methods=['POST'])
+def add_course():
+    db=get_db()
+    form=CourseForm()
+    domains=[]
+    for dom in db.get_domains():
+        domains.append(f'{dom.domain_id}',f'{dom.domain}')
+    terms=[]
+    for term in db.get_terms():
+        terms.append((f'{term.term_id}',f'{term.term_name}'))
+    form.domain_id.choices=domains
+    form.term_id.choices=terms
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            course_number=form.course_number.data
+            course_title=form.course_title.data
+            theory_hours=form.theory_hours.data
+            lab_hours=form.lab_hours.data
+            homework_hours=form.homework_hours.data
+            description=form.description.data
+            domain_id=form.domain_id.data
+            term_id=form.term_id.data
+            course = Course(course_number, course_title,theory_hours,lab_hours,homework_hours,description,domain_id,term_id)
+            try:
+                db.add_course(course)
+                redirect(url_for('display_course'),course_id=course_number)
+            except:
+                flash('Course cannot be added')
+        else:
+            flash('Invalid input')
+    return render_template("add_course.html", course=course, form=form)
     
