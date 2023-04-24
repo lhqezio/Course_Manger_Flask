@@ -46,7 +46,8 @@ create table coursemanager_users(
     id number GENERATED ALWAYS as IDENTITY primary key,
     email varchar2(100) unique,
     password varchar2(102),
-    name varchar2(1000)
+    name varchar2(1000),
+    role varchar2(1000)
 );
 
 
