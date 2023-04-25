@@ -22,7 +22,7 @@ def display_competency(competency_id):
     flash(f"{competency_id} competency not found!")
     return redirect(url_for("competency.display_competencies"))
 
-@bp.route('/edit/<competency_id>', methods=['POST'])
+@bp.route('/edit/<competency_id>', methods=['POST','GET'])
 def edit_competency(competency_id):
     competency_id=escape(competency_id)
     db=get_db()
@@ -39,6 +39,7 @@ def edit_competency(competency_id):
                 competency=form.competency.data
                 competency_achievement=form.competency_achievement.data
                 competency_type=form.competency_type.data
+                #to check
                 competency = Competency(competency_id, competency,competency_achievement,competency_type)
                 try:
                     db.update_competency(competency)
