@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request, escape
 import oracledb
 from CourseManager.dbmanager import *
+from CourseManager.competency import *
 
 bp = Blueprint('competency', __name__, url_prefix='/competencies')
 
@@ -20,3 +21,57 @@ def display_competency(competency_id):
         return render_template("specific_competency.html", competency=competency)
     flash(f"{competency_id} competency not found!")
     return redirect(url_for("competency.display_competencies"))
+
+@bp.route('/edit/<competency_id>', methods=['POST'])
+def edit_competency(competency_id):
+    competency_id=escape(competency_id)
+    db=get_db()
+    if db.get_competency(competency_id):
+        competency = db.get_competency(competency_id)
+        form=CompetencyForm()
+        elements=[]
+        for el in db.get_elems_from_competency(competency_id):
+            elements.append(f'{el.element_id}',f'{el.element}')
+        form.elements.choices=elements
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                competency_id=form.competency_id.data
+                competency=form.competency.data
+                competency_achievement=form.competency_achievement.data
+                competency_type=form.competency_type.data
+                competency = Competency(competency_id, competency,competency_achievement,competency_type)
+                try:
+                    db.update_competency(competency)
+                    redirect(url_for('competency.display_competency'),competency_id=competency_id)
+                except:
+                    flash('Competency update DB Error')
+            else:
+                flash('Invalid input')
+        return render_template("specific_competency.html", competency=competency)
+    flash(f"{competency_id} competency not found!")
+    return redirect(url_for("competency.display_competencies"))
+
+@bp.route('/new-competency/', methods=['POST'])
+def add_competency():
+    db=get_db()
+    form=CompetencyForm()
+    elements=[]
+    for el in db.get_elements():
+        elements.append(f'{el.element_id}',f'{el.element}')
+    form.elements.choices=elements
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            competency_id=form.competency_id.data
+            competency=form.competency.data
+            competency_achievement=form.competency_achievement.data
+            competency_type=form.competency_type.data
+            competency = Competency(competency_id, competency,competency_achievement,competency_type)
+            try:
+                db.add_competency(competency)
+                redirect(url_for('competency.display_competency'),competency_id=competency_id)
+            except:
+                flash('Competency cannot be added')
+        else:
+            flash('Invalid input')
+    return render_template("specific_competency.html", competency=competency)
+    
