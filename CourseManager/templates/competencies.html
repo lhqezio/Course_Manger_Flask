@@ -18,15 +18,15 @@
             <td>
                 <table class="data" id="competency-elements">
                     <tr>
-                        <th>ID</th>
-                        <th>Element</th>
-                        <th>Criteria</th>
+                        <th id="comp-elem-id">ID</th>
+                        <th id="comp-elem-el">Element</th>
+                        <th id="comp-elem-cr">Criteria</th>
                     </tr>
                     {% for element in competency.elements %}
                     <tr>
-                        <td>{{element.element_id}}</td>
-                        <td>{{element.element}}</td>
-                        <td>{{element.element_criteria}}</td>
+                        <td id="comp-elem-id">{{element.element_id}}</td>
+                        <td id="comp-elem-el">{{element.element}}</td>
+                        <td id="comp-elem-cr">{{element.element_criteria}}</td>
                     </tr>
                     {% endfor %}
                 </table>

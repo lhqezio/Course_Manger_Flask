@@ -19,6 +19,27 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
-#competency-elements tr {
+#competency-elements, #competency-elements tr {
     border: none;
+    display: flex;
+}
+#competency-elements th {
+    border-top: none;
+    border-bottom: none;
+}
+#competency-elements td {
+    border-bottom: none;
+}
+#comp-elem-id {
+    border-left: none;
+    width: 10%;
+}
+#comp-elem-el {
+    border-left: none;
+    border-right: none;
+    width: 30%;
+}
+#comp-elem-cr {
+    border-right: none;
+    width: 60%;
 }
