@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint
-from .dbmanager import get_db
-from .user import User
-from flask_security import roles_required, login_required, current_user
+from ..dbmanager import get_db
+from ..user import User
+from flask_login import login_required, current_user
+from flask_security import roles_required
 
 bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 
 @bp.route('/', methods=['GET', 'POST'])
 @roles_required('admin')
+@login_required
 def admin_dashboard():
     # Get all users from the database
     db = get_db()
@@ -34,4 +36,4 @@ def admin_dashboard():
         return redirect(url_for('.admin_dashboard'))
     
     # Render the admin dashboard with the list of users
-    return render_template('admin_dashboard.html', users=users)
+    return render_template('admin_dashboard.html',current_user=current_user, users=users)

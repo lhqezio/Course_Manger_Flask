@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
+from flask_login import current_user
 import oracledb
 from CourseManager.dbmanager import *
 
@@ -21,6 +22,6 @@ def display_courses(domain_id):
 @bp.route('/<course_id>')
 def display_course(course_id):
     if get_db().get_course(course_id):
-        return render_template("specific_course.html", course=get_db().get_course(course_id))
+        return render_template("specific_course.html", course=get_db().get_course(course_id),current_user=current_user)
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))

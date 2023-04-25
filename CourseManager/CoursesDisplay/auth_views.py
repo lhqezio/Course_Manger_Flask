@@ -1,9 +1,9 @@
 import os
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, url_for
-from .dbmanager import get_db
-from .user import LoginForm, SignupForm, User
+from ..dbmanager import get_db
+from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required,current_user
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
@@ -26,7 +26,7 @@ def signup():
                 get_db().add_user(user)
         else:
             flash("invalid form")
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', form=form, current_user = current_user)
 
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -46,7 +46,7 @@ def login():
                 flash("Cannot login")
         else:
             flash("Cannot login")
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, current_user = current_user)
 
 @bp.route('/logout/')
 @login_required
