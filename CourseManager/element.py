@@ -1,4 +1,7 @@
 from flask import jsonify
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField, SelectField
+from wtforms.validators import DataRequired
 
 class Element:
     def __init__(self,element_id,element_order,element,element_criteria,competency_id): 
@@ -31,4 +34,12 @@ class Element:
         return Element(json['element_id'],json['element_order'],json['element'],json['element_criteria'],json['competency_id'])
     def to_json(self):
         return jsonify(self.__dict__)
+    
+class ElementForm(FlaskForm):
+    element_id = IntegerField('element id',validators=[DataRequired()])
+    element_order = IntegerField('element order',validators=[DataRequired()])
+    element = StringField('element',validators=[DataRequired()])
+    element_criteria = StringField('element criteria',validators=[DataRequired()])
+    competency_id= SelectField('competency id',validators=[DataRequired()])
+
     
