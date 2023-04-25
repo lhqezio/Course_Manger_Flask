@@ -46,3 +46,4 @@ class CompetencyForm(FlaskForm):
     competency = StringField('competency',validators=[DataRequired()])
     competency_achievement = StringField('competency achievement',validators=[DataRequired()])
     competency_type = StringField('competency type',validators=[DataRequired()])
+
