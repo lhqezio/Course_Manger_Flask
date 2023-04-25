@@ -1,9 +1,24 @@
-.navbar {
+.navbar ul {
+    display: flex;
     list-style-type: none;
-    display: inline;
     padding: 1em;
 }
-nav {
-    position: relative;
-    top: 1em;
+.navbar li {
+    padding: 1em;
+}
+.navbar a {
+    text-decoration: none;
+}
+.navbar a:visited {
+    color: blue;
+}
+#user {
+    margin-left: auto;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+#competency-elements tr {
+    border: none;
 }
