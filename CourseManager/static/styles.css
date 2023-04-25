@@ -34,6 +34,12 @@ table, th, td {
     border-left: none;
     width: 10%;
 }
+#comp-elem-el {
+    border-left: none;
+    border-right: none;
+    width: 30%;
+}
 #comp-elem-cr {
     border-right: none;
+    width: 60%;
 }
