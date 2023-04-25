@@ -13,7 +13,7 @@ def display_courses(domain_id):
         for course in courses:
             if course.term not in terms:
                 terms.append(course.term)
-        return render_template("courses.html", courses=courses, terms=terms)
+        return render_template("courses.html", courses=courses, terms=terms, current_user=current_user)
     except oracledb.Error as e:
         flash("Something went wrong..")
         flash("Cannot reach the database")
