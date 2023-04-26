@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask import jsonify
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, SelectMultipleField
 from wtforms.validators import DataRequired
 from CourseManager.element import Element
 
@@ -46,4 +46,5 @@ class CompetencyForm(FlaskForm):
     competency = StringField('competency',validators=[DataRequired()])
     competency_achievement = StringField('competency achievement',validators=[DataRequired()])
     competency_type = StringField('competency type',validators=[DataRequired()])
+    elements=SelectMultipleField('elements',validators=[DataRequired()])
 
