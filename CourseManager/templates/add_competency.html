@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}New Competency{% endblock %}
+{% block content %}
+    <form name="form" id="new_competency" method="POST">
+        <label id="add-comp-form-label" for="form">New Competency Form: </label> <br><br>
+        {{form.csrf_token}}
+        {{ form.competency_id.label }}
+        {{ form.competency_id()}}
+        {{ form.competency.label }}
+        {{ form.competency()}}
+        {{ form.competency_achievement.label }}
+        {{ form.competency_achievement() }}
+        {{ form.competency_type.label }}
+        {{ form.competency_type() }}
+        {{ form.elements.label }}
+        {{ form.elements() }}
+        <input id="button" type="submit" />
+    </form>
+{% endblock %}
