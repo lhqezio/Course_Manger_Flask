@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Edit Competency{% endblock %}
+{% block content %}
+    <form name="form" id="edit_competency" method="POST">
+        <label id="edit-comp-form-label" for="form">Edit Competency Form: </label> <br><br>
+        {{form.csrf_token}}
+        {{ form.competency_id.label }}
+        {{ form.competency_id(value=competency.competency_id readonly=true)}}
+        {{ form.competency.label }}
+        {{ form.competency(value=competency.competency)}}
+        {{ form.competency_achievement.label }}
+        {{ form.competency_achievement(value=competency.competency_id_achievement) }}
+        {{ form.competency_type.label }}
+        {{ form.competency_type(value=competency.competency_type) }}
+        {{ form.elements.label }}
+        {{ form.elements(value=competency.elements) }}
+        <input id="button" type="submit" />
+    </form>
+{% endblock %}
