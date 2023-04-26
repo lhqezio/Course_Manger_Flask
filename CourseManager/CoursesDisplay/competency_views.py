@@ -66,7 +66,8 @@ def add_competency():
             competency=form.competency.data
             competency_achievement=form.competency_achievement.data
             competency_type=form.competency_type.data
-            competency = Competency(competency_id, competency,competency_achievement,competency_type)
+            elements=form.elements.data
+            competency = Competency(competency_id, competency,competency_achievement,competency_type,elements)
             try:
                 db.add_competency(competency)
                 redirect(url_for('competency.display_competency'),competency_id=competency_id)
@@ -74,5 +75,5 @@ def add_competency():
                 flash('Competency cannot be added')
         else:
             flash('Invalid input')
-    return render_template("specific_competency.html", competency=competency)
+    return render_template("add_competency.html", competency=competency, form=form)
     
