@@ -31,13 +31,13 @@ def add_element(element_id):
         for dom in db.get_domains:
             dom_ids.append(f'{dom.domain_id}',f'{dom.domain}')
         form.competency_id.choices=dom_ids
-        if request.method=="POST":
+        if request.method=="POST" and form.validate_on_submit():
             element_id=form.element_id.data
             element_order=form.element_order.data
             element=form.element.data
             element_criteria=form.element_criteria.data
             competency_id=form.competency_id.data
             element=Element(element_id,element_order,element,element_criteria,competency_id)
-        return render_template("element_form.html", element=element)
+        return render_template("element_form.html", element=element, form=form)
     flash("DB connection fail")
     return redirect(url_for("element.display_elements"))
