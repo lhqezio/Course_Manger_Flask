@@ -7,16 +7,16 @@ from CourseManager.element import Element
 class Competency:
     def __init__(self,competency_id,competency,competency_achievement,competency_type,elements):
         if not isinstance(competency_id,str):
-            raise TypeError()
+            raise TypeError("wrong ID")
         if not isinstance(competency,str):
-            raise TypeError()
+            raise TypeError("bad competency name")
         if not isinstance(competency_achievement,str):
-            raise TypeError()
+            raise TypeError("bad achievement")
         if not isinstance(competency_type,str):
-            raise TypeError()
+            raise TypeError("bad type")
         for el in elements:
             if not isinstance(el,Element):
-                raise TypeError()
+                raise TypeError("no elem", el)
         self.competency_id=competency_id
         self.competency=competency
         self.competency_achievement=competency_achievement
@@ -42,9 +42,9 @@ class Competency:
         return jsonify(self.__dict__)
     
 class CompetencyForm(FlaskForm):
-    competency_id = IntegerField('competency id',validators=[DataRequired()])
+    competency_id = StringField('competency id',validators=[DataRequired()])
     competency = StringField('competency',validators=[DataRequired()])
-    competency_achievement = TextAreaField('competency achievement',validators=[DataRequired()])
+    competency_achievement = StringField('competency achievement',validators=[DataRequired()])
     competency_type = SelectField('competency type',choices=[('Mandatory','Mandatory'),('Optional','Optional')], validators=[DataRequired()])
     elements=SelectMultipleField('elements',validators=[DataRequired()])
 
