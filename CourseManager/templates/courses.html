@@ -5,15 +5,23 @@
     {% for term in terms %}
         <h3>Term {{term.term_id}}</h3>
         <table class="data" id="courses">
+            <tr id="course-row">
+                <th id="course-id">Course Number</th>
+                <th id="course-title">Title</th>
+                <th id="course-hours">Theory</th>
+                <th id="course-hours">Lab</th>
+                <th id="course-hours">Homework</th>
+                <th id="course-desc">Description</th>
+            </tr>
             {% for course in courses %}
             {% if course.term.term_id == term.term_id %}
-            <tr>
-                <td>{{course.course_number}}</td>
-                <td>{{course.course_title}}</td>
-                <td>{{course.theory_hours}}</td>
-                <td>{{course.lab_hours}}</td>
-                <td>{{course.homework_hours}}</td>
-                <td>{{course.description}}</td>
+            <tr id="course-row">
+                <td id="course-id">{{course.course_number}}</td>
+                <td id="course-title">{{course.course_title}}</td>
+                <td id="course-hours">{{course.theory_hours}}</td>
+                <td id="course-hours">{{course.lab_hours}}</td>
+                <td id="course-hours">{{course.homework_hours}}</td>
+                <td id="course-desc">{{course.description}}</td>
             </tr>
             {% endif %}
             {% endfor %}
