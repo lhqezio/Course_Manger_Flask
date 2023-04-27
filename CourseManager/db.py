@@ -76,7 +76,6 @@ class Database:
         return domains
 
     def get_term(self, term_id):
-            terms = []
             with self.__get_cursor() as cursor:
                 results = cursor.execute('select (term_id,term_name from terms where term_id=:id', id=term_id)
                 for row in results:
@@ -113,9 +112,9 @@ class Database:
             raise TypeError()
         course_elems = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_courses_elements_competencies where course_id=:id',id=course_id)
+            results = cursor.execute('select v.element_id, v.element_order, v.element, v.element_criteria, v.competency_id, e.element_hours from view_courses_elements_competencies v inner join courses_elements e using(course_id) where course_id:id',id=course_id)
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
                 course_elems.append(element)
         return course_elems
     
@@ -177,9 +176,9 @@ class Database:
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id=:id',id=competency_id)
+            results = cursor.execute('select v.element_id, v.element_order, v.element, v.element_criteria, v.competency_id, e.element_hours from view_competencies_elements v inner join courses_elements e on v.element_id=e.element_id where competency_id=:id',id=competency_id)
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=row[5])
                 competency_elems.append(element)
         return competency_elems
     
@@ -199,7 +198,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('select competency_id,competency,competency_achievement,competency_type from competencies')
             for row in results:
-                elements=self.get_elems_from_competency(competency_id=row[0])
+                elements=self.get_elems_from_competency(comp_id=row[0])
                 competency = Competency(competency_id=row[0],competency=row[1],competency_achievement=row[2],competency_type=row[3],elements=elements)
                 competencies.append(competency)
         return competencies
@@ -211,23 +210,23 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('select competency_id,competency,competency_achievement,competency_type from view_courses_elements_competencies where course_id=:id',id=course_id)
             for row in results:
-                elements=self.get_elems_from_competency(competency_id=row[0])
+                elements=self.get_elems_from_competency(comp_id=row[0])
                 competency = Competency(competency_id=row[0],competency=row[1],competency_achievement=row[2],competency_type=row[3],elements=elements)
                 course_competencies.append(competency)
         return course_competencies
     
     def get_element(self, elem_id):
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_order, element, element_criteria, competency_id from elements where competency_id=:id', id=elem_id)
+            results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where element_id=:id', id=elem_id)
             for row in results:
-                return Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                return Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
 
     def get_elems(self):
         elements = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from elements')
+            results = cursor.execute('select element_id, element_order,  element, element_criteria, competency_id from elements')
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=0)
                 elements.append(element)
         return elements
 
@@ -236,9 +235,9 @@ class Database:
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id=:id',id=comp_id)
+            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_competencies_elements e left outer join courses_elements h on e.element_id=h.element_id where e.competency_id=:id',id=comp_id)
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
                 competency_elems.append(element)
         return competency_elems
     
@@ -247,9 +246,9 @@ class Database:
             raise TypeError()
         course_elems = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from view_courses_elements_competencies where course_id=:id',id=course_id)
+            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_courses_elements_competencies e left outer join courses_elements h on e.element_id=h.element_id where e.course_id=:id',id=course_id)
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
                 course_elems.append(element)
         return course_elems
 

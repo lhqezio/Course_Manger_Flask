@@ -4,7 +4,7 @@ from wtforms import StringField, IntegerField, SelectField
 from wtforms.validators import DataRequired
 
 class Element:
-    def __init__(self,element_id,element_order,element,element_criteria,competency_id): 
+    def __init__(self,element_id,element_order,element,element_criteria,competency_id, hours): 
         if not isinstance(element,str):
             raise TypeError()
         if not isinstance(element_id,int):
@@ -15,11 +15,16 @@ class Element:
             raise TypeError()
         if not isinstance(competency_id,str):
             raise TypeError()
+        if not isinstance(competency_id,str):
+            raise TypeError()
+        if not isinstance(hours,int):
+            hours=0
         self.element_id=element_id
         self.element_order=element_order
         self.element=element
         self.element_criteria=element_criteria
         self.competency_id=competency_id
+        self.hours=hours
     def __str__(self):
         return f'Element: {self.element_id} {self.element}'
     def __repr__(self):
@@ -41,5 +46,6 @@ class ElementForm(FlaskForm):
     element = StringField('element',validators=[DataRequired()])
     element_criteria = StringField('element criteria',validators=[DataRequired()])
     competency_id= SelectField('competency id',validators=[DataRequired()])
+    hours = IntegerField('element hours',validators=[DataRequired()])
 
     

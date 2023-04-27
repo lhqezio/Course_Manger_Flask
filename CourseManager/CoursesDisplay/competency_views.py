@@ -30,8 +30,8 @@ def edit_competency(competency_id):
         competency = db.get_competency(competency_id)
         form=CompetencyForm()
         elements=[]
-        for el in db.get_elems_from_competency(competency_id):
-            elements.append(f'{el.element_id}',f'{el.element}')
+        for el in db.get_elems():
+            elements.append((f'{el.element_id}',f'{el}'))
         form.elements.choices=elements
         if request.method == 'POST':
             if form.validate_on_submit():
@@ -39,8 +39,8 @@ def edit_competency(competency_id):
                 competency=form.competency.data
                 competency_achievement=form.competency_achievement.data
                 competency_type=form.competency_type.data
-                #to check
-                competency = Competency(competency_id, competency,competency_achievement,competency_type)
+                elements=form.elements.data #objects?
+                competency = Competency(competency_id, competency,competency_achievement,competency_type,elements)
                 try:
                     db.update_competency(competency)
                     redirect(url_for('competency.display_competency'),competency_id=competency_id)
@@ -48,17 +48,17 @@ def edit_competency(competency_id):
                     flash('Competency update DB Error')
             else:
                 flash('Invalid input')
-        return render_template("specific_competency.html", competency=competency)
+        return render_template("edit_competency.html", competency=competency, form=form)
     flash(f"{competency_id} competency not found!")
     return redirect(url_for("competency.display_competencies"))
 
-@bp.route('/new-competency/', methods=['POST'])
+@bp.route('/new-competency/', methods=['POST','GET'])
 def add_competency():
     db=get_db()
     form=CompetencyForm()
     elements=[]
-    for el in db.get_elements():
-        elements.append(f'{el.element_id}',f'{el.element}')
+    for el in db.get_elems():
+        elements.append((f'{el.element_id}',f'{el}'))
     form.elements.choices=elements
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -75,5 +75,5 @@ def add_competency():
                 flash('Competency cannot be added')
         else:
             flash('Invalid input')
-    return render_template("add_competency.html", competency=competency, form=form)
+    return render_template("add_competency.html", form=form)
     
