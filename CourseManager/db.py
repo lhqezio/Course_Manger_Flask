@@ -41,6 +41,11 @@ class Database:
             self.__conn.close()
             self.__conn = None
 
+    def commit(self):
+        if self.__conn:
+            self.__conn.commit()
+            self.__conn = None
+
     def __get_cursor(self):
             for i in range(3):
                 try:
@@ -217,7 +222,7 @@ class Database:
     
     def get_element(self, elem_id):
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where element_id=:id', id=elem_id)
+            results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where e.element_id=:id', id=elem_id)
             for row in results:
                 return Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
 
