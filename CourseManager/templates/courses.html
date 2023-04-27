@@ -16,7 +16,7 @@
             {% for course in courses %}
             {% if course.term.term_id == term.term_id %}
             <tr id="course-row">
-                <td id="course-id">{{course.course_number}}</td>
+                <td id="course-id"><a href="{{ url_for('course.display_course', course_id=course.course_number)}}">{{course.course_number}}</a></td>
                 <td id="course-title">{{course.course_title}}</td>
                 <td id="course-hours">{{course.theory_hours}}</td>
                 <td id="course-hours">{{course.lab_hours}}</td>

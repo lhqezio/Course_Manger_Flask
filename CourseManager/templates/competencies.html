@@ -24,7 +24,7 @@
                     </tr>
                     {% for element in competency.elements %}
                     <tr>
-                        <td id="comp-elem-id">{{element.element_id}}</td>
+                        <td id="comp-elem-id"><a href="{{ url_for('element.display_element', element_id=element.element_id)}}">{{element.element_id}}</a></td>
                         <td id="comp-elem-el">{{element.element}}</td>
                         <td id="comp-elem-cr">{{element.element_criteria}}</td>
                     </tr>
