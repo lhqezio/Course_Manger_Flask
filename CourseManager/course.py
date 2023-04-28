@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask import jsonify
-from wtforms import StringField, IntegerField, TextAreaField, SelectField
+from wtforms import StringField, IntegerField, TextAreaField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired
 from CourseManager.domain import Domain
 from CourseManager.term import Term
@@ -13,11 +13,11 @@ class Course:
             raise TypeError()
         if not isinstance(course_title,str):
             raise TypeError()
-        if not isinstance(theory_hours,int):
+        if not isinstance(theory_hours,int) or theory_hours<0:
             raise TypeError()
-        if not isinstance(lab_hours,int):
+        if not isinstance(lab_hours,int) or lab_hours<0:
             raise TypeError()
-        if not isinstance(homework_hours,int):
+        if not isinstance(homework_hours,int) or homework_hours<0:
             raise TypeError()
         if not isinstance(description,str):
             raise TypeError()
@@ -63,8 +63,10 @@ class CourseForm(FlaskForm):
     course_number = StringField('course number',validators=[DataRequired()])
     course_title = StringField('course title',validators=[DataRequired()])
     theory_hours = IntegerField('theory hours',validators=[DataRequired()])
-    lab_hours = IntegerField('lab hours',validators=[DataRequired()]),
+    lab_hours = IntegerField('lab hours',validators=[DataRequired()])
     homework_hours = IntegerField('homework hours',validators=[DataRequired()])
     description = TextAreaField('description',validators=[DataRequired()])
-    domain_id = SelectField('domain id',validators=[DataRequired()])
-    term_id = SelectField('term id',validators=[DataRequired()])
+    domain_id = SelectField('domain',validators=[DataRequired()])
+    term_id = SelectField('term',validators=[DataRequired()])
+    competencies = SelectMultipleField('competencies',validators=[DataRequired()])
+    

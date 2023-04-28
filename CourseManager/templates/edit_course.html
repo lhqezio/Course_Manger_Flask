@@ -5,7 +5,7 @@
         <label id="course-form-label" for="form">Edit Course Form: </label> <br><br>
         {{form.csrf_token}}
         {{ form.course_number.label }}
-        {{ form.course_number(value=course.course_number readonly=true)}}
+        {{ form.course_number(value=course.course_number, readonly=true)}}
         {{ form.course_title.label }}
         {{ form.course_title(value=course.course_title)}}
         {{ form.theory_hours.label }}
@@ -17,9 +17,11 @@
         {{ form.description.label }}
         {{ form.description(value=course.description) }}
         {{ form.domain_id.label }}
-        {{ form.domain_id(value=course.domain_id) }}
+        {{ form.domain_id() }}
         {{ form.term_id.label }}
-        {{ form.term_id(value=course.term_id) }}
+        {{ form.term_id() }}
+        {{ form.competencies.label }}
+        {{ form.competencies() }}
         <input id="button" type="submit" />
     </form>
 {% endblock %}
