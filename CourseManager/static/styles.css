@@ -1,9 +1,59 @@
-.navbar {
+.navbar ul {
+    display: flex;
     list-style-type: none;
-    display: inline;
     padding: 1em;
 }
-nav {
-    position: relative;
-    top: 1em;
+.navbar li {
+    padding: 1em;
+}
+.navbar a {
+    text-decoration: none;
+}
+.navbar a:visited {
+    color: blue;
+}
+#user {
+    margin-left: auto;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1em;
+}
+#competency-elements, #competency-elements tr {
+    border: none;
+    display: flex;
+}
+#competency-elements th {
+    border-top: none;
+    border-bottom: none;
+}
+#competency-elements td {
+    border-bottom: none;
+}
+#comp-elems-td, #comp-elems-td * {
+    padding: 0em;
+}
+#comp-elem-id {
+    border-left: none;
+    width: 10%;
+    justify-content: center;
+}
+#comp-elem-el {
+    border-left: none;
+    border-right: none;
+    width: 30%;
+}
+#comp-elem-cr {
+    border-right: none;
+    width: 60%;
+}
+#course-id {
+    width: 10%;
+}
+#course-title {
+    width: 25%;
+}
+#course-desc {
+    width: 65%;
 }
