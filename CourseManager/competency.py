@@ -44,9 +44,9 @@ class Competency:
 class CompetencyForm(FlaskForm):
     competency_id = StringField('competency id',validators=[DataRequired()])
     competency = StringField('competency',validators=[DataRequired()])
-    competency_achievement = StringField('competency achievement',validators=[DataRequired()])
+    competency_achievement = TextAreaField('competency achievement',validators=[DataRequired()])
     competency_type = SelectField('competency type',choices=[('Mandatory','Mandatory'),('Optional','Optional')], validators=[DataRequired()])
-    elements=SelectMultipleField('elements',validators=[DataRequired()])
+    elements=SelectMultipleField('elements')
 
 #,widget = widgets.ListWidget(prefix_label=False),option_widget = widgets.CheckboxInput()
 #https://stackoverflow.com/questions/70563907/display-wtforms-selectmultiplefield-display-as-drop-down-and-not-list

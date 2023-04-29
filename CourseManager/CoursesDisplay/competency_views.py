@@ -28,11 +28,16 @@ def edit_competency(competency_id):
     db=get_db()
     if db.get_competency(competency_id):
         competency = db.get_competency(competency_id)
-        form=CompetencyForm()
-        elements=[]
+        form=CompetencyForm(competency_achievement=competency.competency_achievement)
+        elements_list=[]
         for el in db.get_elems():
-            elements.append((f'{el.element_id}',f'{el}'))
-        form.elements.choices=elements
+            elements_list.append((f'{el.element_id}',f'{el.element}'))
+        form.elements.choices=elements_list
+        com_els_ids=[] 
+        for el in competency.elements:
+            com_els_ids.append(el.element_id)
+        form.elements.choices=elements_list
+        form.elements.default=com_els_ids
         if request.method == 'POST':
             if form.validate_on_submit():
                 competency_id=form.competency_id.data
@@ -45,7 +50,6 @@ def edit_competency(competency_id):
                 competency = Competency(competency_id, competency,competency_achievement,competency_type,elements)
                 try:
                     db.update_competency(competency)
-                    flash("updated")
                     return redirect(url_for('competency.display_competency'),competency_id=competency_id)
                 except:
                     flash('Competency update DB Error')
