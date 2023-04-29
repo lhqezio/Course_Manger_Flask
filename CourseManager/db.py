@@ -176,14 +176,25 @@ class Database:
                 courses.append(course)
         return courses
     
-    def get_elems_from_competency(self,competency_id):
+    def get_elems_from_competency(self,comp_id):
+        if not isinstance(comp_id, str):
+            raise TypeError()
+        competency_elems = [] 
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_competencies_elements e left outer join courses_elements h on e.element_id=h.element_id where e.competency_id=:id',id=comp_id)
+            for row in results:
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
+                competency_elems.append(element)
+        return competency_elems
+    
+    def get_elems_of_competency(self,competency_id):
         if not isinstance(competency_id, int):
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select v.element_id, v.element_order, v.element, v.element_criteria, v.competency_id, e.element_hours from view_competencies_elements v inner join courses_elements e on v.element_id=e.element_id where competency_id=:id',id=competency_id)
+            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from elements where competency_id=:id',id=competency_id)
             for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=row[5])
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
                 competency_elems.append(element)
         return competency_elems
     
@@ -234,17 +245,6 @@ class Database:
                 element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=0)
                 elements.append(element)
         return elements
-
-    def get_elems_from_competency(self,comp_id):
-        if not isinstance(comp_id, str):
-            raise TypeError()
-        competency_elems = [] 
-        with self.__get_cursor() as cursor:
-            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_competencies_elements e left outer join courses_elements h on e.element_id=h.element_id where e.competency_id=:id',id=comp_id)
-            for row in results:
-                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
-                competency_elems.append(element)
-        return competency_elems
     
     def get_elems_from_course(self,course_id):
         if not isinstance(course_id, str):
