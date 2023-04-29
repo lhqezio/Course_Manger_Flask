@@ -273,10 +273,10 @@ class Database:
         with self.__get_cursor() as cursor:
             domain_id=course.domain.domain_id
             term_id=course.term.term_id
-            cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,homework_hours=:hhrs,description=:descr,domain_id=:dom_id,term_id=:term_id WHERE course_id=:id',
+            cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,work_hours=:whrs,description=:descr,domain_id=:dom_id,term_id=:t_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
-                            hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
-                            
+                            whrs=course.homework_hours,descr=course.description,dom_id=domain_id,t_id=term_id)
+                       
     def delete_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()

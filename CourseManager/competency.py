@@ -23,7 +23,7 @@ class Competency:
         self.competency_type=competency_type
         self.elements=elements
     def __str__(self):
-        return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
+        return f'{self.competency_id} {self.competency}'
     def __repr__(self):
         return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
     def __eq__(self, other):

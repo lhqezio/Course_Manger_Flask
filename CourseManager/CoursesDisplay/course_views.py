@@ -39,10 +39,14 @@ def edit_course(course_id):
         terms=[]
         for term in db.get_terms():
             terms.append((f'{term.term_id}',f'{term}'))
+        competencies_list=[]
+        for comp in db.get_competencies():
+            competencies_list.append((f'{comp.competency_id}',f'{comp.competency}'))
         form.domain_id.choices=domains
         form.term_id.choices=terms
+        form.competencies.choices=competencies_list
         if request.method=='GET':
-            form.competencies=course.competencies
+            #form.competencies.default = [1,2,3]
             form.domain_id.data=course.domain.domain_id
             form.term_id.data=course.term.term_id
         if request.method == 'POST':
@@ -52,14 +56,20 @@ def edit_course(course_id):
                 lab_hours=form.lab_hours.data
                 homework_hours=form.homework_hours.data
                 description=form.description.data
-                domain_id=form.domain_id.data
-                term_id=form.term_id.data
-                course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain_id,term_id)
+                domain=db.get_domain(form.domain_id.data[0])
+                term=db.get_term(form.term_id.data[0])
+                competencies=[]
+                for com_id in form.competencies.data:
+                    competencies.append(db.get_competency(com_id))
+                course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain,term, competencies)
                 try:
                     db.update_course(course)
-                    return redirect(url_for('course.display_course',course_id=course_id),course_id=course_id)
-                except:
-                    flash('Course update DB Error')
+                    flash("Course updated")
+                    db.commit()
+                    return redirect(url_for('course.display_course',course_id=course_id))
+                except Exception as e:
+                    raise e
+                    #flash('Course update DB Error')
             else:
                 flash('Invalid input')
         return render_template("edit_course.html", course=course, form=form)
@@ -67,7 +77,7 @@ def edit_course(course_id):
         flash('Course doesn\'t exist')
         redirect(url_for('display_courses'))
 
-@bp.route('/add-course', methods=['POST','GET'])
+@bp.route('/new-course/', methods=['POST','GET'])
 def add_course():
     db=get_db()
     form=CourseForm()
@@ -76,9 +86,13 @@ def add_course():
         domains.append((f'{dom.domain_id}',f'{dom.domain}'))
     terms=[]
     for term in db.get_terms():
-        terms.append((f'{term.term_id}',f'{term}'))
+        terms.append((f'{term.term_id}',f'{term.term_name}'))
+    competencies_list=[]
+    for comp in db.get_competencies():
+        competencies_list.append((f'{comp.competency_id}',f'{comp.competency}'))
     form.domain_id.choices=domains
     form.term_id.choices=terms
+    form.competencies.choices=competencies_list
     if request.method == 'POST':
         if form.validate_on_submit():
             course_id=form.course_number.data
@@ -87,12 +101,18 @@ def add_course():
             lab_hours=form.lab_hours.data
             homework_hours=form.homework_hours.data
             description=form.description.data
-            domain_id=form.domain_id.data
-            term_id=form.term_id.data
-            course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain_id,term_id)
+            domain=db.get_domain(form.domain_id.data[0])
+            term=db.get_term(form.term_id.data[0])
+            competencies=[]
+            for com_id in form.competencies.data:
+                competencies.append(db.get_competency(com_id))
+
+            course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain,term,competencies)
             try:
                 db.add_course(course)
-                return redirect(url_for('course.display_course',course_id=course_id),course_id=course_id)
+                flash("New course added")
+                db.commit()
+                return redirect(url_for('course.display_course',course_id=course_id))
             except:
                 flash('Course cannot be added')
         else:
