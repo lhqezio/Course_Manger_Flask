@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask import jsonify
-from wtforms import StringField, IntegerField, TextAreaField, SelectField, SelectMultipleField, widgets
+from wtforms import StringField, IntegerField, SelectField, SelectMultipleField, TextAreaField, widgets
 from wtforms.validators import DataRequired
 from CourseManager.domain import Domain
 from CourseManager.term import Term
@@ -65,8 +65,9 @@ class CourseForm(FlaskForm):
     theory_hours = IntegerField('theory hours',validators=[DataRequired()])
     lab_hours = IntegerField('lab hours',validators=[DataRequired()])
     homework_hours = IntegerField('homework hours',validators=[DataRequired()])
-    description = StringField('description',validators=[DataRequired()])
+    description = TextAreaField('description',validators=[DataRequired()])
     domain_id = SelectField('domain',validators=[DataRequired()])
     term_id = SelectField('term',validators=[DataRequired()])
     competencies = SelectMultipleField('competencies')
+    #,widget = widgets.ListWidget(prefix_label=False),option_widget = widgets.CheckboxInput()
     

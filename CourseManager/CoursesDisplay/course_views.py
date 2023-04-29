@@ -32,7 +32,7 @@ def edit_course(course_id):
     db=get_db()
     if db.get_course(course_id):
         course = db.get_course(course_id)
-        form=CourseForm()
+        form=CourseForm(domain_id=course.domain.domain_id,term_id=course.term.term_id, description=course.description)
         domains=[]
         for dom in db.get_domains():
             domains.append((f'{dom.domain_id}',f'{dom.domain}'))
@@ -44,11 +44,11 @@ def edit_course(course_id):
             competencies_list.append((f'{comp.competency_id}',f'{comp.competency}'))
         form.domain_id.choices=domains
         form.term_id.choices=terms
+        com_ids=[]
+        for com in course.competencies:
+            com_ids.append(com.competency_id)
         form.competencies.choices=competencies_list
-        if request.method=='GET':
-            #form.competencies.default = [1,2,3]
-            form.domain_id.data=course.domain.domain_id
-            form.term_id.data=course.term.term_id
+        form.competencies.data=com_ids
         if request.method == 'POST':
             if form.validate_on_submit():
                 course_title=form.course_title.data
@@ -56,20 +56,18 @@ def edit_course(course_id):
                 lab_hours=form.lab_hours.data
                 homework_hours=form.homework_hours.data
                 description=form.description.data
-                domain=db.get_domain(form.domain_id.data[0])
-                term=db.get_term(form.term_id.data[0])
+                domain=db.get_domain(form.domain_id.data)
+                term=db.get_term(form.term_id.data)
                 competencies=[]
                 for com_id in form.competencies.data:
                     competencies.append(db.get_competency(com_id))
                 course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain,term, competencies)
                 try:
                     db.update_course(course)
-                    flash("Course updated")
                     db.commit()
                     return redirect(url_for('course.display_course',course_id=course_id))
-                except Exception as e:
-                    raise e
-                    #flash('Course update DB Error')
+                except:
+                    flash('Course update DB Error, try again')
             else:
                 flash('Invalid input')
         return render_template("edit_course.html", course=course, form=form)
@@ -101,12 +99,11 @@ def add_course():
             lab_hours=form.lab_hours.data
             homework_hours=form.homework_hours.data
             description=form.description.data
-            domain=db.get_domain(form.domain_id.data[0])
-            term=db.get_term(form.term_id.data[0])
+            domain=db.get_domain(form.domain_id.data)
+            term=db.get_term(form.term_id.data)
             competencies=[]
             for com_id in form.competencies.data:
                 competencies.append(db.get_competency(com_id))
-
             course = Course(course_id, course_title,theory_hours,lab_hours,homework_hours,description,domain,term,competencies)
             try:
                 db.add_course(course)
