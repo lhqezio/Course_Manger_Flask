@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}New Competency{% endblock %}
 {% block content %}
-    <form name="form" id="new_competency" method="POST">
+    <form name="form" id="new_competency" method="POST" class="db_form">
         <label id="add-comp-form-label" for="form">New Competency Form: </label> <br><br>
         {{form.csrf_token}}
         {{ form.competency_id.label }}
@@ -14,6 +14,6 @@
         {{ form.competency_type() }}
         {{ form.elements.label }}
         {{ form.elements() }}
-        <input id="newcomp-button" type="submit" />
+        <button id="editcomp-button" class="form_btn" type="submit">Add</button>
     </form>
 {% endblock %}
