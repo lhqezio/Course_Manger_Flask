@@ -29,15 +29,18 @@ def edit_competency(competency_id):
     if db.get_competency(competency_id):
         competency = db.get_competency(competency_id)
         form=CompetencyForm(competency_achievement=competency.competency_achievement)
+        #elements list for form choices 
         elements_list=[]
         for el in db.get_elems():
             elements_list.append((f'{el.element_id}',f'{el.element}'))
-        form.elements.choices=elements_list
+        #elements in competency as default selected for form choices 
         com_els_ids=[] 
-        for el in competency.elements:
-            com_els_ids.append(el.element_id)
+        for ele in competency.elements:
+            if not com_els_ids.__contains__(str(ele.element_id)):
+                com_els_ids.append(str(ele.element_id))
+        #form elements dynamic populate 
+        form.elements.data=com_els_ids
         form.elements.choices=elements_list
-        form.elements.default=com_els_ids
         if request.method == 'POST':
             if form.validate_on_submit():
                 competency_id=form.competency_id.data
