@@ -84,7 +84,7 @@ def add_course():
         domains.append((f'{dom.domain_id}',f'{dom.domain}'))
     terms=[]
     for term in db.get_terms():
-        terms.append((f'{term.term_id}',f'{term.term_name}'))
+        terms.append((f'{term.term_id}',f'{term}'))
     competencies_list=[]
     for comp in db.get_competencies():
         competencies_list.append((f'{comp.competency_id}',f'{comp.competency}'))
