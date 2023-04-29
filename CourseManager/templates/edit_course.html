@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Course Edit{% endblock %}
 {% block content %}
-    <form name="form" id="new_course" method="POST">
+    <form name="form" id="new_course" method="POST" class="db_form">
         <label id="course-form-label" for="form">Edit Course Form: </label> <br><br>
         {{form.csrf_token}}
         {{ form.course_number.label }}
@@ -22,6 +22,6 @@
         {{ form.term_id() }}
         {{ form.competencies.label }}
         {{ form.competencies() }}
-        <input id="button" type="submit" />
+        <button id="editcourse-button" class="form_btn" type="submit">Edit</button>
     </form>
 {% endblock %}

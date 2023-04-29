@@ -57,3 +57,25 @@ table, th, td {
 #course-desc {
     width: 65%;
 }
+
+.db_form{
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+    justify-content: space-around;
+}
+
+.db_form textarea{
+    resize: vertical;
+    min-height: 5rem;
+}
+
+.form_btn{
+    margin-top: 1%;
+    width: 20%;
+}
+
+.form_btn:hover{
+    background-color: black;
+    color: white;
+}
