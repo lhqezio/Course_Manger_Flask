@@ -67,29 +67,29 @@ class Database:
 
     def get_domain(self, dom_id):
             with self.__get_cursor() as cursor:
-                results = cursor.execute('select domain, description from domains where domain_id=:id', id=dom_id)
+                results = cursor.execute('select domain_id, domain, domain_description from domains where domain_id=:id', id=dom_id)
                 for row in results:
-                    return Domain(dom_id, domain=row[0], description=row[1])
+                    return Domain(domain_id=row[0], domain=row[1], domain_description=row[2])
 
     def get_domains(self):
         domains = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select domain_id, domain, description from domains')
+            results = cursor.execute('select domain_id, domain, domain_description from domains')
             for row in results:
-                domain = Domain(id=row[0], domain=row[1], description=row[2])
+                domain = Domain(domain_id=row[0], domain=row[1], domain_description=row[2])
                 domains.append(domain)
         return domains
 
     def get_term(self, term_id):
             with self.__get_cursor() as cursor:
-                results = cursor.execute('select (term_id,term_name from terms where term_id=:id', id=term_id)
+                results = cursor.execute('select term_id,term_name from terms where term_id=:id', id=term_id)
                 for row in results:
                     return Term(term_id=row[0], term_name=row[1])
 
     def get_terms(self):
         terms = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select term_id, term_name from terms')
+            results = cursor.execute('select term_id, term_name from terms ORDER BY(term_id)')
             for row in results:
                 term = Term(term_id=row[0], term_name=row[1])
                 terms.append(term)
@@ -131,7 +131,7 @@ class Database:
             for row in results:
                 term=Term(term_id=row[6],term_name=row[7])
                 domain=Domain(domain_id=row[8],domain=row[9],domain_description=row[10])
-                course_competencies=self.get_competencies_from_courses(row[0])
+                course_competencies=self.get_competencies_from_courses(course_id=row[0])
                 course = Course(course_number=row[0],course_title=row[1],theory_hours=row[2],lab_hours=row[3],homework_hours=row[4],description=row[5],domain=domain,term=term,competencies=course_competencies)
                 return course
         return None
@@ -213,7 +213,7 @@ class Database:
             raise TypeError()
         course_competencies = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select competency_id,competency,competency_achievement,competency_type from view_courses_elements_competencies where course_id=:id',id=course_id)
+            results = cursor.execute('select distinct competency_id,competency,competency_achievement,competency_type from view_courses_elements_competencies where course_id=:id',id=course_id)  
             for row in results:
                 elements=self.get_elems_from_competency(comp_id=row[0])
                 competency = Competency(competency_id=row[0],competency=row[1],competency_achievement=row[2],competency_type=row[3],elements=elements)
@@ -273,10 +273,16 @@ class Database:
         with self.__get_cursor() as cursor:
             domain_id=course.domain.domain_id
             term_id=course.term.term_id
-            cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,homework_hours=:hhrs,description=:descr,domain_id=:dom_id,term_id=:term_id WHERE course_id=:id',
+            #update course info
+            cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,work_hours=:whrs,description=:descr,domain_id=:dom_id,term_id=:t_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
-                            hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
-                            
+                            whrs=course.homework_hours,descr=course.description,dom_id=domain_id,t_id=term_id)
+            # #change competencies
+            # cursor.execute('delete courses elements from WHERE course_id=:id', id=course.course_number)
+            # for comp in course.competencies:#update courses_elements
+            #     for elem in comp.elements:
+            #         cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
+                       
     def delete_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
