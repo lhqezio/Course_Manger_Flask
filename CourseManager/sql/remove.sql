@@ -11,7 +11,7 @@ drop table domains cascade constraints;
 drop table audit_logs;
 
 --Users
-drop table course_users cascade constraints;
+drop table coursemanager_users cascade constraints;
 
 --Drop Triggers
 --courses

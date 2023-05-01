@@ -10,7 +10,10 @@ from CourseManager.CoursesDisplay.admin_dashboard_views import bp as dashboard_b
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(SECRET_KEY=secrets.token_urlsafe(32))
+    app.config.from_mapping(
+        SECRET_KEY=secrets.token_urlsafe(32),
+        IMAGE_PATH = os.path.join(app.instance_path,'Image')
+                            )
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:

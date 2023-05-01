@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, email, name, password,role, avatar_path=None):
+    def __init__(self, email, name, password, avatar_path,role="User"):
         if not isinstance(email, str):
             raise TypeError()
         if not isinstance(password, str):
@@ -30,7 +30,6 @@ class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
     password = PasswordField('password',validators=[DataRequired()])
     name = StringField('name',validators=[DataRequired()])
-    role = StringField('role',validators=[DataRequired()])
     avatar = FileField("avatar",validators=[FileAllowed({"jpg","png","tiff"})])
 
 class LoginForm(FlaskForm):

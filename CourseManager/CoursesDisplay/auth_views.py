@@ -22,7 +22,7 @@ def signup():
                     os.makedirs(avatar_dir)
                 file.save(avatar_path)
                 hash = generate_password_hash(form.password.data)
-                user = User(form.email.data, hash, form.name.data)
+                user = User(form.email.data,form.name.data,hash,form.avatar.data)
                 get_db().add_user(user)
         else:
             flash("invalid form")
