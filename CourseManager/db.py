@@ -296,31 +296,20 @@ class Database:
         if not isinstance(email, str):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from coursemanager_users where email=:email', email=email)
+            results = cursor.execute('select id, email, password, name, avatar from coursemanager_users where email=:email', email=email)
             for row in results:
-                user = User(id=row[0], email=row[1],
-                    password=row[2], name=row[3])
-                return user
-        return None
-    
-    def get_user_by_id(self, id):
-        if not isinstance(id, int):
-            raise TypeError()
-        with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from coursemanager_users where id=:id', id=id)
-            for row in results:
-                user = User(id=row[0], email=row[1],
-                    password=row[2], name=row[3])
+                user = User(email=row[1],
+                    password=row[2], name=row[3],avatar_path=row[4])
                 return user
         return None
 
     def get_users(self):
         users = []
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from coursemanager_users')
+            results = cursor.execute('select id, email, password, name,avatar from coursemanager_users')
             for row in results:
-                user = User(id=row[0], email=row[1],
-                    password=row[2], name=row[3])
+                user = User(email=row[1],
+                    password=row[2], name=row[3], avatar_path=row[4])
                 users.append(user)
         return users
     
@@ -328,12 +317,12 @@ class Database:
         if not isinstance(user, User):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name where email=:old_email',
-                email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email)
+            cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name, avatar=:avatar where email=:old_email',
+                email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email,avatar=user.avatar_path)
     def add_user(self,user):
         if not isinstance(user, User):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            cursor.execute('insert into coursemanager_users values(:email,:password,:role,:name)',
-                email=user.email, password=user.password, name=user.name,role=user.role)
+            cursor.execute('insert into coursemanager_users (email,password,role,name,avatar) values(:email,:password,:role,:name,:avatar)',
+                email=user.email, password=user.password, name=user.name,role=user.role,avatar=user.avatar_path)
     

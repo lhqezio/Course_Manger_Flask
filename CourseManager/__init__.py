@@ -1,5 +1,6 @@
 from flask import Flask
 import secrets
+from flask_login import LoginManager
 from CourseManager.CoursesDisplay.course_views import bp as course_views
 from CourseManager.CoursesDisplay.competency_views import bp as competency_views
 from CourseManager.CoursesDisplay.element_views import bp as element_views
@@ -12,13 +13,16 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=secrets.token_urlsafe(32),
-        IMAGE_PATH = os.path.join(app.root_path,'Image')
+        IMAGE_PATH = os.path.join(app.instance_path,'Image')
                             )
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.from_mapping(test_config)
     init_app(app)
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
     return app
 def init_app(app):
     app.teardown_appcontext(cleanup)
