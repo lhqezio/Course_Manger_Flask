@@ -3,7 +3,7 @@
     list-style-type: none;
     padding: 1em;
 }
-.navbar li {
+.navbar li, ol li {
     padding: 1em;
 }
 .navbar a {

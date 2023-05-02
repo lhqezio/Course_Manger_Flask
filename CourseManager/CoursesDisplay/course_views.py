@@ -25,3 +25,13 @@ def display_course(course_id):
         return render_template("specific_course.html", course=get_db().get_course(course_id),current_user=current_user)
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_courses"))
+
+@bp.route('/')
+def choose_domain():
+    try:
+        domains = get_db().get_domains()
+        return render_template("courses_home.html", domains=domains)
+    except oracledb.Error as e:
+        flash("Something went wrong..")
+        flash("Cannot reach the database")
+        return redirect(url_for("home.index"))

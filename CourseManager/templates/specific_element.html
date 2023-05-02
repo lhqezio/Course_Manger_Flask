@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}Element {{element.id}}{% endblock %}
 {% block content %}
+    <h1>{{element.element}}</h1>
     <table>
         <tr>
-            <td>{{element.id}}</td>
+            <th>Element ID</th>
+            <th>Element</th>
+            <th>Criteria</th>
+        </tr>
+        <tr>
+            <td>{{element.element_id}}</td>
             <td>{{element.element}}</td>
-            <td>{{element.criteria}}</td>
+            <td>{{element.element_criteria}}</td>
         </tr>    
     </table>
 {% endblock %}
