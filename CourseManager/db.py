@@ -69,9 +69,9 @@ class Database:
     def get_domains(self):
         domains = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select domain_id, domain, description from domains')
+            results = cursor.execute('select domain_id, domain, domain_description from domains')
             for row in results:
-                domain = Domain(id=row[0], domain=row[1], description=row[2])
+                domain = Domain(row[0], row[1], row[2])
                 domains.append(domain)
         return domains
 
