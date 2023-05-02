@@ -209,9 +209,9 @@ class Database:
     
     def get_element(self, elem_id):
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select element_order, element, element_criteria, competency_id from elements where competency_id=:id', id=elem_id)
+            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from elements where element_id=:id', id=elem_id)
             for row in results:
-                return Element(elem_id, row[0], row[1], row[2], row[3])
+                return Element(row[0], row[1], row[2], row[3], row[4])
 
     def get_elems(self):
         elements = [] 

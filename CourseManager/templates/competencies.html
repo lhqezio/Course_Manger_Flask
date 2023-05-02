@@ -11,7 +11,7 @@
         </tr>
         {% for competency in competencies %}
         <tr>
-            <td>{{competency.competency_id}}</td>
+            <td><a href="{{ url_for('competency.display_competency', competency_id=competency.competency_id)}}">{{competency.competency_id}}</a></td>
             <td>{{competency.competency}}</td>
             <td>{{competency.competency_achievement}}</td>
             <td>{{competency.competency_type}}</td>
