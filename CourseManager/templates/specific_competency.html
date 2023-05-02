@@ -1,12 +1,36 @@
 {% extends 'base.html' %}
 {% block title %}{{competency.competency}}{% endblock %}
 {% block content %}
-    <table>
-        <tr>
-            <td>{{competency.competencyId}}</td>
-            <td>{{competency.competency}}</td>
-            <td>{{competency.competencyAchievement}}</td>
-            <td>{{competency.competencyType}}</td>
-        </tr>    
-    </table>
+<h1>{{competency.competency}}</h1>
+<table class="data" id="competencies">
+    <tr>
+        <th>ID</th>
+        <th>Competency</th>
+        <th>Achievement</th>
+        <th>Type</th>
+        <th>Elements</th>
+    </tr>
+    <tr>
+        <td>{{competency.competency_id}}</td>
+        <td>{{competency.competency}}</td>
+        <td>{{competency.competency_achievement}}</td>
+        <td>{{competency.competency_type}}</td>
+        <td id="comp-elems-td">
+            <table class="data" id="competency-elements">
+                <tr>
+                    <th id="comp-elem-id">ID</th>
+                    <th id="comp-elem-el">Element</th>
+                    <th id="comp-elem-cr">Criteria</th>
+                </tr>
+                {% for element in competency.elements %}
+                <tr>
+                    <td id="comp-elem-id"><a href="{{ url_for('element.display_element', element_id=element.element_id)}}">{{element.element_id}}</a></td>
+                    <td id="comp-elem-el">{{element.element}}</td>
+                    <td id="comp-elem-cr">{{element.element_criteria}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
 {% endblock %}

@@ -1,16 +1,64 @@
 {% extends 'base.html' %}
-{% block title %}{{course.title}}{% endblock %}
+{% block title %}{{course.course_title}}{% endblock %}
 {% block content %}
-    <h2>{{course.domain.title}}</h2>
-    <h3>Term {{course.term.id}}</h3>
-    <table>
-        <tr>
-            <td>{{course.id}}</td>
-            <td>{{course.title}}</td>
-            <td>{{course.theory_hours}}</td>
-            <td>{{course.lab_hours}}</td>
-            <td>{{course.work_hours}}</td>
-            <td>{{course.description}}</td>
-        </tr>
-    </table>
+<h1>{{course.course_title}}</h1>
+    <p>Domain: {{course.domain.domain}}</p>
+    <p>Term {{course.term.term_id}}</p>
+    <section>
+        <table class="data" id="courses">
+            <tr id="course-row">
+                <th id="course-id">Course Number</th>
+                <th id="course-title">Title</th>
+                <th id="course-hours">Theory</th>
+                <th id="course-hours">Lab</th>
+                <th id="course-hours">Homework</th>
+                <th id="course-desc">Description</th>
+            </tr>
+            <tr id="course-row">
+                <td id="course-id">{{course.course_number}}</td>
+                <td id="course-title">{{course.course_title}}</td>
+                <td id="course-hours">{{course.theory_hours}}</td>
+                <td id="course-hours">{{course.lab_hours}}</td>
+                <td id="course-hours">{{course.homework_hours}}</td>
+                <td id="course-desc">{{course.description}}</td>
+            </tr>
+        </table>
+    </section>
+    <h2>Competencies:</h2>
+    <section>
+        <table class="data" id="competencies">
+            <tr>
+                <th>ID</th>
+                <th>Competency</th>
+                <th>Achievement</th>
+                <th>Type</th>
+                <th>Elements</th>
+            </tr>
+            {% for competency in course.competencies %}
+            <tr>
+                <td><a href="{{ url_for('competency.display_competency', competency_id=competency.competency_id)}}">{{competency.competency_id}}</a></td>
+                <td>{{competency.competency}}</td>
+                <td>{{competency.competency_achievement}}</td>
+                <td>{{competency.competency_type}}</td>
+                <td id="comp-elems-td">
+                    <table class="data" id="competency-elements">
+                        <tr>
+                            <th id="comp-elem-id">ID</th>
+                            <th id="comp-elem-el">Element</th>
+                            <th id="comp-elem-cr">Criteria</th>
+                        </tr>
+                        {% for element in competency.elements %}
+                        <tr>
+                            <td id="comp-elem-id"><a href="{{ url_for('element.display_element', element_id=element.element_id)}}">{{element.element_id}}</a></td>
+                            <td id="comp-elem-el">{{element.element}}</td>
+                            <td id="comp-elem-cr">{{element.element_criteria}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}      
+        </table>
+    </section>
+
 {% endblock %}
