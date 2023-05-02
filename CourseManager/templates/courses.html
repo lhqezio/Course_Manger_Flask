@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{courses[0].domain.domain}} Courses{% endblock %}
 {% block content %}
-    <h2>{{courses[0].domain.domain}}</h2>
+    <h1>{{courses[0].domain.domain}} Courses</h1>
     {% for term in terms %}
         <h3>Term {{term.term_id}}</h3>
         <table class="data" id="courses">

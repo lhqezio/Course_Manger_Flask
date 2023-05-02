@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{course.course_title}}{% endblock %}
 {% block content %}
+<h1>{{course.course_title}}</h1>
     <p>Domain: {{course.domain.domain}}</p>
     <p>Term {{course.term.term_id}}</p>
     <section>
@@ -35,7 +36,7 @@
             </tr>
             {% for competency in course.competencies %}
             <tr>
-                <td>{{competency.competency_id}}</td>
+                <td><a href="{{ url_for('competency.display_competency', competency_id=competency.competency_id)}}">{{competency.competency_id}}</a></td>
                 <td>{{competency.competency}}</td>
                 <td>{{competency.competency_achievement}}</td>
                 <td>{{competency.competency_type}}</td>
@@ -48,7 +49,7 @@
                         </tr>
                         {% for element in competency.elements %}
                         <tr>
-                            <td id="comp-elem-id">{{element.element_id}}</td>
+                            <td id="comp-elem-id"><a href="{{ url_for('element.display_element', element_id=element.element_id)}}">{{element.element_id}}</a></td>
                             <td id="comp-elem-el">{{element.element}}</td>
                             <td id="comp-elem-cr">{{element.element_criteria}}</td>
                         </tr>
