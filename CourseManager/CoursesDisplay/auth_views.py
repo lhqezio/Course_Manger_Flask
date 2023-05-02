@@ -1,9 +1,10 @@
 import os
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, url_for
-from .dbmanager import get_db
-from .user import LoginForm, SignupForm, User
+from ..dbmanager import get_db
+from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_login import login_user, logout_user, login_required
+from werkzeug.datastructures import FileStorage
+from flask_login import login_user, logout_user, login_required,current_user,login_user,login_manager
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
@@ -16,17 +17,24 @@ def signup():
                 flash("User already exists")
             else:
                 file = form.avatar.data
+                if not file:
+                    default_image = os.path.join(current_app.root_path,"Image", 'default.png')
+                    fp = open(default_image,"rb")
+                    file = FileStorage(fp)
                 avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], form.email.data)
                 avatar_path = os.path.join(avatar_dir, 'avatar.png')
                 if not os.path.exists(avatar_dir):
                     os.makedirs(avatar_dir)
                 file.save(avatar_path)
+                if fp:
+                    fp.close()
                 hash = generate_password_hash(form.password.data)
-                user = User(form.email.data, hash, form.name.data)
+                user = User(form.email.data,form.name.data,hash,avatar_path)
                 get_db().add_user(user)
+                flash("User created")
         else:
             flash("invalid form")
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', form=form, current_user = current_user)
 
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -46,7 +54,7 @@ def login():
                 flash("Cannot login")
         else:
             flash("Cannot login")
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, current_user = current_user)
 
 @bp.route('/logout/')
 @login_required
@@ -55,6 +63,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 @bp.route('/avatars/<email>/avatar.png')
+@login_required
 def show_avatar(email):
     path = os.path.join(current_app.config['IMAGE_PATH'], email)
     return send_from_directory(path, 'avatar.png')

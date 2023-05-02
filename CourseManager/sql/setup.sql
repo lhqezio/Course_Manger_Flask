@@ -37,18 +37,21 @@ create table elements (element_id number generated always as identity PRIMARY KE
                         element_order number NOT NULL, 
                         element varchar2(250) NOT NULL,
                         element_criteria varchar2(500) NOT NULL, 
-                        competency_id REFERENCES competencies(competency_id) ON DELETE CASCADE);
+                        competency_id REFERENCES competencies(competency_id));
                     
 --Courses_Elements (Bridging)
 create table courses_elements (course_id REFERENCES courses(course_id) ON DELETE CASCADE, 
                                 element_id REFERENCES elements(element_id) ON DELETE CASCADE, 
                                 element_hours number NOT NULL);
+                                
 --Users
 create table coursemanager_users(
     id number GENERATED ALWAYS as IDENTITY primary key,
     email varchar2(100) unique,
     password varchar2(102),
-    name varchar2(1000)
+    name varchar2(1000),
+    avatar varchar2(1000),
+    role varchar2(1000)
 );
 
 
@@ -63,6 +66,3 @@ create table coursemanager_users(
 
 --adding package
 @courses_package.sql
-
---add users table
-@auth.sql

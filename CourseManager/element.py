@@ -41,5 +41,10 @@ class Element:
         return jsonify(self.__dict__)
     
 
-
-    
+    class ElementForm(FlaskForm):
+    element_id = IntegerField('element id',validators=[DataRequired()])
+    element_order = IntegerField('element order',validators=[DataRequired()])
+    element = StringField('element',validators=[DataRequired()])
+    element_criteria = StringField('element criteria',validators=[DataRequired()])
+    competency_id= SelectField('competency id',validators=[DataRequired()])
+    hours = IntegerField('element hours',validators=[DataRequired()])
