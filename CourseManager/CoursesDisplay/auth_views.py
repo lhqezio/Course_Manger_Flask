@@ -4,7 +4,7 @@ from ..dbmanager import get_db
 from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.datastructures import FileStorage
-from flask_login import login_user, logout_user, login_required,current_user,login_user
+from flask_login import login_user, logout_user, login_required,current_user,login_user,login_manager
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
@@ -63,6 +63,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 @bp.route('/avatars/<email>/avatar.png')
+@login_required
 def show_avatar(email):
     path = os.path.join(current_app.config['IMAGE_PATH'], email)
     return send_from_directory(path, 'avatar.png')

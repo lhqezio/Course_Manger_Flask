@@ -1,10 +1,9 @@
-from flask import jsonify
+from flask import jsonify,current_app
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import EmailField, PasswordField, StringField, BooleanField
 from wtforms.validators import DataRequired
-from flask_login import UserMixin, login_manager
-from .dbmanager import get_db
+from flask_login import UserMixin
 
 class User(UserMixin):
     def __init__(self, email, name, password, avatar_path,role="User"):
@@ -26,6 +25,9 @@ class User(UserMixin):
     
     def has_role(self, role):
         return self.role == role
+    def get_id(self):
+        return self.email
+
 
 class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
@@ -38,6 +40,3 @@ class LoginForm(FlaskForm):
     password = PasswordField('password',validators=[DataRequired()])
     remember_me = BooleanField('remember me', default=False)
 
-@login_manager.user_loader
-def load_user(email):
-    return get_db().get_user(email)
