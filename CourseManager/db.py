@@ -296,6 +296,9 @@ class Database:
             cursor.execute('insert into competencies values(:id,:name,:achievement,:type)',
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
+            for ele in competency.elements:
+                cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
+                            comp_id=competency.competency_id, elem_id=ele.element_id)
 
     def update_competency(self,competency=None):
         if not isinstance(competency, Competency):
