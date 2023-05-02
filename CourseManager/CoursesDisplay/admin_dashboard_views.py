@@ -7,7 +7,6 @@ from flask_security import roles_required
 bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 
 @bp.route('/', methods=['GET', 'POST'])
-@roles_required('admin')
 @login_required
 def admin_dashboard():
     # Get all users from the database
