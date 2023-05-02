@@ -4,7 +4,7 @@
     <h2>{{courses[0].domain.domain}}</h2>
     {% for term in terms %}
         <h3>Term {{term.term_id}}</h3>
-        <table>
+        <table class="data" id="courses">
             {% for course in courses %}
             {% if course.term.term_id == term.term_id %}
             <tr>

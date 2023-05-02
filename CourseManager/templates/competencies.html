@@ -1,20 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}Competencies{% endblock %}
 {% block content %}
-    <table>
+    <table class="data" id="competencies">
+        <tr>
+            <th>ID</th>
+            <th>Competency</th>
+            <th>Achievement</th>
+            <th>Type</th>
+            <th>Elements</th>
+        </tr>
         {% for competency in competencies %}
         <tr>
-            <td>{{competency.competencyId}}</td>
+            <td>{{competency.competency_id}}</td>
             <td>{{competency.competency}}</td>
-            <td>{{competency.competencyAchievement}}</td>
-            <td>{{competency.competencyType}}</td>
+            <td>{{competency.competency_achievement}}</td>
+            <td>{{competency.competency_type}}</td>
             <td>
-                <table>
+                <table class="data" id="competency-elements">
+                    <tr>
+                        <th>ID</th>
+                        <th>Element</th>
+                        <th>Criteria</th>
+                    </tr>
                     {% for element in competency.elements %}
                     <tr>
-                        <td>{{element.id}}</td>
+                        <td>{{element.element_id}}</td>
                         <td>{{element.element}}</td>
-                        <td>{{element.criteria}}</td>
+                        <td>{{element.element_criteria}}</td>
                     </tr>
                     {% endfor %}
                 </table>
