@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Test Elems{% endblock %}
+{% block content %}
+    <form name="form" method="POST" class="db_form">
+        <label id="elems_hrs" for="form">Course teaching elements hours Form: </label> <br><br>
+        {%for form in forms%}
+            {{form.csrf_token}}
+            {{ form.competency.label}}
+            {{ form.elem_hours.label}}
+            {{ form.elem_hours()}}
+        {%endfor%}
+    </form>
+{% endblock %}
