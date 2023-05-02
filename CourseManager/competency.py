@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask import jsonify
-from wtforms import StringField, IntegerField, SelectMultipleField, SelectField, TextAreaField, widgets
+from wtforms import StringField, SelectMultipleField, SelectField, TextAreaField, widgets
 from wtforms.validators import DataRequired
 from CourseManager.element import Element
 
