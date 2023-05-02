@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField
-from wtforms.validators import DataRequired
+from wtforms import StringField, IntegerField, SelectField, FieldList, FormField
+from wtforms.validators import DataRequired, NumberRange
 
 class Element:
     def __init__(self,element_id,element_order,element,element_criteria,competency_id, hours): 
@@ -47,5 +47,16 @@ class ElementForm(FlaskForm):
     element_criteria = StringField('element criteria',validators=[DataRequired()])
     competency_id= SelectField('competency id',validators=[DataRequired()])
     hours = IntegerField('element hours',validators=[DataRequired()])
+
+#https://stackoverflow.com/questions/30121763/how-to-use-a-wtforms-fieldlist-of-formfields
+#https://stackoverflow.com/questions/49066046/append-entry-to-fieldlist-with-flask-wtforms-using-ajax
+class CourseTeachingElementHoursForm(FlaskForm):
+    course_element = StringField(validators=[DataRequired()])
+    hours = IntegerField('Teaching hours',validators=[NumberRange(min=0, message='Invalid length'),DataRequired()])
+
+class ElemHrsForm(FlaskForm):
+    competency = StringField()
+    elem_hours = FieldList(FormField(CourseTeachingElementHoursForm),'List of elements')
+    
 
     

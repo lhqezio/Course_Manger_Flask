@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, escape
 import oracledb
-from CourseManager.dbmanager import *
+from CourseManager.dbmanager import get_db
 from CourseManager.course import Course,CourseForm
+from CourseManager.element import ElemHrsForm
+
 
 bp = Blueprint('course', __name__, url_prefix='/courses')
 
@@ -74,6 +76,24 @@ def edit_course(course_id):
     else:
         flash('Course doesn\'t exist')
         redirect(url_for('display_courses'))
+
+@bp.route('/test/<course_id>', methods=['POST','GET'])
+def elemenstHours(course_id):
+    course_id=escape(course_id)
+    db=get_db()
+    if db.get_course(course_id):
+        course = db.get_course(course_id)
+        forms=[]
+        if isinstance(course,Course):
+            competencies=course.competencies
+            for comp in competencies:
+                form=ElemHrsForm()
+                form.competency.label=comp.competency
+                for elem in comp.elements:
+                    form.elem_hours.append_entry(({elem.element},{elem.hours}))
+                    #form.elem_hours.course_element.data=elem.element
+                forms.append(form)
+        return render_template("course_elems_hrs.html", forms=forms)
 
 @bp.route('/new-course/', methods=['POST','GET'])
 def add_course():
