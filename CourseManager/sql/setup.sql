@@ -63,6 +63,3 @@ create table coursemanager_users(
 
 --adding package
 @courses_package.sql
-
---add users table
-@auth.sql

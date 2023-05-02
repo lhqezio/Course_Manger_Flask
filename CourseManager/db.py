@@ -324,9 +324,16 @@ class Database:
                 users.append(user)
         return users
     
-    def update_user(user,old_email):
+    def update_user(self,user,old_email):
         if not isinstance(user, User):
             raise TypeError()
         with self.__conn.cursor() as cursor:
             cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name where email=:old_email',
                 email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email)
+    def add_user(self,user):
+        if not isinstance(user, User):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('insert into coursemanager_users values(:email,:password,:role,:name)',
+                email=user.email, password=user.password, name=user.name,role=user.role)
+    

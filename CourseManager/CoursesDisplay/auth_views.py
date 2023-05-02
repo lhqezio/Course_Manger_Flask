@@ -3,6 +3,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from ..dbmanager import get_db
 from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.datastructures import FileStorage
 from flask_login import login_user, logout_user, login_required,current_user
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
@@ -16,13 +17,19 @@ def signup():
                 flash("User already exists")
             else:
                 file = form.avatar.data
+                if not file:
+                    default_image = os.path.join(current_app.config['IMAGE_PATH'], 'default.png')
+                    fp = open(default_image,"rb")
+                    file = FileStorage(fp)
                 avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], form.email.data)
                 avatar_path = os.path.join(avatar_dir, 'avatar.png')
                 if not os.path.exists(avatar_dir):
                     os.makedirs(avatar_dir)
                 file.save(avatar_path)
+                if fp:
+                    fp.close()
                 hash = generate_password_hash(form.password.data)
-                user = User(form.email.data,form.name.data,hash,form.avatar.data)
+                user = User(form.email.data,form.name.data,hash,avatar_path)
                 get_db().add_user(user)
         else:
             flash("invalid form")
