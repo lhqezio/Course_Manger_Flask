@@ -18,7 +18,7 @@
             {% block user %}
             <li class="navbar" id="user">
                 {% if current_user.is_authenticated %}
-                <img src="{{url_for('auth.show_avatar', email=current_user.email)}}">
+                <img id="avatar" src="{{url_for('auth.show_avatar', email=current_user.email)}}">
                 <p>{{current_user.name}}</p>
                 <a href="{{ url_for('auth.logout')}}">Logout</a>
                 {% else %}
