@@ -40,3 +40,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('password',validators=[DataRequired()])
     remember_me = BooleanField('remember me', default=False)
 
+class UpdateForm(FlaskForm):
+    name = StringField('name')
+    avatar = FileField("avatar",validators=[FileAllowed(['jpg','png'])])
+    email = EmailField('email')
+    role = StringField('role',validators=[DataRequired()])
+    password = PasswordField('password')
+

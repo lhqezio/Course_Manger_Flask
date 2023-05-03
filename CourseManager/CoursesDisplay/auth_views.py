@@ -48,6 +48,8 @@ def login():
                 if check_password_hash(user.password, form.password.data):
                     #User can login
                     login_user(user, form.remember_me.data)
+                    flash("Logged in successfully")
+                    return redirect(url_for('course.choose_domain'))
                 else:
                     flash("Cannot login")
             else:
@@ -55,7 +57,6 @@ def login():
         else:
             flash("Cannot login")
     return render_template('login.html', form=form, current_user = current_user)
-
 @bp.route('/logout/')
 @login_required
 def logout():
