@@ -1,7 +1,7 @@
 from flask import jsonify,current_app
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import EmailField, PasswordField, StringField, BooleanField
+from wtforms import EmailField, PasswordField, StringField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import UserMixin
 
@@ -41,9 +41,10 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('remember me', default=False)
 
 class UpdateForm(FlaskForm):
-    name = StringField('name')
-    avatar = FileField("avatar",validators=[FileAllowed(['jpg','png'])])
-    email = EmailField('email')
-    role = StringField('role',validators=[DataRequired()])
-    password = PasswordField('password')
-
+    name = StringField('Name')
+    avatar = FileField("Avatar",validators=[FileAllowed(['jpg','png'])])
+    email = EmailField('Email')
+    role = StringField('Role')
+    password = PasswordField('Password')
+    submit = SubmitField('Update')
+    delete = SubmitField('Delete')

@@ -1,40 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Welcome to the Admin Dashboard</h1>
-    {% if current_user.is_authenticated %}
-      {% if users %}
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
-              <th>Edit</th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for user in users %}
-            <tr>
-              <td>{{ user.name }}</td>
-              {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
-                  <td>
-                    {{ form.csrf_token }}
-                    <input type="hidden" name="old_email" value="{{ user.email }}">
-                    {{ form.name.label}} {{ form.name() }}
-                    {{ form.email.label}} {{ form.email() }}
-                    {{ form.password.label}}{{ form.password() }}
-                    {{ form.role.label}}{{ form.role() }}
-                    <input type="submit" />
-                  </td>
-              {% endif %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-    <p>No users found.</p>
-  {% endif %}
-    {% else %}
-        <p>You must be logged in to view this page</p>
-    {% endif %}
+<h1>Welcome to the Admin Dashboard</h1>
+{% if current_user.is_authenticated %}
+{% if users %}
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      <th>Edit</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in range(users.__len__()) %}
+    <tr>
+      <td>{{ users[i].name }}</td>
+      {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      <td>
+        <form method="post" >
+          {{ forms[i].csrf_token }}
+          {{ forms[i].email.label }} {{ forms[i].email() }}
+          {{ forms[i].name.label }} {{ forms[i].name() }}
+          {{ forms[i].password.label }} {{ forms[i].password() }}
+          {{ forms[i].role.label }} {{ forms[i].role() }}
+          {{ forms[i].submit.label}} {{ forms[i].submit() }}
+          {{ forms[i].delete.label}} {{ forms[i].delete() }}
+        </form>
+      </td> 
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No users found.</p>
+{% endif %}
+{% else %}
+<p>You must be logged in to view this page</p>
+{% endif %}
 {% endblock %}
