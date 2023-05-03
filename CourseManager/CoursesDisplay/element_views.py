@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, abort, render_template, redirect, url_for, flash
 import oracledb
 from CourseManager.dbmanager import *
 from flask_login import current_user
@@ -19,5 +19,4 @@ def display_element(element_id):
     if get_db().get_element(element_id):
         element = get_db().get_element(element_id)
         return render_template("specific_element.html", element=element,current_user = current_user)
-    flash(f"{element_id} element not found!")
-    return redirect(url_for("home.index"))
+    abort(404)

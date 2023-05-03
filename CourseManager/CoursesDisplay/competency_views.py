@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, abort, render_template, redirect, url_for, flash
 from flask_login import current_user
 import oracledb
 from CourseManager.dbmanager import *
@@ -19,5 +19,4 @@ def display_competency(competency_id):
     if get_db().get_competency(competency_id):
         competency = get_db().get_competency(competency_id)
         return render_template("specific_competency.html", competency=competency,current_user =current_user)
-    flash(f"{competency_id} competency not found!")
-    return redirect(url_for("home.index"))
+    abort(404)

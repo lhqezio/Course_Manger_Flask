@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import secrets
 from flask_login import LoginManager,login_manager
 from CourseManager.CoursesDisplay.course_views import bp as course_views
@@ -26,6 +26,10 @@ def create_app(test_config=None):
     @login_manager.user_loader
     def load_user(email):
         return get_db().get_user(email)
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('404.html'), 404
+
     return app
 
 def init_app(app):
