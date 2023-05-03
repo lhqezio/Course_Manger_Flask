@@ -12,7 +12,8 @@ def admin_dashboard():
     # Get all users from the database
     db = get_db()
     users = db.get_users()
-    
+    users = [user for user in users if (current_user.has_role('member') and user.role == 'member') or (current_user.has_role('admin_user_gp') and (user.role == 'member' or user.role == 'admin_user_gp')) or (current_user.has_role('admin'))]
+    print(current_user.role)
     if request.method == 'POST':
         # Handle form submission
         email = request.form['email']

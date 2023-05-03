@@ -1,31 +1,40 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h1>Welcome to the Admin Dashboard</h1>
-    {% if users %}
+    {% if current_user.is_authenticated %}
+      {% if users %}
       <table>
         <thead>
           <tr>
-            <th>Actions</th>
+            <th>Name</th>
+            {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+              <th>Edit</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
           {% for user in users %}
             <tr>
-              <td>
-                <form action="{{ url_for('.admin_dashboard') }}" method="POST">
-                  <input type="hidden" name="old_email" value="{{ user.email }}">
-                  <input type="text" name="email" placeholder="{{user.email}}">
-                  <input type="text" name="name" placeholder="{{user.name}}">
-                  <input type="text" name="password" placeholder="Password">
-                  <button type="submit">Update</button>
-                </form>
-              </td>
+              <td>{{ user.name }}</td>
+              {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+                  <td>
+                    <form action="{{ url_for('.admin_dashboard') }}" method="POST">
+                      <input type="hidden" name="old_email" value="{{ user.email }}">
+                      <input type="text" name="email" placeholder="{{user.email}}">
+                      <input type="text" name="name" placeholder="{{user.name}}">
+                      <input type="text" name="password" placeholder="Password">
+                      <button type="submit">Update</button>
+                    </form>
+                  </td>
+              {% endif %}
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <p>No users found.</p>
+    <p>No users found.</p>
+  {% endif %}
+    {% else %}
+        <p>You must be logged in to view this page</p>
     {% endif %}
 {% endblock %}

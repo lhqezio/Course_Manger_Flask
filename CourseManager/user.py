@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, email, name, password, avatar_path,role="Member"):
+    def __init__(self, email, name, password, avatar_path,role="member"):
         if not isinstance(email, str):
             raise TypeError()
         if not isinstance(password, str):
@@ -23,8 +23,8 @@ class User(UserMixin):
         self.avatar_path = avatar_path
         self.role = role
     
-    def has_role(self, role):
-        return self.role == role
+    def has_role(self, role_name):
+        return self.role == role_name
     def get_id(self):
         return self.email
 
