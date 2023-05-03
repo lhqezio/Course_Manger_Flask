@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% block title %}Login{% endblock %}
 {% block content %}
 <h1>Login</h1>
 
+<p>with an existing account. Don't have one? <a href="{{ url_for('auth.signup') }}">Signup</a> now!</p>
 
-<a href="{{ url_for('auth.signup') }}">Signup</a>
 <section class="form-section">
     <form method="post" class="auth-form">
         {{ form.csrf_token }}

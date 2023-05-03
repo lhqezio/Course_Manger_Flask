@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+{% block title %}Signup{% endblock %}
 {% block content %}
 <h1>Signup</h1>
-<form method="post">
-    {{ form.csrf_token }}
-    {{ form.email.label}} {{ form.email() }}
-    {{ form.password.label}}{{ form.password() }}
-    {{ form.name.label}}{{ form.name() }}
-    {{form.avatar.label}}{{form.avatar()}}
-    <input type="submit" />
-</form>
+<section class="form-section">
+    <form method="post" class="auth-form">
+        {{ form.csrf_token }}
+        {{ form.email.label}} {{ form.email() }}
+        {{ form.password.label}}{{ form.password() }}
+        {{ form.name.label}}{{ form.name() }}
+        {{form.avatar.label}}{{form.avatar()}}
+        <input type="submit" id="signup"/>
+    </form>
+</section>
+
 {% endblock %}

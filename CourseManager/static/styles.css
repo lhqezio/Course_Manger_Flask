@@ -88,11 +88,14 @@ label {
     width: 25%;
     justify-content: center;
 }
-#email, #password {
+#email, #password, #name, #avatar {
     width: 60%;
     margin-left: auto;
 }
 #login {
     width: 62%;
     margin-left: auto;
+}
+#signup {
+    width: 100%;
 }
