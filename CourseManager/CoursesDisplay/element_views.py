@@ -20,4 +20,4 @@ def display_element(element_id):
         element = get_db().get_element(element_id)
         return render_template("specific_element.html", element=element,current_user = current_user)
     flash(f"{element_id} element not found!")
-    return redirect(url_for("element.display_elements"))
+    return redirect(url_for("home.index"))

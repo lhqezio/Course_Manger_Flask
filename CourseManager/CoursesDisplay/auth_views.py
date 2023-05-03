@@ -39,6 +39,10 @@ def signup():
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if current_user.is_authenticated:
+        flash("You're already logged in!")
+        return redirect(url_for('home.index'))
+
     if request.method == 'POST':
         if form.validate_on_submit():
             #Check our user
@@ -48,6 +52,7 @@ def login():
                 if check_password_hash(user.password, form.password.data):
                     #User can login
                     login_user(user, form.remember_me.data)
+                    return redirect(url_for('home.index'))
                 else:
                     flash("Cannot login")
             else:

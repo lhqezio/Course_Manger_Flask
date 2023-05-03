@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Login</h1>
-<form method="post">
-    {{ form.csrf_token }}
-    {{ form.email.label}} {{ form.email() }}
-    {{ form.password.label}}{{ form.password() }}
-    {{ form.remember_me.label}}{{ form.remember_me() }}
-    <input type="submit" />
-</form>
+
+
 <a href="{{ url_for('auth.signup') }}">Signup</a>
+<section class="form-section">
+    <form method="post" class="auth-form">
+        {{ form.csrf_token }}
+        {{ form.email.label}} {{ form.email() }}
+        {{ form.password.label}}{{ form.password() }}
+        {{ form.remember_me.label}}{{ form.remember_me() }}
+        <input type="submit" id="login"/>
+    </form>
+</section>
+
 {% endblock %}

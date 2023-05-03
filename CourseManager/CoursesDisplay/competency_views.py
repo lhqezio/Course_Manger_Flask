@@ -20,4 +20,4 @@ def display_competency(competency_id):
         competency = get_db().get_competency(competency_id)
         return render_template("specific_competency.html", competency=competency,current_user =current_user)
     flash(f"{competency_id} competency not found!")
-    return redirect(url_for("competency.display_competencies"))
+    return redirect(url_for("home.index"))

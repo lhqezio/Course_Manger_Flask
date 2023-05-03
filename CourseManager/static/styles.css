@@ -5,16 +5,27 @@
 }
 .navbar li, ol li {
     padding: 1em;
+    align-items: center;
 }
-.navbar a {
+a {
     text-decoration: none;
 }
-.navbar a:visited {
+a:visited {
     color: blue;
+}
+#errors {
+    margin-left: 4em;
+}
+.message {
+    color: red;
 }
 #user {
     margin-left: auto;
     display: flex;
+    padding: 0em;
+}
+#user * {
+    padding-left: 1em;
 }
 table, th, td {
     border: 1px solid black;
@@ -61,4 +72,27 @@ table, th, td {
 #avatar {
     height: 50px;
     width: 50px;
+}
+.auth-form {
+    display: flex;
+    width: 30%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 0.5em;
+}
+.form-section {
+    padding: 1em;
+    margin-left: 2em;
+}
+label {
+    width: 25%;
+    justify-content: center;
+}
+#email, #password {
+    width: 60%;
+    margin-left: auto;
+}
+#login {
+    width: 62%;
+    margin-left: auto;
 }
