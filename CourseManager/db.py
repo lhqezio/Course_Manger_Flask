@@ -181,7 +181,7 @@ class Database:
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_competencies_elements e left outer join courses_elements h on e.element_id=h.element_id where e.competency_id=:id',id=comp_id)
+            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from elements where competency_id=:id',id=comp_id)
             for row in results:
                 element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
                 competency_elems.append(element)
@@ -289,6 +289,8 @@ class Database:
         with self.__get_cursor() as cursor:
             cursor.execute('delete from courses where course_id=:id',id=course.course_number)
 
+    
+
     def add_competency(self,competency=None):
         if not isinstance(competency, Competency):
             raise TypeError()
@@ -296,8 +298,9 @@ class Database:
             cursor.execute('insert into competencies values(:id,:name,:achievement,:type)',
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
-            for ele in competency.elements:
-                cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
+            with self.__get_cursor() as cursor:
+                for ele in competency.elements:
+                    cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
                             comp_id=competency.competency_id, elem_id=ele.element_id)
 
     def update_competency(self,competency=None):
@@ -307,6 +310,7 @@ class Database:
             cursor.execute('update competencies set competency=:name,competency_achievement=:achievement,competency_type=:type WHERE competency_id=:id',
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
+        with self.__get_cursor() as cursor:
             for ele in competency.elements:
                 cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
                             comp_id=competency.competency_id, elem_id=ele.element_id)
