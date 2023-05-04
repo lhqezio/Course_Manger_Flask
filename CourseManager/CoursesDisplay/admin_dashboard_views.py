@@ -24,7 +24,9 @@ def admin_dashboard():
             forms.append(form)
     if request.method == 'POST':
         # Handle form submission
-        form = [form for form in forms if form.old_email.data == request.form['old_email'] ][0]       
+        forms = [form for form in forms if form.old_email.data == request.form['old_email'] ]
+        if len(forms) != 1:
+            flash("Service error,Please contact the admin")      
         if form.validate_on_submit():
             if form.submit.data:
                 old_email = form.old_email.data

@@ -18,7 +18,7 @@ def signup():
             else:
                 file = form.avatar.data
                 if not file:
-                    default_image = os.path.join(current_app.root_path,"Image", 'default.png')
+                    default_image = os.path.join(current_app.root_path,"Image", 'avatar.png')
                     fp = open(default_image,"rb")
                     file = FileStorage(fp)
                 avatar_path = get_avatar_path(file,form.email.data)

@@ -47,7 +47,7 @@ class UpdateForm(FlaskForm):
     name = StringField('Name',id=None)
     avatar = FileField("Avatar",validators=[FileAllowed(['jpg','png'])],id=None)
     email = EmailField('Email',id=None)
-    role = SelectField(label="Roles",id=None,choices=ROLES)
+    role = SelectField(label="Role",id=None,choices=ROLES)
     password = PasswordField('Password',id=None)
     submit = SubmitField('Update',id=None)
     delete = SubmitField('Delete',id = None)
