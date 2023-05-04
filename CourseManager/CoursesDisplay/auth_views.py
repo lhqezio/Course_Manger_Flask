@@ -17,6 +17,7 @@ def signup():
                 flash("User already exists")
             else:
                 file = form.avatar.data
+                fp = None
                 if not file:
                     default_image = os.path.join(current_app.root_path,"Image", 'avatar.png')
                     fp = open(default_image,"rb")
@@ -78,3 +79,12 @@ def get_avatar_path(file,email):
         os.makedirs(avatar_dir)
     file.save(avatar_path)
     return avatar_path
+
+def remove_avatar(email,new_email = None):
+    avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], email)
+    if os.path.exists(avatar_dir):
+        if new_email:
+            new_avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], new_email)
+            os.rename(avatar_dir,new_avatar_dir)
+        else:
+            os.rmdir(avatar_dir)

@@ -1,6 +1,6 @@
 from flask import jsonify,current_app
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField
 from wtforms import EmailField,HiddenField, PasswordField, StringField, BooleanField, SubmitField,SelectField
 from wtforms.validators import DataRequired
 from flask_login import UserMixin
@@ -36,7 +36,7 @@ class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
     password = PasswordField('password',validators=[DataRequired()])
     name = StringField('name',validators=[DataRequired()])
-    avatar = FileField("avatar",validators=[FileAllowed(['jpg','png'])])
+    avatar = FileField("avatar")
 
 class LoginForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
@@ -45,7 +45,7 @@ class LoginForm(FlaskForm):
 
 class UpdateForm(FlaskForm):
     name = StringField('Name',id=None)
-    avatar = FileField("Avatar",validators=[FileAllowed(['jpg','png'])],id=None)
+    avatar = FileField("Avatar",id=None)
     email = EmailField('Email',id=None)
     role = SelectField(label="Role",id=None,choices=ROLES)
     password = PasswordField('Password',id=None)
