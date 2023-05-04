@@ -22,8 +22,7 @@ def admin_dashboard():
             forms.append(form)
     if request.method == 'POST':
         # Handle form submission
-        form = [form for form in forms if form.old_email.data == request.form['old_email'] ][0]
-        
+        form = [form for form in forms if form.old_email.data == request.form['old_email'] ][0]       
         if form.validate_on_submit():
             if form.submit.data:
                 old_email = form.old_email.data
@@ -59,6 +58,7 @@ def admin_dashboard():
                 flash('User updated successfully.')
             elif form.delete.data:
                 db.remove_user(form.old_email.data)  
+                flash('User deleted')
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
     return render_template('admin_dashboard.html',current_user=current_user, users=users, forms=forms)
