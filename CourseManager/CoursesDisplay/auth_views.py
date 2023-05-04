@@ -40,13 +40,10 @@ def login():
             #Check our user
             try:
                 user = get_db().get_user(form.email.data)
-                if user.role == 'blocked':
-                    flash('You are banned from this service')
-                    user = None
             except ValueError:
                 flash("Something wrong with your account, please contact the admin")
                 user = None
-            if user:
+            if user and user.role != 'blocked':
                 #Check the password
                 if check_password_hash(user.password, form.password.data):
                     #User can login
