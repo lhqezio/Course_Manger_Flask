@@ -86,5 +86,7 @@ def remove_avatar(email,new_email = None):
         if new_email:
             new_avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], new_email)
             os.rename(avatar_dir,new_avatar_dir)
+            new_avatar_dir = os.path.join(new_avatar_dir, 'avatar.png')
+            return new_avatar_dir
         else:
             os.rmdir(avatar_dir)

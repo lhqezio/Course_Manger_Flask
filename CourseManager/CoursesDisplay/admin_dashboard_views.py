@@ -60,8 +60,9 @@ def admin_dashboard():
                 else:
                     get_avatar_path(avatar,old_email)
                     remove_avatar(email,old_email)
-                new_user = User(email, name,password,avatar_path,role)
+                    avatar_path = remove_avatar(email,old_email)
                 # Update the user's name and role
+                new_user = User(email, name, password, avatar_path,role)
                 db.update_user(new_user, old_email)
                 flash('User updated successfully.')
             elif form.delete.data:
