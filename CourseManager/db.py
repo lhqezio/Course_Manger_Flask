@@ -301,22 +301,14 @@ class Database:
             results = cursor.execute('select id, email, password, name, avatar, role from coursemanager_users where email=:email', email=email)
             for row in results:
                 user = User(email=row[1],
-<<<<<<< HEAD
-                    password=row[2], name=row[3],avatar_path=row[4], role=row[5])
-=======
                     password=row[2], name=row[3],avatar_path=row[4],role=row[5])
->>>>>>> a66210d34dc5db45c7dffdf4dccc9fb31c5d5918
                 return user
         return None
 
     def get_users(self):
         users = []
         with self.__conn.cursor() as cursor:
-<<<<<<< HEAD
-            results = cursor.execute('select id, email, password, name,avatar, role from coursemanager_users')
-=======
             results = cursor.execute('select id, email, password, name,avatar,role from coursemanager_users')
->>>>>>> a66210d34dc5db45c7dffdf4dccc9fb31c5d5918
             for row in results:
                 user = User(email=row[1],
                     password=row[2], name=row[3], avatar_path=row[4], role=row[5])
