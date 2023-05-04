@@ -22,7 +22,7 @@
       {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
       <td>{{users[i].role}}</td>
       <td>
-        <form method="post" >
+        <form method="post" enctype="multipart/form-data">
           {{ forms[i].csrf_token }}
           <input type="hidden" name="old_email" value="{{ users[i].email }}">
           {{ forms[i].email.label }} {{ forms[i].email() }}
