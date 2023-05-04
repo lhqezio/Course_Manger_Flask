@@ -14,7 +14,11 @@ bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 def admin_dashboard():
     # Get all users from the database
     db = get_db()
-    users = db.get_users()
+    try:
+        users = db.get_users()
+    except ValueError:
+        flash("Contact the administrator")
+        return redirect(url_for("home.index"))
     forms = []
     users = [user for user in users if (current_user.has_role('member') and user.role == 'member') or (current_user.has_role('admin_user_gp') and (user.role == 'member' or user.role == 'admin_user_gp')) or (current_user.has_role('admin'))]
     if current_user.has_role('admin_user_gp') or current_user.has_role('admin'):

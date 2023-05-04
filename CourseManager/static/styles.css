@@ -80,6 +80,13 @@ table, th, td {
     flex-wrap: wrap;
     row-gap: 0.5em;
 }
+.edit-form {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 0.5em;
+}
 .form-section {
     padding: 1em;
     margin-left: 2em;
@@ -88,14 +95,20 @@ label {
     width: 25%;
     justify-content: center;
 }
-#email, #password, #name, #avatar {
+#email, #password, #name, #avatar{
     width: 60%;
     margin-left: auto;
 }
-#login {
+#login, #role, #submit, #delete {
     width: 62%;
     margin-left: auto;
 }
 #signup {
     width: 100%;
+}
+#usr-edit-form {
+    width: auto;
+}
+#dash-usr {
+    width: 50%;
 }
