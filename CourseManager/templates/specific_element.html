@@ -14,4 +14,7 @@
             <td>{{element.element_criteria}}</td>
         </tr>    
     </table>
+    {% if current_user.is_authenticated %}
+    <a href="{{url_for('elements.edit_element', element_id=element.element_id)}}">Edit Element</a>
+    {% endif %}
 {% endblock %}

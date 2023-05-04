@@ -33,4 +33,7 @@
         </td>
     </tr>
 </table>
+{% if current_user.is_authenticated %}
+<a href="{{url_for('competencies.edit_competency', competency_id=competency.competency_id)}}">Edit Competency</a>
+{% endif %}
 {% endblock %}

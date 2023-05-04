@@ -16,4 +16,7 @@
         </tr>
         {% endfor %}      
     </table>
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('elements.add_element')}}">Add a New Element</a>
+    {% endif %}
 {% endblock %}

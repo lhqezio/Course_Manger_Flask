@@ -35,4 +35,7 @@
         </tr>
         {% endfor %}      
     </table>
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('competencies.add_competency')}}">Add a New Competency</a>
+    {% endif %}
 {% endblock %}

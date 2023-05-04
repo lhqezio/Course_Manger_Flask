@@ -8,4 +8,7 @@
         <li><a href="{{url_for('course.display_courses', domain_id=domain.domain_id)}}">{{domain.domain}}</a></li>
         {% endfor %}
     </ol>
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('courses.add_course')}}">Add a New Course</a>
+    {% endif %}
 {% endblock %}
