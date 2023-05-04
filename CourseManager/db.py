@@ -7,6 +7,8 @@ from CourseManager.term import Term
 from CourseManager.domain import Domain
 from CourseManager.element import Element
 from CourseManager.user import User
+from werkzeug.security import check_password_hash, generate_password_hash
+
 class Database:
     def __init__(self):
         self.__user = os.environ['DBUSER']
@@ -326,20 +328,20 @@ class Database:
         if not isinstance(email, str):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name, avatar from coursemanager_users where email=:email', email=email)
+            results = cursor.execute('select id, email, password, name, avatar, role from coursemanager_users where email=:email', email=email)
             for row in results:
                 user = User(email=row[1],
-                    password=row[2], name=row[3],avatar_path=row[4])
+                    password=row[2], name=row[3],avatar_path=row[4],role=row[5])
                 return user
         return None
 
     def get_users(self):
         users = []
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name,avatar from coursemanager_users')
+            results = cursor.execute('select id, email, password, name,avatar,role from coursemanager_users')
             for row in results:
                 user = User(email=row[1],
-                    password=row[2], name=row[3], avatar_path=row[4])
+                    password=row[2], name=row[3], avatar_path=row[4], role=row[5])
                 users.append(user)
         return users
     
@@ -355,4 +357,11 @@ class Database:
         with self.__conn.cursor() as cursor:
             cursor.execute('insert into coursemanager_users (email,password,role,name,avatar) values(:email,:password,:role,:name,:avatar)',
                 email=user.email, password=user.password, name=user.name,role=user.role,avatar=user.avatar_path)
+    
+    def remove_user(self,email):
+        if not isinstance(email, str):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('delete from coursemanager_users where email=:email',
+                email=email)
     
