@@ -64,8 +64,7 @@ def admin_dashboard():
                 avatar_path = os.path.join(current_app.config['IMAGE_PATH'],"Image", form.old_email.data)
                 if os.path.exists(avatar_path):
                     os.remove(avatar_path)
-                flash('User deleted successfully.')
-                
+                flash('User deleted successfully.')         
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
     return render_template('admin_dashboard.html',current_user=current_user, users=users, forms=forms)

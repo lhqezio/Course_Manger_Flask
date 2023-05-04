@@ -70,6 +70,8 @@ def logout():
 @login_required
 def show_avatar(email):
     path = os.path.join(current_app.config['IMAGE_PATH'], email)
+    if not os.path.exists(path):
+        path = os.path.join(current_app.root_path,"Image")
     return send_from_directory(path, 'avatar.png')
 
 def get_avatar_path(file,email):
