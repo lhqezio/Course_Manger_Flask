@@ -3,11 +3,7 @@
     list-style-type: none;
     padding: 1em;
 }
-<<<<<<< HEAD
-.navbar li {
-=======
 .navbar li, ol li {
->>>>>>> f89a74052fdbe373c450966046f06b646f79baf2
     padding: 1em;
 }
 .navbar a {
