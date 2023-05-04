@@ -23,7 +23,7 @@ def display_competency(competency_id):
     flash(f"{competency_id} competency not found!")
     return redirect(url_for("competency.display_competencies"))
 
-@bp.route('/edit/<competency_id>', methods=['POST','GET'])
+@bp.route('/edit-competency/<competency_id>', methods=['POST','GET'])
 def edit_competency(competency_id):
     competency_id=escape(competency_id)
     db=get_db()
