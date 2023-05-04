@@ -75,25 +75,7 @@ def edit_course(course_id):
         return render_template("edit_course.html", course=course, form=form)
     else:
         flash('Course doesn\'t exist')
-        redirect(url_for('display_courses'))
-
-@bp.route('/test/<course_id>', methods=['POST','GET'])
-def elemenstHours(course_id):
-    course_id=escape(course_id)
-    db=get_db()
-    if db.get_course(course_id):
-        course = db.get_course(course_id)
-        forms=[]
-        if isinstance(course,Course):
-            competencies=course.competencies
-            for comp in competencies:
-                form=ElemHrsForm()
-                form.competency.label=comp.competency
-                for elem in comp.elements:
-                    form.elem_hours.append_entry(({elem.element},{elem.hours}))
-                    #form.elem_hours.course_element.data=elem.element
-                forms.append(form)
-        return render_template("course_elems_hrs.html", forms=forms)
+        return redirect(url_for('course.display_courses'))
 
 @bp.route('/new-course/', methods=['POST','GET'])
 def add_course():
@@ -136,3 +118,34 @@ def add_course():
             flash('Invalid input')
     return render_template("add_course.html", form=form)
     
+@bp.route('/test/<course_id>', methods=['POST','GET'])
+def elemenstHours(course_id):
+    course_id=escape(course_id)
+    db=get_db()
+    if db.get_course(course_id):
+        course = db.get_course(course_id)
+        forms=[]
+        competencies=course.competencies
+        course_current_elemhrs=db.get_competency_elemhrs_from_course(course.course_number)
+        for comp in competencies:
+            form=ElemHrsForm()
+            form.competency.label=comp.competency
+            for elem in comp.elements:
+                form.elem_hours.append_entry()
+                x=form.elem_hours.last_index
+                form.elem_hours.entries[x].course_element.data=elem.element
+                if(elem in course_current_elemhrs):
+                    y=course_current_elemhrs.index(elem)
+                    elem.hours=course_current_elemhrs[y].hours
+                form.elem_hours.entries[x].hours.data=elem.hours
+            forms.append(form)
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                #db.update_course_elem_hrs(course)
+                flash("DB course elem teaching hours set")
+            else:
+                flash("DB error")
+    else: 
+        flash("Invalid course id")
+        return redirect(url_for('course.display_courses'))
+    return render_template("course_elems_hrs.html", forms=forms, name=course.course_title)

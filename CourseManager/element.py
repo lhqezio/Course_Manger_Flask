@@ -32,7 +32,7 @@ class Element:
     def __eq__(self, other):
         if not isinstance(other,Element):
             raise Exception("Not an element object")
-        return self.__dict__ == other.__dict__
+        return self.element_id == other.element_id
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not an Element")
@@ -51,7 +51,7 @@ class ElementForm(FlaskForm):
 #https://stackoverflow.com/questions/30121763/how-to-use-a-wtforms-fieldlist-of-formfields
 #https://stackoverflow.com/questions/49066046/append-entry-to-fieldlist-with-flask-wtforms-using-ajax
 class CourseTeachingElementHoursForm(FlaskForm):
-    course_element = StringField(validators=[DataRequired()])
+    course_element = StringField(render_kw={'readonly': True},validators=[DataRequired()])
     hours = IntegerField('Teaching hours',validators=[NumberRange(min=0, message='Invalid hours'),DataRequired()])
 
 class ElemHrsForm(FlaskForm):

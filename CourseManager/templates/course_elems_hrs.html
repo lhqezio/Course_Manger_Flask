@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Test Elems{% endblock %}
 {% block content %}
+    <h2>{{name}}</h2>
     <form name="form" method="POST" class="db_form">
         <label id="elems_hrs" for="form">Course teaching elements hours Form: </label> <br><br>
         {%for form in forms%}
@@ -9,5 +10,6 @@
             {{ form.elem_hours.label}}
             {{ form.elem_hours()}}
         {%endfor%}
+        <button id="course-elem-hrs-button" class="form_btn" type="submit">Set Hours</button>
     </form>
 {% endblock %}

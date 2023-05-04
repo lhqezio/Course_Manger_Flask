@@ -233,6 +233,17 @@ class Database:
                 course_competencies.append(competency)
         return course_competencies
     
+    def get_competency_elemhrs_from_course(self,course_id):
+        if not isinstance(course_id, str):
+            raise TypeError("wrong course id")
+        course_elems = [] #elems that are already part of the course
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('select element_id,element_order,element,element_criteria,competency_id, element_hours from view_courses_elements_competencies where course_id=:id',id=course_id)  
+            for row in results:
+                element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
+                course_elems.append(element)
+        return course_elems
+    
     def get_element(self, elem_id):
         with self.__get_cursor() as cursor:
             results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where e.element_id=:id', id=elem_id)
@@ -279,19 +290,25 @@ class Database:
             cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,work_hours=:whrs,description=:descr,domain_id=:dom_id,term_id=:t_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             whrs=course.homework_hours,descr=course.description,dom_id=domain_id,t_id=term_id)
-            # #change competencies
-            # cursor.execute('delete courses elements from WHERE course_id=:id', id=course.course_number)
-            # for comp in course.competencies:#update courses_elements
-            #     for elem in comp.elements:
-            #         cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
+    
+    def update_course_elem_hrs(self,course):
+        if not isinstance(course, Course):
+            raise TypeError()
+        #set course teaching elem hours
+        with self.__get_cursor() as cursor:
+            cursor.execute('delete from courses_elements where course_id=:course_id',course_id=course.course_number)
+            for comp in course.competencies:
+                for elem in comp.elements:
+                    for comp in course.competencies:#update courses_elements
+                        for elem in comp.elements:
+                            cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
+        
                        
     def delete_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
         with self.__get_cursor() as cursor:
             cursor.execute('delete from courses where course_id=:id',id=course.course_number)
-
-    
 
     def add_competency(self,competency=None):
         if not isinstance(competency, Competency):
