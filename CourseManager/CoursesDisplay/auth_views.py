@@ -38,7 +38,14 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             #Check our user
-            user = get_db().get_user(form.email.data)
+            try:
+                user = get_db().get_user(form.email.data)
+                if user.role == 'blocked':
+                    flash('You are banned from this service')
+                    user = None
+            except ValueError:
+                flash("Something wrong with your account, please contact the admin")
+                user = None
             if user:
                 #Check the password
                 if check_password_hash(user.password, form.password.data):

@@ -36,14 +36,14 @@ def admin_dashboard():
                 role = form.role.data
                 avatar = form.avatar.data
                 password = form.password.data
-                if not password and not email and not name and not role and not avatar:
+                if not password and not email and not name and (not role or role == '') and not avatar:
                     flash("No change was made")
                     return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
                 if not email:
                     email = old_email
                 if not name:
                     name = old_user.name
-                if not role:
+                if not role or role == '':
                     role = old_user.role
                 if not password:
                     password = old_user.password
