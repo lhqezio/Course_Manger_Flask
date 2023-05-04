@@ -3,7 +3,7 @@ from ..dbmanager import get_db
 from ..user import User, UpdateForm
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
-from .auth_views import add_avatar
+from .auth_views import get_avatar_path
 
 bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 
@@ -48,16 +48,15 @@ def admin_dashboard():
                 if not password:
                     password = old_user.password
                 if not avatar:
-                    avatar = old_user.avatar_path
+                    avatar_path = old_user.avatar_path
                 else:
-                    add_avatar(avatar)
-                new_user = User(email, name,password,avatar,role)
+                    avatar_path = get_avatar_path(avatar)
+                new_user = User(email, name,password,avatar_path,role)
                 # Update the user's name and role
                 db.update_user(new_user, old_email)
                 flash('User updated successfully.')
             elif form.delete.data:
-                print("h")
-            
+                db.remove_user(form.old_email.data)  
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
     return render_template('admin_dashboard.html',current_user=current_user, users=users, forms=forms)

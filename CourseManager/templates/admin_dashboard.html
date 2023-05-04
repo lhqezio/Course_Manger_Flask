@@ -7,7 +7,9 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Email</th>
       {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      <th>Role</th>
       <th>Edit</th>
       {% endif %}
     </tr>
@@ -16,7 +18,9 @@
     {% for i in range(users.__len__()) %}
     <tr>
       <td>{{ users[i].name }}</td>
+      <td>{{users[i].email}}
       {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      <td>{{users[i].role}}</td>
       <td>
         <form method="post" >
           {{ forms[i].csrf_token }}
