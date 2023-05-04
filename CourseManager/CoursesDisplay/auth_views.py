@@ -5,7 +5,7 @@ from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.datastructures import FileStorage
 from flask_login import login_user, logout_user, login_required,current_user,login_user,login_manager
-
+import shutil
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
 @bp.route('/signup/', methods=['GET', 'POST'])
@@ -89,8 +89,8 @@ def remove_avatar(email,new_email = None):
     if os.path.exists(avatar_dir):
         if new_email:
             new_avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], new_email)
-            os.rename(avatar_dir,new_avatar_dir)
+            shutil.move(avatar_dir,new_avatar_dir)
             new_avatar_dir = os.path.join(new_avatar_dir, 'avatar.png')
             return new_avatar_dir
         else:
-            os.rmdir(avatar_dir)
+            shutil.rmtree(avatar_dir)
