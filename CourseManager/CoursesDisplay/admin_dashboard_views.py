@@ -47,6 +47,8 @@ def admin_dashboard():
                     role = old_user.role
                 if not password:
                     password = old_user.password
+                else:
+                    password = generate_password_hash(password)
                 if not avatar:
                     avatar_path = old_user.avatar_path
                 else:
