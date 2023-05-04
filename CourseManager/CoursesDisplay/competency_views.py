@@ -29,18 +29,16 @@ def edit_competency(competency_id):
     db=get_db()
     if db.get_competency(competency_id):
         competency = db.get_competency(competency_id)
-        form=CompetencyForm(competency_achievement=competency.competency_achievement)
+        com_els_ids=[] 
+        #form elements dynamic populate 
+        for ele in competency.elements:
+            if not com_els_ids.__contains__((ele.element_id)):
+                com_els_ids.append((ele.element_id))
+        form=CompetencyForm(competency_achievement=competency.competency_achievement,competency_type=competency.competency_type, elements=com_els_ids)
         #elements list for form choices 
         elements_list=[]
         for el in db.get_elems():
             elements_list.append((f'{el.element_id}',f'{el.element}'))
-        #elements in competency as default selected for form choices 
-        com_els_ids=[] 
-        for ele in competency.elements:
-            if not com_els_ids.__contains__(str(ele.element_id)):
-                com_els_ids.append(str(ele.element_id))
-        #form elements dynamic populate 
-        form.elements.data=com_els_ids
         form.elements.choices=elements_list
         if request.method == 'POST':
             if form.validate_on_submit():
@@ -50,11 +48,12 @@ def edit_competency(competency_id):
                 competency_type=form.competency_type.data
                 elements=[]
                 for id_e in form.elements.data:
-                    elements.append(db.get_element(int(id_e)))
+                    elements.append(db.get_element(id_e))
                 competency = Competency(competency_id, competency,competency_achievement,competency_type,elements)
                 try:
                     db.update_competency(competency)
-                    return redirect(url_for('competency.display_competency'),competency_id=competency_id)
+                    db.commit()
+                    return redirect(url_for('competency.display_competency',competency_id=competency_id))
                 except:
                     flash('Competency update DB Error')
             else:
@@ -85,7 +84,7 @@ def add_competency():
                 db.add_competency(competency)
                 db.commit()
                 flash('Competency added')
-                return redirect(url_for('competency.display_competency'),competency_id=competency_id)
+                return redirect(url_for('competency.display_competency',competency_id=competency_id))
             except:
                 flash('Competency cannot be added')
         else:
