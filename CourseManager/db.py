@@ -328,3 +328,10 @@ class Database:
             cursor.execute('insert into coursemanager_users (email,password,role,name,avatar) values(:email,:password,:role,:name,:avatar)',
                 email=user.email, password=user.password, name=user.name,role=user.role,avatar=user.avatar_path)
     
+    def remove_user(self,user):
+        if not isinstance(user, User):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('delete from coursemanager_users where email=:email',
+                email=user.email)
+    
