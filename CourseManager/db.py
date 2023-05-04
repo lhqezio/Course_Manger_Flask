@@ -7,6 +7,8 @@ from CourseManager.term import Term
 from CourseManager.domain import Domain
 from CourseManager.element import Element
 from CourseManager.user import User
+from werkzeug.security import check_password_hash, generate_password_hash
+
 class Database:
     def __init__(self):
         self.__user = os.environ['DBUSER']
@@ -318,7 +320,7 @@ class Database:
             raise TypeError()
         with self.__conn.cursor() as cursor:
             cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name, avatar=:avatar where email=:old_email',
-                email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email,avatar=user.avatar_path)
+                email=user.email, password=generate_password_hash(user.password), name=user.name,role=user.role,old_email=old_email,avatar=user.avatar_path)
     def add_user(self,user):
         if not isinstance(user, User):
             raise TypeError()

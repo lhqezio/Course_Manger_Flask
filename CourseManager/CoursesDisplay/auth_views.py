@@ -21,11 +21,7 @@ def signup():
                     default_image = os.path.join(current_app.root_path,"Image", 'default.png')
                     fp = open(default_image,"rb")
                     file = FileStorage(fp)
-                avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], form.email.data)
-                avatar_path = os.path.join(avatar_dir, 'avatar.png')
-                if not os.path.exists(avatar_dir):
-                    os.makedirs(avatar_dir)
-                file.save(avatar_path)
+                add_avatar(file,form.email.data)
                 if fp:
                     fp.close()
                 hash = generate_password_hash(form.password.data)
@@ -68,3 +64,10 @@ def logout():
 def show_avatar(email):
     path = os.path.join(current_app.config['IMAGE_PATH'], email)
     return send_from_directory(path, 'avatar.png')
+
+def add_avatar(file,email):
+    avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], email)
+    avatar_path = os.path.join(avatar_dir, 'avatar.png')
+    if not os.path.exists(avatar_dir):
+        os.makedirs(avatar_dir)
+    file.save(avatar_path)

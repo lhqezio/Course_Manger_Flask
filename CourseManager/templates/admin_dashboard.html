@@ -20,10 +20,12 @@
       <td>
         <form method="post" >
           {{ forms[i].csrf_token }}
+          <input type="hidden" name="old_email" value="{{ users[i].email }}">
           {{ forms[i].email.label }} {{ forms[i].email() }}
           {{ forms[i].name.label }} {{ forms[i].name() }}
           {{ forms[i].password.label }} {{ forms[i].password() }}
           {{ forms[i].role.label }} {{ forms[i].role() }}
+          {{ forms[i].avatar.label }} {{ forms[i].avatar() }}
           {{ forms[i].submit.label}} {{ forms[i].submit() }}
           {{ forms[i].delete.label}} {{ forms[i].delete() }}
         </form>
