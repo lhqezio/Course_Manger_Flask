@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}New Competency{% endblock %}
 {% block content %}
+    {%if current_user.is_authenticated %}
     <form name="form" id="new_competency" method="POST" class="db_form">
         <label id="add-comp-form-label" for="form">New Competency Form: </label> <br><br>
         {{form.csrf_token}}
@@ -16,4 +17,7 @@
         {{ form.elements() }}
         <button id="editcomp-button" class="form_btn" type="submit">Add</button>
     </form>
+    {%else%}
+        <h1>You must be logged in to add a competency</h1>
+    {%endif%}
 {% endblock %}

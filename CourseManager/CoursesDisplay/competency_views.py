@@ -58,7 +58,7 @@ def edit_competency(competency_id):
                     flash('Competency update DB Error')
             else:
                 flash('Invalid input')
-        return render_template("edit_competency.html", competency=competency, form=form)
+        return render_template("edit_competency.html", competency=competency, form=form, current_user =current_user)
     flash(f"{competency_id} competency not found!")
     return redirect(url_for("competency.display_competencies"))
 
@@ -89,5 +89,5 @@ def add_competency():
                 flash('Competency cannot be added')
         else:
             flash('Invalid input')
-    return render_template("add_competency.html", form=form)
+    return render_template("add_competency.html", form=form, current_user =current_user)
     
