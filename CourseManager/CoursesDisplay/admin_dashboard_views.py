@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint
+import os
+from flask import Flask, current_app, render_template, request, redirect, url_for, flash, Blueprint
 from ..dbmanager import get_db
 from ..user import User, UpdateForm
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from .auth_views import get_avatar_path
+from werkzeug.datastructures import FileStorage
 
 bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 
@@ -35,6 +37,7 @@ def admin_dashboard():
                 role = form.role.data
                 avatar = form.avatar.data
                 password = form.password.data
+                print(avatar)
                 if not password and not email and not name and (not role or role == '') and not avatar:
                     flash("No change was made")
                     return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
@@ -57,8 +60,12 @@ def admin_dashboard():
                 db.update_user(new_user, old_email)
                 flash('User updated successfully.')
             elif form.delete.data:
-                db.remove_user(form.old_email.data)  
-                flash('User deleted')
+                db.remove_user(form.old_email.data)
+                avatar_path = os.path.join(current_app.config['IMAGE_PATH'],"Image", form.old_email.data)
+                if os.path.exists(avatar_path):
+                    os.remove(avatar_path)
+                flash('User deleted successfully.')
+                
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
     return render_template('admin_dashboard.html',current_user=current_user, users=users, forms=forms)
