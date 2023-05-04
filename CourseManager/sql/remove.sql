@@ -4,14 +4,12 @@ drop table elements cascade constraints;
 drop table competencies cascade constraints;
 drop table courses cascade constraints;
 drop table terms cascade constraints;
-drop table elements cascade constraints;
-drop table competencies cascade constraints;
 drop table domains cascade constraints;
 --Logging
 drop table audit_logs;
 
 --Users
-drop table course_users cascade constraints;
+drop table coursemanager_users cascade constraints;
 
 --Drop Triggers
 --courses

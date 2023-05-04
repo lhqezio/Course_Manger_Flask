@@ -41,18 +41,18 @@ class Element:
         return jsonify(self.__dict__)
     
 class ElementForm(FlaskForm):
-    element_id = IntegerField('element id',validators=[DataRequired()])
-    element_order = IntegerField('element order',validators=[DataRequired()])
+    element_id = IntegerField('element id',validators=[NumberRange(min=0, message='Invalid element id'),DataRequired()])
+    element_order = IntegerField('element order',validators=[NumberRange(min=0, message='Invalid element order'),DataRequired()])
     element = StringField('element',validators=[DataRequired()])
     element_criteria = StringField('element criteria',validators=[DataRequired()])
     competency_id= SelectField('competency id',validators=[DataRequired()])
-    hours = IntegerField('element hours',validators=[DataRequired()])
+    hours = IntegerField('element hours',validators=[NumberRange(min=0, message='Invalid element hours'),DataRequired()])
 
 #https://stackoverflow.com/questions/30121763/how-to-use-a-wtforms-fieldlist-of-formfields
 #https://stackoverflow.com/questions/49066046/append-entry-to-fieldlist-with-flask-wtforms-using-ajax
 class CourseTeachingElementHoursForm(FlaskForm):
     course_element = StringField(validators=[DataRequired()])
-    hours = IntegerField('Teaching hours',validators=[NumberRange(min=0, message='Invalid length'),DataRequired()])
+    hours = IntegerField('Teaching hours',validators=[NumberRange(min=0, message='Invalid hours'),DataRequired()])
 
 class ElemHrsForm(FlaskForm):
     competency = StringField()

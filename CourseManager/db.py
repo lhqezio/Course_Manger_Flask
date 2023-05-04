@@ -6,6 +6,8 @@ from CourseManager.user import User
 from CourseManager.term import Term
 from CourseManager.domain import Domain
 from CourseManager.element import Element
+from CourseManager.user import User
+from werkzeug.security import check_password_hash, generate_password_hash
 
 class Database:
     def __init__(self):
@@ -181,7 +183,7 @@ class Database:
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_competencies_elements e left outer join courses_elements h on e.element_id=h.element_id where e.competency_id=:id',id=comp_id)
+            results = cursor.execute('select element_id, element_order, element, element_criteria, competency_id from elements where competency_id=:id',id=comp_id)
             for row in results:
                 element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4],hours=0)
                 competency_elems.append(element)
@@ -289,6 +291,8 @@ class Database:
         with self.__get_cursor() as cursor:
             cursor.execute('delete from courses where course_id=:id',id=course.course_number)
 
+    
+
     def add_competency(self,competency=None):
         if not isinstance(competency, Competency):
             raise TypeError()
@@ -296,6 +300,10 @@ class Database:
             cursor.execute('insert into competencies values(:id,:name,:achievement,:type)',
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
+            with self.__get_cursor() as cursor:
+                for ele in competency.elements:
+                    cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
+                            comp_id=competency.competency_id, elem_id=ele.element_id)
 
     def update_competency(self,competency=None):
         if not isinstance(competency, Competency):
@@ -304,6 +312,11 @@ class Database:
             cursor.execute('update competencies set competency=:name,competency_achievement=:achievement,competency_type=:type WHERE competency_id=:id',
                             id=competency.competency_id,name=competency.competency,
                             achievement=competency.competency_achievement,type=competency.competency_type)
+        with self.__get_cursor() as cursor:
+            for ele in competency.elements:
+                cursor.execute('update elements set competency_id=:comp_id WHERE element_id=:elem_id',
+                            comp_id=competency.competency_id, elem_id=ele.element_id)
+            
 
     def delete_competency(self,competency=None):
         if not isinstance(competency, Competency):
@@ -315,20 +328,40 @@ class Database:
         if not isinstance(email, str):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from coursemanager_users where email=:email', email=email)
+            results = cursor.execute('select id, email, password, name, avatar, role from coursemanager_users where email=:email', email=email)
             for row in results:
-                user = User(id=row[0], email=row[1],
-                    password=row[2], name=row[3])
+                user = User(email=row[1],
+                    password=row[2], name=row[3],avatar_path=row[4],role=row[5])
                 return user
         return None
+
+    def get_users(self):
+        users = []
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select id, email, password, name,avatar,role from coursemanager_users')
+            for row in results:
+                user = User(email=row[1],
+                    password=row[2], name=row[3], avatar_path=row[4], role=row[5])
+                users.append(user)
+        return users
     
-    def get_user_by_id(self, id):
-        if not isinstance(id, int):
+    def update_user(self,user,old_email):
+        if not isinstance(user, User):
             raise TypeError()
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name from coursemanager_users where id=:id', id=id)
-            for row in results:
-                user = User(id=row[0], email=row[1],
-                    password=row[2], name=row[3])
-                return user
-        return None
+            cursor.execute('update coursemanager_users set email=:email, password=:password, role=:role, name=:name, avatar=:avatar where email=:old_email',
+                email=user.email, password=user.password, name=user.name,role=user.role,old_email=old_email,avatar=user.avatar_path)
+    def add_user(self,user):
+        if not isinstance(user, User):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('insert into coursemanager_users (email,password,role,name,avatar) values(:email,:password,:role,:name,:avatar)',
+                email=user.email, password=user.password, name=user.name,role=user.role,avatar=user.avatar_path)
+    
+    def remove_user(self,email):
+        if not isinstance(email, str):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('delete from coursemanager_users where email=:email',
+                email=email)
+    

@@ -3,7 +3,7 @@ import oracledb
 from CourseManager.dbmanager import get_db
 from CourseManager.course import Course,CourseForm
 from CourseManager.element import ElemHrsForm
-
+from flask_login import current_user
 
 bp = Blueprint('course', __name__, url_prefix='/courses')
 
@@ -15,7 +15,7 @@ def display_courses(domain_id):
         for course in courses:
             if course.term not in terms:
                 terms.append(course.term)
-        return render_template("courses.html", courses=courses, terms=terms)
+        return render_template("courses.html", courses=courses, terms=terms, current_user=current_user)
     except oracledb.Error as e:
         flash("Something went wrong..")
         flash("Cannot reach the database")
@@ -24,7 +24,7 @@ def display_courses(domain_id):
 @bp.route('/<course_id>')
 def display_course(course_id):
     if get_db().get_course(course_id):
-        return render_template("specific_course.html", course=get_db().get_course(course_id))
+        return render_template("specific_course.html", course=get_db().get_course(course_id),current_user=current_user)
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_course"))
 
@@ -34,7 +34,10 @@ def edit_course(course_id):
     db=get_db()
     if db.get_course(course_id):
         course = db.get_course(course_id)
-        form=CourseForm(domain_id=course.domain.domain_id,term_id=course.term.term_id, description=course.description)
+        com_ids=[]
+        for com in course.competencies:
+            com_ids.append(com.competency_id)
+        form=CourseForm(domain_id=course.domain.domain_id,term_id=course.term.term_id, description=course.description,competencies=com_ids)
         domains=[]
         for dom in db.get_domains():
             domains.append((f'{dom.domain_id}',f'{dom.domain}'))
@@ -46,11 +49,8 @@ def edit_course(course_id):
             competencies_list.append((f'{comp.competency_id}',f'{comp.competency}'))
         form.domain_id.choices=domains
         form.term_id.choices=terms
-        com_ids=[]
-        for com in course.competencies:
-            com_ids.append(com.competency_id)
         form.competencies.choices=competencies_list
-        form.competencies.data=com_ids
+        
         if request.method == 'POST':
             if form.validate_on_submit():
                 course_title=form.course_title.data
