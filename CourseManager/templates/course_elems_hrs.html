@@ -1,15 +1,35 @@
 {% extends 'base.html' %}
 {% block title %}Test Elems{% endblock %}
 {% block content %}
-    <h2>{{name}}</h2>
-    <form name="form" method="POST" class="db_form">
-        <label id="elems_hrs" for="form">Course teaching elements hours Form: </label> <br><br>
-        {%for form in forms%}
-            {{form.csrf_token}}
-            {{ form.competency.label}}
-            {{ form.elem_hours.label}}
-            {{ form.elem_hours()}}
+    <h2>{{course.course_title}}</h2>
+    <h3>Modify course elements hours</h3>
+    <table class="data" id="course-elem-hrs">
+        <tr>
+            <th>Competencies</th>
+            <th>Elements Hours</th>
+        </tr>
+        {%for comp in course.competencies%}
+        <tr>
+            <td><a href="{{url_for('course.compElementsHours', course_id=course.course_number, comp_id=comp.competency_id)}}">{{comp.competency}}</a></td>
+            <td class="comp_elems">
+            {%for elem in comp.elements%}
+                    <table class="courses-comp-elems">
+                        <tr>
+                            <th>Elements</th>
+                            <th>Hours</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{elem.element}}
+                            </td>
+                            <td class="elem_hrs">
+                                {{elem.hours}}
+                            </td>
+                        </tr>
+                    </table>
+            {%endfor%}
+            </td>
+        </tr>
         {%endfor%}
-        <button id="course-elem-hrs-button" class="form_btn" type="submit">Set Hours</button>
-    </form>
+    </table>
 {% endblock %}

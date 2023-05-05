@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{course.course_title}} {{comp.competency_id}} Elems{% endblock %}
+{% block content %}
+    <h2>{{course.course_title}}</h2>
+    <h3>{{comp.competency}}: <i>{{element.element}}</i></h3>
+    <form name="form" id="elem-hrs-form" method="POST" class="db_form">
+    <label id="elem-hrs-label" for="form">Edit {{element.element}} Hours Form: </label> <br><br>
+        {{form.csrf}}
+        {{form.csrf_token}}
+        {{form.course_element.label }}
+        {{form.course_element() }}
+        {{form.hours.label }}
+        {{form.hours() }}
+        <button id="elemhrs-button" class="form_btn" type="submit">Set hours</button>
+    </form>
+{% endblock %}

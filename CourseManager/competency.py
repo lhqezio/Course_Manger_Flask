@@ -29,7 +29,7 @@ class Competency:
     def __eq__(self, other):
         if not isinstance(other,Competency):
             raise Exception("Not a competency object")
-        return self.__dict__ == other.__dict__
+        return self.competency_id == other.competency_id
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not a competency")

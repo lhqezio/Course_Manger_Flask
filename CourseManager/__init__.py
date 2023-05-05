@@ -15,6 +15,7 @@ def create_app(test_config=None):
         SECRET_KEY=secrets.token_urlsafe(32),
         IMAGE_PATH = os.path.join(app.instance_path,'Image')
                             )
+
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:

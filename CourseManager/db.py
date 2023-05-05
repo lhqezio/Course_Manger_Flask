@@ -228,10 +228,34 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute('select distinct competency_id,competency,competency_achievement,competency_type from view_courses_elements_competencies where course_id=:id',id=course_id)  
             for row in results:
-                elements=self.get_elems_from_competency(comp_id=row[0])
+                elements=self.course_elems_by_competency(course_id,row[0])
                 competency = Competency(competency_id=row[0],competency=row[1],competency_achievement=row[2],competency_type=row[3],elements=elements)
                 course_competencies.append(competency)
         return course_competencies
+    
+    def course_elems_by_competency(self,course_id,comp_id):
+        if not isinstance(course_id, str):
+            raise TypeError()
+        if not isinstance(comp_id, str):
+            raise TypeError()
+        elements=[]
+        with self.__get_cursor() as cursor:
+            elems = cursor.execute('select element_id,element_order,element,element_criteria,competency_id, element_hours from view_courses_elements_competencies where course_id=:id and competency_id=:cid',id=course_id,cid=comp_id)
+            for e in elems:
+                element=Element(element_id=e[0],element_order=e[1],element=e[2],element_criteria=e[3],competency_id=e[4], hours=e[5])
+                elements.append(element)
+        return elements
+    
+    def course_elem_in_competency(self,course_id,comp_id):
+        if not isinstance(course_id, str):
+            raise TypeError()
+        if not isinstance(comp_id, str):
+            raise TypeError()
+        with self.__get_cursor() as cursor:
+            elems = cursor.execute('select element_id,element_order,element,element_criteria,competency_id, element_hours from view_courses_elements_competencies where course_id=:id and competency_id=:cid',id=course_id,cid=comp_id)
+            for e in elems:
+                element=Element(element_id=e[0],element_order=e[1],element=e[2],element_criteria=e[3],competency_id=e[4], hours=e[5])
+            return element
     
     def get_competency_elemhrs_from_course(self,course_id):
         if not isinstance(course_id, str):
@@ -290,18 +314,18 @@ class Database:
             cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,work_hours=:whrs,description=:descr,domain_id=:dom_id,term_id=:t_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             whrs=course.homework_hours,descr=course.description,dom_id=domain_id,t_id=term_id)
-    
-    def update_course_elem_hrs(self,course):
-        if not isinstance(course, Course):
+            
+    def update_course_elem_hrs(self,course_id,element_id,hours):
+        if not isinstance(course_id, str):
+            raise TypeError()
+        if not isinstance(int(element_id), int):
             raise TypeError()
         #set course teaching elem hours
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from courses_elements where course_id=:course_id',course_id=course.course_number)
-            for comp in course.competencies:
-                for elem in comp.elements:
-                    for comp in course.competencies:#update courses_elements
-                        for elem in comp.elements:
-                            cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
+                cursor.execute('delete from courses_elements where course_id=:course_id and element_id=:el_id',course_id=course_id,el_id=element_id)
+        if hours>0:
+            with self.__get_cursor() as cursor:
+                    cursor.execute('insert into courses_elements values(:course_id,:el_id,:hours)',course_id=course_id,el_id=element_id, hours=hours)  
         
                        
     def delete_course(self,course=None):

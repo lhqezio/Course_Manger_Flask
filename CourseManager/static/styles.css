@@ -79,3 +79,16 @@ table, th, td {
     background-color: black;
     color: white;
 }
+
+.courses-comp-elems, .comp_elems{
+    padding: 0;
+    margin:0;
+}
+
+.courses-comp-elems{
+    border: none;
+    width:100%;
+}
+.elem_hrs{
+    width:20%;
+}
