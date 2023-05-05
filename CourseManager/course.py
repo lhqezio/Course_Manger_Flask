@@ -50,8 +50,9 @@ class Course:
             raise TypeError("Not a course")
         term=Term.from_json(json['term'])
         domain=Domain.from_json(json['domain'])
+        competencies = 
         return Course(json['course_number'],json['course_title'],json['theory_hours'],json['lab_hours'],
-                      json['homework_hours'],json['description'],domain,term,[])
+                      json['homework_hours'],json['description'],domain,term,competencies)
     def to_json(self):
         return jsonify(self.__dict__)
     
