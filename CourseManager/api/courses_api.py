@@ -19,11 +19,10 @@ def courses_api():
                 course = Course.from_json(result)
                 get_db().add_course(course)
                 return jsonify({"message": "Success"})
-            except oracledb.DatabaseError:
+            except oracledb.DatabaseError or oracledb.IntegrityError:
                 abort(409)
             except:
                 abort(400)
-            
         else:
             abort(400)
     else:
@@ -62,6 +61,7 @@ def course_api(course_id):
             try:
                 course = Course.from_json(result)
                 get_db().update_course(course)
+                return jsonify({"message": "Success"})
             except oracledb.DatabaseError:
                 abort(417)
             except:
@@ -83,7 +83,8 @@ def course_competencies_api():
             try:
                 competency = Competency.from_json(result)
                 get_db().add_competency(competency)
-            except oracledb.DatabaseError:
+                return jsonify({"message": "Success"})
+            except oracledb.DatabaseError or oracledb.IntegrityErro:
                 abort(409)
             except:
                 abort(400)
@@ -94,7 +95,7 @@ def course_competencies_api():
         json_competencies = {
             "competencies": [competency.to_dict() for competency in competencies]
         }
-    return jsonify(json_competencies)
+        return jsonify(json_competencies)
 
 @bp.route("/competencies/<competency_id>/", methods=["GET", "PUT", "DELETE"])
 def course_competency_api(competency_id):
@@ -145,10 +146,10 @@ def course_competency_elements_api(competency_id):
             abort(400)
     else:
         elements = get_db().get_elems_of_competency(competency_id)
-    json_elements = {
-        "elements": [element.__dict__ for element in elements]
-    }
-    return jsonify(json_elements)
+        json_elements = {
+            "elements": [element.__dict__ for element in elements]
+        }
+        return jsonify(json_elements)
 
 @bp.route("competencies/<competency_id>/elements/<int:element_id>/", methods=["GET", "PUT", "DELETE"])
 def course_competency_element_api(competency_id, element_id):

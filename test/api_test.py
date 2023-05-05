@@ -7,9 +7,6 @@ class TestApi(flask_unittest.ClientTestCase):
     app = create_app()
     SAMPLE_COURSE={
                 "competencies": [
-                "http://127.0.0.1:5000/api/competencies/00Q2/",
-                "http://127.0.0.1:5000/api/competencies/00Q4/",
-                "http://127.0.0.1:5000/api/competencies/00Q3/"
                 ],
                 "course_number": "420-110-TE",
                 "course_title": "TEST",
@@ -23,10 +20,54 @@ class TestApi(flask_unittest.ClientTestCase):
                 "lab_hours": 3,
                 "term": {
                 "term_id": 1,
-                "term_name": "Fall"
+                "term_name": "Fall  "
                 },
                 "theory_hours": 3
                 }
+    SAMPLE_COURSE_UPDATE={
+                "competencies": [
+                ],
+                "course_number": "420-110-TE",
+                "course_title": "TEST UPDATE",
+                "description": "TEST",
+                "domain": {
+                "domain": "Programming, Data Structures, and Algorithms",
+                "domain_description": "The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are taught object-oriented programming in the context of standalone, event-driven and web-based programs.",
+                "domain_id": 1
+                },
+                "homework_hours": 3,
+                "lab_hours": 3,
+                "term": {
+                "term_id": 1,
+                "term_name": "Fall  "
+                },
+                "theory_hours": 3
+                }
+    SAMPLE_COMPETENCY= {
+            "competency": "TEST",
+            "competency_achievement": "* For problems that are easily solved * Using basic algorithms * Using a debugger and a functional test plan",
+            "competency_id": "TEST",
+            "competency_type": "Mandatory",
+            "elements": [
+            ]
+        }
+    SAMPLE_COMPETENCY_UPDATED= {
+            "competency": "TEST_UPDATED",
+            "competency_achievement": "* For problems that are easily solved * Using basic algorithms * Using a debugger and a functional test plan",
+            "competency_id": "TEST",
+            "competency_type": "Mandatory",
+            "elements": [
+            ]
+        }
+    SAMPLE_ELEMENT= {
+
+                "competency_id": "TEST_UPDATED",
+                "element": "TEST.",
+                "element_criteria": "TEST",
+                "element_id": 1,
+                "element_order": 1,
+                "hours": 1
+    }
 
     def test_get_courses(self, client):
         response = client.get("/api/courses/")
@@ -45,17 +86,59 @@ class TestApi(flask_unittest.ClientTestCase):
     def test_insert_course(self, client):
         response = client.post("/api/courses/",json=(self.SAMPLE_COURSE))
         self.assertEqual(response.status_code, 200)
-        response = client.get("/api/courses/")
-        self.assertEqual(response.status_code, 200)
-
-
+        
     def test_get_course(self,client):
-        response = client.get("/api/courses/1/")
+        response = client.get("/api/courses/420-440-DW/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["id"], 1)
-        self.assertEqual(response.json["name"], "course1")
-        self.assertEqual(response.json["description"], "description1")
-        self.assertEqual(response.json["domain"], "domain1")
-        self.assertEqual(response.json["credits"], 1)
-        self.assertEqual(response.json["term_id"], 1)
-        self.assertEqual(response.json["teacher_id"], 1)
+    
+    def test_update_course(self,client):
+        self.maxDiff=None
+        response = client.put("/api/courses/420-110-TE/",json=(self.SAMPLE_COURSE_UPDATE))
+        self.assertEqual(response.status_code, 200)
+        response = client.get("/api/courses/420-110-TE/")
+        self.assertEqual(response.json,self.SAMPLE_COURSE_UPDATE)
+
+    def test_delete_course(self,client):
+        response = client.delete("/api/courses/420-110-TE/")
+        self.assertEqual(response.status_code, 200)
+        response = client.get("/api/courses/420-110-TE/")
+        self.assertEqual(response.status_code, 404)
+    
+    def test_get_competencies(self,client):
+        response = client.get("/api/competencies/")
+        self.assertEqual(response.status_code, 200)
+    
+    def test_get_competency(self,client):
+        response = client.get("/api/competencies/00Q2/")
+        self.assertEqual(response.status_code, 200)
+    
+    def test_add_competency(self,client):
+        response = client.post("/api/competencies/",json=(self.SAMPLE_COMPETENCY))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json,{"message": "Success"})
+
+    def test_update_competency(self,client):
+        response = client.put("/api/competencies/TEST/",json=(self.SAMPLE_COMPETENCY_UPDATED))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json,{"message": "Success"})
+
+    
+
+    def test_get_elements_of_competency(self,client):
+        response = client.get("/api/competencies/00Q2/elements/")
+        self.assertEqual(response.status_code, 200)
+    
+    def test_get_element_of_competency(self,client):
+        response = client.get("/api/competencies/00Q2/elements/52/")
+        self.assertEqual(response.status_code, 200)
+    
+    def test_add_element_to_competency(self,client):
+        response = client.post("/api/competencies/TEST/elements/",json=(self.SAMPLE_ELEMENT))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json,{"message": "Success"})
+
+    def test_delete_competency(self,client):
+        response = client.delete("/api/competencies/TEST/")
+        self.assertEqual(response.status_code, 200)
+        response = client.get("/api/competencies/TEST/")
+        self.assertEqual(response.status_code, 404)

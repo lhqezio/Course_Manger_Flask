@@ -291,7 +291,6 @@ class Database:
             cursor.execute('insert into courses values(:id,:title,:thrs,:lhrs,:hhrs,:descr,:dom_id,:term_id)',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
-
            
     def update_course(self,course=None):
         if not isinstance(course, Course):
@@ -317,7 +316,7 @@ class Database:
         else:
             id=course
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from courses where course_id=:id',id=id)
+            cursor.execute('delete from courses where course_id LIKE :course_id',course_id=id)
 
 
     def add_competency(self,competency=None):
@@ -346,10 +345,14 @@ class Database:
             
 
     def delete_competency(self,competency=None):
-        if not isinstance(competency, Competency):
+        if not isinstance(competency, Competency) and not isinstance(competency, str):
             raise TypeError()
+        if isinstance(competency, Competency):
+            id=competency.competency_id
+        else:
+            id=competency
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from competencies where competency_id=:id',id=competency.competency_id)
+            cursor.execute('delete from competencies where competency_id=:comp_id',comp_id=id)
 
     def get_user(self, email):
         if not isinstance(email, str):

@@ -64,7 +64,6 @@ class Course:
             []
         )
     def to_json(self):
-        print(self.to_dict())
         return jsonify(self.to_dict())
     
 class CourseForm(FlaskForm):
