@@ -8,6 +8,7 @@ from CourseManager.CoursesDisplay.home_views import bp as home_views
 from CourseManager.dbmanager import *
 from CourseManager.CoursesDisplay.auth_views import bp as auth_bp
 from CourseManager.CoursesDisplay.admin_dashboard_views import bp as dashboard_bp
+from CourseManager.api.courses_api import bp as course_api_bp
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -37,6 +38,7 @@ def init_app(app):
     app.register_blueprint(element_views)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(course_api_bp)
     with app.app_context():
         db = get_db()
 

@@ -136,6 +136,27 @@ class Database:
                 return course
         return None
     
+    def get_courses_api(self,page_num=1,page_size=10):
+        courses = []
+        offset = (page_num - 1) * page_size
+        prev_page = None
+        next_page = None
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('SELECT COUNT(*) FROM COURSES')
+            count = results.fetchone()[0]
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION FROM COURSES OFFSET :offset ROWS FETCH NEXT :page_size ROWS ONLY',offset=offset,page_size=page_size)
+            for row in results:
+                term=self.get_term_for_course(row[0])
+                domain=self.get_domain_for_course(row[0])
+                course_competencies=self.get_competencies_from_courses(row[0])
+                course = Course(row[0],row[1],row[2],row[3],row[4],row[5],domain,term,course_competencies)
+                courses.append(course)
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(courses) > 0 and (count):
+            next_page = page_num + 1
+        return courses, prev_page, next_page
+    
     def get_courses(self):
         courses=[]
         with self.__get_cursor() as cursor:
