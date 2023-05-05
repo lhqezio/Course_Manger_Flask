@@ -138,6 +138,27 @@ class Database:
                 return course
         return None
     
+    def get_courses_api(self,page_num=1,page_size=10):
+        courses = []
+        offset = (page_num - 1) * page_size
+        prev_page = None
+        next_page = None
+        with self.__get_cursor() as cursor:
+            results = cursor.execute('SELECT COUNT(*) FROM COURSES')
+            count = results.fetchone()[0]
+            results = cursor.execute('SELECT COURSE_ID, COURSE_TITLE, THEORY_HOURS, LAB_HOURS, WORK_HOURS, DESCRIPTION FROM COURSES OFFSET :offset ROWS FETCH NEXT :page_size ROWS ONLY',offset=offset,page_size=page_size)
+            for row in results:
+                term=self.get_term_for_course(row[0])
+                domain=self.get_domain_for_course(row[0])
+                course_competencies=self.get_competencies_from_courses(row[0])
+                course = Course(row[0],row[1],row[2],row[3],row[4],row[5],domain,term,course_competencies)
+                courses.append(course)
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(courses) > 0 and (count):
+            next_page = page_num+1
+        return courses, prev_page, next_page
+    
     def get_courses(self):
         courses=[]
         with self.__get_cursor() as cursor:
@@ -190,7 +211,7 @@ class Database:
         return competency_elems
     
     def get_elems_of_competency(self,competency_id):
-        if not isinstance(competency_id, int):
+        if not isinstance(competency_id, str):
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
@@ -234,6 +255,8 @@ class Database:
         return course_competencies
     
     def get_element(self, elem_id):
+        if not isinstance(elem_id, int):
+            raise TypeError()
         with self.__get_cursor() as cursor:
             results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where e.element_id=:id', id=elem_id)
             for row in results:
@@ -286,12 +309,18 @@ class Database:
             #         cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
                        
     def delete_course(self,course=None):
-        if not isinstance(course, Course):
+        if not isinstance(course, Course) and not isinstance(course, str):
             raise TypeError()
+        if isinstance(course, Course):
+            id=course.course_number
+        else:
+            id=course
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from courses where course_id=:id',id=course.course_number)
+            cursor.execute('delete from courses where course_id LIKE :course_id',course_id=id)
+            if cursor.rowcount == 0:
+                raise oracledb.DatabaseError('Course not found')
+             
 
-    
 
     def add_competency(self,competency=None):
         if not isinstance(competency, Competency):
@@ -319,10 +348,25 @@ class Database:
             
 
     def delete_competency(self,competency=None):
-        if not isinstance(competency, Competency):
+        if not isinstance(competency, Competency) and not isinstance(competency, str):
             raise TypeError()
+        if isinstance(competency, Competency):
+            id=competency.competency_id
+        else:
+            id=competency
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from competencies where competency_id=:id',id=competency.competency_id)
+            cursor.execute('delete from competencies where competency_id=:comp_id',comp_id=id)
+    def delete_element(self,element=None):
+        if not isinstance(element, Element) and not isinstance(element, int):
+            raise TypeError()
+        if isinstance(element, Element):
+            id=element.element_id
+        else:
+            id=element
+        with self.__get_cursor() as cursor:
+            cursor.execute('delete from elements where element_id=:elem_id',elem_id=id)
+            if cursor.rowcount == 0:
+                raise oracledb.DatabaseError('Element not found')
 
     def get_user(self, email):
         if not isinstance(email, str):
@@ -364,4 +408,3 @@ class Database:
         with self.__conn.cursor() as cursor:
             cursor.execute('delete from coursemanager_users where email=:email',
                 email=email)
-    

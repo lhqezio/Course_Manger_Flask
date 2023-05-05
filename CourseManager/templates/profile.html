@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <h1>Profile</h1>
+    <table class="data" id="profile">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>{{current_user.name}}</td>
+            <td>{{current_user.email}}</td>
+            <td>{{current_user.role}}</td>
+            <td>
+                <form method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    {{ form.email.label }} {{ form.email() }}
+                    {{ form.name.label }} {{ form.name() }}
+                    {{ form.password.label }} {{ form.password() }}
+                    {{ form.avatar.label }} {{ form.avatar() }}
+                    {{ form.submit.label}} {{ form.submit() }}
+                    {{ form.delete.label}} {{ form.delete() }}
+                  </form>
+            </td>
+        </tr>      
+    </table>
+{% endblock %}
