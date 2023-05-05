@@ -211,7 +211,7 @@ class Database:
         return competency_elems
     
     def get_elems_of_competency(self,competency_id):
-        if not isinstance(competency_id, int):
+        if not isinstance(competency_id, str):
             raise TypeError()
         competency_elems = [] 
         with self.__get_cursor() as cursor:
@@ -255,6 +255,8 @@ class Database:
         return course_competencies
     
     def get_element(self, elem_id):
+        if not isinstance(elem_id, int):
+            raise TypeError()
         with self.__get_cursor() as cursor:
             results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where e.element_id=:id', id=elem_id)
             for row in results:
@@ -312,7 +314,6 @@ class Database:
         with self.__get_cursor() as cursor:
             cursor.execute('delete from courses where course_id=:id',id=course.course_number)
 
-    
 
     def add_competency(self,competency=None):
         if not isinstance(competency, Competency):
