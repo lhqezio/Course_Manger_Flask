@@ -12,8 +12,9 @@ To access the admin account, use the following credentials:
 3. User profile management
 4. Admin Dashboard (Edit other users, blocking etc...)
 5. Working but unimplemented API
-### Know Bugs (TBF if we have time)
+### Known Bugs (TBF if we have time)
 1. Avatar hardly works after changing user's email address, will revert to default
+2. Little bugs here and there interacting with Database
 2. TBD...
 ## Deployment Steps
 1. Set up venv with "python venv -m .venv"
