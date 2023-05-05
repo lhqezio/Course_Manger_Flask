@@ -291,6 +291,7 @@ class Database:
             cursor.execute('insert into courses values(:id,:title,:thrs,:lhrs,:hhrs,:descr,:dom_id,:term_id)',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
+
            
     def update_course(self,course=None):
         if not isinstance(course, Course):

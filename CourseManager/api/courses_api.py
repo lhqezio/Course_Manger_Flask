@@ -4,16 +4,20 @@ from CourseManager.element import Element
 from ..dbmanager import get_db
 from flask import Blueprint, request, jsonify, abort, url_for
 
-bp = Blueprint("courses_api", __name__, url_prefix="/api/courses/")
+bp = Blueprint("courses_api", __name__, url_prefix="/api/")
 
 
-@bp.route("/", methods=["GET", "POST"])
+@bp.route("/courses/", methods=["GET", "POST"])
 def courses_api():
     if request.method == "POST":
-        result = request.json()
+        result = request.json
+        print(result)
         if result:
-            course = Course.from_json(result)
-            get_db().add_course(course)
+            try:
+                course = Course.from_json(result)
+                get_db().add_course(course)
+            except:
+                abort(400)
         else:
             abort(400)
     else:
@@ -23,7 +27,7 @@ def courses_api():
             if page:
                 page_num = int(page)
         courses, prev_page, next_page = get_db().get_courses_api(
-            page_num=page_num, page_size=2
+            page_num=page_num, page_size=3
         )
     next_page_url = None
     prev_page_url = None
@@ -34,11 +38,11 @@ def courses_api():
     json_courses = {
         "next_page": next_page_url,
         "prev_page": prev_page_url,
-        "courses": [course.to_dict() for course in courses],
+        "courses": [course.to_dict() for course in courses]
     }
     return jsonify(json_courses)
 
-@bp.route("/<course_id>/", methods=["GET", "PUT", "DELETE"])
+@bp.route("courses/<course_id>/", methods=["GET", "PUT", "DELETE"])
 def course_api(course_id):
     if request.method == "GET":
         course = get_db().get_course(course_id)
@@ -57,8 +61,8 @@ def course_api(course_id):
         get_db().delete_course(course_id)
     return jsonify({"message": "Success"})
 
-@bp.route("/<course_id>/competencies/", methods=["GET", "POST"])
-def course_competencies_api(course_id):
+@bp.route("/competencies/", methods=["GET", "POST"])
+def course_competencies_api():
     if request.method == "POST":
         result = request.json()
         if result:
@@ -67,14 +71,14 @@ def course_competencies_api(course_id):
         else:
             abort(400)
     else:
-        competencies = get_db().get_competencies_from_courses(course_id)
+        competencies = get_db().get_competencies()
         json_competencies = {
             "competencies": [competency.to_dict() for competency in competencies]
         }
     return jsonify(json_competencies)
 
-@bp.route("/<course_id>/competencies/<competency_id>/", methods=["GET", "PUT", "DELETE"])
-def course_competency_api(course_id, competency_id):
+@bp.route("/competencies/<competency_id>/", methods=["GET", "PUT", "DELETE"])
+def course_competency_api(competency_id):
     if request.method == "GET":
         competency = get_db().get_competency(competency_id)
         if competency:
@@ -92,7 +96,7 @@ def course_competency_api(course_id, competency_id):
         get_db().delete_competency(competency_id)
     return jsonify({"message": "Success"})
 
-@bp.route("/<course_id>/competencies/<competency_id>/elements/", methods=["GET", "POST"])
+@bp.route("/competencies/<competency_id>/elements/", methods=["GET", "POST"])
 def course_competency_elements_api(course_id, competency_id):
     if request.method == "POST":
         result = request.json()

@@ -35,7 +35,7 @@ class Competency:
         return self.__dict__ == other.__dict__
     def from_json(json):
         if not isinstance(json,dict):
-            raise TypeError("Not a competency")
+            raise TypeError("Not a dict")
         elements=[]
         for el in json['elements']:
             element=Element.from_json(el)
