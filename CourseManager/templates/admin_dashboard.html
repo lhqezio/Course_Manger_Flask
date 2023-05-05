@@ -8,7 +8,7 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      {% if current_user.role == 'admin' or current_user.role == 'admin_user_gp'%}
       <th>Role</th>
       <th>Edit</th>
       {% endif %}
@@ -19,7 +19,7 @@
     <tr>
       <td>{{ users[i].name }}</td>
       <td>{{users[i].email}}
-      {% if current_user.role == 'admin' or current_user.role == 'admin_gp_user'%}
+      {% if current_user.role == 'admin' or current_user.role == 'admin_user_gp'%}
       <td>{{users[i].role}}</td>
       <td id="usr-edit-form">
         <form method="post" enctype="multipart/form-data" class="edit-form">

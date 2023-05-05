@@ -85,12 +85,16 @@ def get_avatar_path(file,email):
     return avatar_path
 
 def remove_avatar(email,new_email = None):
-    avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], email)
-    if os.path.exists(avatar_dir):
-        if new_email:
-            new_avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], new_email)
-            shutil.move(avatar_dir,new_avatar_dir)
-            new_avatar_dir = os.path.join(new_avatar_dir, 'avatar.png')
-            return new_avatar_dir
-        else:
+    image_path = current_app.config['IMAGE_PATH']
+    avatar_dir = os.path.join(image_path,email)
+    avatar_path = os.path.join(avatar_dir,'avatar.png')
+    if not new_email:
+        if os.path.exists(avatar_dir):
             shutil.rmtree(avatar_dir)
+    elif email == new_email:
+        return avatar_path
+    else:
+        new_avatar_dir = os.path.join(image_path,new_email)
+        if os.path.exists(avatar_dir):
+            shutil.move(avatar_path,new_avatar_dir)
+            return os.path.join(new_avatar_dir,'avatar.png')
