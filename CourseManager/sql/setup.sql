@@ -1,6 +1,8 @@
 --calling table drops
 @remove.sql
 
+drop table coursemanager_users;
+
 --adding objects
 @project_type.sql
 
