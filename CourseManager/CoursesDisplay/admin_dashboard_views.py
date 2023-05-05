@@ -63,11 +63,19 @@ def admin_dashboard():
                     avatar_path = remove_avatar(email,old_email)
                 # Update the user's name and role
                 new_user = User(email, name, password, avatar_path,role)
-                db.update_user(new_user, old_email)
+                try:
+                    db.update_user(new_user, old_email)
+                except:
+                    flash('Something went wrong.')
+                    return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
                 flash('User updated successfully.')
             elif form.delete.data:
                 remove_avatar(form.old_email.data)
-                db.remove_user(form.old_email.data)    
+                try:
+                    db.remove_user(form.old_email.data)  
+                except:
+                    flash('Something went wrong.')
+                    return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))  
                 flash('User deleted successfully.')         
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
