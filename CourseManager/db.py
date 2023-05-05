@@ -156,7 +156,7 @@ class Database:
         if page_num > 1:
             prev_page = page_num - 1
         if len(courses) > 0 and (count):
-            next_page = page_num + 1
+            next_page = page_num+1
         return courses, prev_page, next_page
     
     def get_courses(self):
@@ -387,4 +387,3 @@ class Database:
         with self.__conn.cursor() as cursor:
             cursor.execute('delete from coursemanager_users where email=:email',
                 email=email)
-    

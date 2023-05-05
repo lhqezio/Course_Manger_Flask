@@ -49,11 +49,9 @@ class Course:
         return self.__dict__ == other.__dict__
     def from_json(json):
         if not isinstance(json, dict):
-            raise TypeError("Not a course")
+            raise TypeError("Not a dict")
         term = Term.from_json(json['term'])
         domain = Domain.from_json(json['domain'])
-        competencies_json = json.get('competencies', [])
-        competencies = [Competency.from_json(comp_json) for comp_json in competencies_json]
         return Course(
             json['course_number'],
             json['course_title'],
@@ -63,7 +61,7 @@ class Course:
             json['description'],
             domain,
             term,
-            competencies
+            []
         )
     def to_json(self):
         print(self.to_dict())

@@ -1,6 +1,8 @@
+import oracledb
 from CourseManager.competency import Competency
 from CourseManager.course import Course
 from CourseManager.element import Element
+from CourseManager.term import Term
 from ..dbmanager import get_db
 from flask import Blueprint, request, jsonify, abort, url_for
 
@@ -16,8 +18,11 @@ def courses_api():
             try:
                 course = Course.from_json(result)
                 get_db().add_course(course)
+            except oracledb.DatabaseError:
+                abort(409)
             except:
                 abort(400)
+            
         else:
             abort(400)
     else:
@@ -53,12 +58,20 @@ def course_api(course_id):
     elif request.method == "PUT":
         result = request.json()
         if result:
-            course = Course.from_json(result)
-            get_db().update_course(course)
+            try:
+                course = Course.from_json(result)
+                get_db().update_course(course)
+            except oracledb.DatabaseError:
+                abort(417)
+            except:
+                abort(400)
         else:
             abort(400)
     elif request.method == "DELETE":
-        get_db().delete_course(course_id)
+        try:
+            get_db().delete_course(course_id)
+        except oracledb.DatabaseError:
+            abort(400)
     return jsonify({"message": "Success"})
 
 @bp.route("/competencies/", methods=["GET", "POST"])
@@ -66,8 +79,13 @@ def course_competencies_api():
     if request.method == "POST":
         result = request.json()
         if result:
-            competency = Competency.from_json(result)
-            get_db().add_competency(competency)
+            try:
+                competency = Competency.from_json(result)
+                get_db().add_competency(competency)
+            except oracledb.DatabaseError:
+                abort(409)
+            except:
+                abort(400)
         else:
             abort(400)
     else:
@@ -88,26 +106,40 @@ def course_competency_api(competency_id):
     elif request.method == "PUT":
         result = request.json()
         if result:
-            competency = Competency.from_json(result)
-            get_db().update_competency(competency)
+            try:
+                competency = Competency.from_json(result)
+                get_db().update_competency(competency)
+            except oracledb.DatabaseError:
+                abort(417)
+            except:
+                abort(400)
         else:
             abort(400)
     elif request.method == "DELETE":
-        get_db().delete_competency(competency_id)
+        try:
+            get_db().delete_competency(competency_id)
+        except oracledb.DatabaseError:
+            abort(400)
     return jsonify({"message": "Success"})
 
 @bp.route("/competencies/<competency_id>/elements/", methods=["GET", "POST"])
-def course_competency_elements_api(course_id, competency_id):
+def course_competency_elements_api(competency_id):
     if request.method == "POST":
         result = request.json()
         if result:
-            element = Element.from_json(result)
+            try:
+                element = Element.from_json(result)
+            except:
+                abort(400)
             competency = get_db().get_competency(competency_id)
             for e in competency.elements:
                 if e.id == element.id:
                     abort(400)
             competency.elements.append(element)
-            get_db().update_competency(competency)
+            try:
+                get_db().update_competency(competency)
+            except oracledb.DatabaseError:
+                abort(409)
         else:
             abort(400)
     else:
@@ -117,8 +149,8 @@ def course_competency_elements_api(course_id, competency_id):
     }
     return jsonify(json_elements)
 
-@bp.route("/<course_id>/competencies/<competency_id>/elements/<int:element_id>/", methods=["GET", "PUT", "DELETE"])
-def course_competency_element_api(course_id, competency_id, element_id):
+@bp.route("competencies/<competency_id>/elements/<int:element_id>/", methods=["GET", "PUT", "DELETE"])
+def course_competency_element_api(competency_id, element_id):
     if request.method == "GET":
         element = get_db().get_element(element_id)
         if element:
@@ -128,22 +160,31 @@ def course_competency_element_api(course_id, competency_id, element_id):
     elif request.method == "PUT":
         result = request.json()
         if result:
-            element = Element.from_json(result)
+            try:
+                element = Element.from_json(result)
+            except:
+                abort(400)
             competency = get_db().get_competency(competency_id)
             for e in competency.elements:
                 if e.element_id == element.element_id:
                     e = element
-                    get_db().update_competency(competency)
+                    try:
+                        get_db().update_competency(competency)
+                    except oracledb.DatabaseError:
+                        abort(409)
                     return jsonify({"message": "Success"})
             abort(400)
         else:
             abort(400)
     elif request.method == "DELETE":
-        competency = get_db().get_competency(competency_id)
-        for e in competency.elements:
-            if e.element_id == element_id:
-                competency.elements.remove(e)
-                get_db().update_competency(competency)
-                return jsonify({"message": "Success"})
+        try:
+            competency = get_db().get_competency(competency_id)
+            for e in competency.elements:
+                if e.element_id == element_id:
+                    competency.elements.remove(e)
+                    get_db().update_competency(competency)
+                    return jsonify({"message": "Success"})
+        except oracledb.DatabaseError:
+            abort(400)
         abort(400)
     return jsonify({"message": "Success"})
