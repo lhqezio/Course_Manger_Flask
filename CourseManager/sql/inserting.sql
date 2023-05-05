@@ -15,7 +15,7 @@ VALUES
 ('user_seven@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSeven', '', 'member'),
 ('user_eight@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserEight', '', 'member'),
 ('user_nine@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserNine','','member'),
-('user_ten@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTen','','member'),
+('user_ten@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTen','','member');
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
     --Term
