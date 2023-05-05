@@ -38,7 +38,7 @@ class Course:
         self.term=term
         self.competencies=competencies
     def to_dict(self):
-        return {'course_number':self.course_number,'course_title':self.course_title,'theory_hours':self.theory_hours,'lab_hours':self.lab_hours,'homework_hours':self.homework_hours,'description':self.description,'domain':self.domain.__dict__,'term':self.term.__dict__,'competencies':[url_for('courses_api.course_competency_api',competency_id=c.competency_id) for c in self.competencies]}
+        return {'course_number':self.course_number,'course_title':self.course_title,'theory_hours':self.theory_hours,'lab_hours':self.lab_hours,'homework_hours':self.homework_hours,'description':self.description,'domain':self.domain.__dict__,'term':self.term.__dict__,'competencies':[url_for('courses_api.course_competency_api',competency_id=c.competency_id,_external=True) for c in self.competencies]}
     def __str__(self):
         return f'{self.course_number} {self.course_title}: {self.theory_hours}-{self.lab_hours}-{self.homework_hours}'
     def __repr__(self):

@@ -27,7 +27,7 @@ def courses_api():
             if page:
                 page_num = int(page)
         courses, prev_page, next_page = get_db().get_courses_api(
-            page_num=page_num, page_size=3
+            page_num=page_num, page_size=2
         )
     next_page_url = None
     prev_page_url = None
