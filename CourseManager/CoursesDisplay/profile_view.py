@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, logout_user
 from CourseManager.CoursesDisplay.auth_views import get_avatar_path
 
 from CourseManager.dbmanager import get_db
@@ -13,6 +13,7 @@ def profile():
     db = get_db()
     form = UpdateForm()
     form.old_email.data = current_user.email
+    form.role.data = ''
     if request.method == 'POST':
         if form.validate_on_submit():
             old_email = form.old_email.data
@@ -41,8 +42,9 @@ def profile():
                 get_avatar_path(avatar,old_email)
             role = old_user.role
             user = User(email,name,password,avatar_path,role)
-            db.update_user(user)
+            db.update_user(user,current_user.email)
             flash("Update successfully")
+            logout_user()
         else:
             flash("Invalid form")
     return render_template('profile.html',current_user=current_user, form=form)
