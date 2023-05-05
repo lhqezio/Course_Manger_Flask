@@ -22,6 +22,9 @@ class Competency:
         self.competency_achievement=competency_achievement
         self.competency_type=competency_type
         self.elements=elements
+    def to_dict(self):
+        return {'competency_id':self.competency_id,'competency':self.competency,'competency_achievement':self.competency_achievement,'competency_type':self.competency_type,'elements':[e.__dict__ for e in self.elements]}
+
     def __str__(self):
         return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
     def __repr__(self):
@@ -39,7 +42,7 @@ class Competency:
             elements.append(element)
         return Competency(json['competency_id'],json['competency'],json['competency_achievement'],json['competency_type'],elements)
     def to_json(self):
-        return jsonify(self.__dict__)
+        return jsonify(self.to_dict())
     
 class CompetencyForm(FlaskForm):
     competency_id = IntegerField('competency id',validators=[DataRequired()])

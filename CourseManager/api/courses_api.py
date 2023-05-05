@@ -2,7 +2,7 @@ from CourseManager.course import Course
 from ..dbmanager import get_db
 from flask import Blueprint, request, jsonify, abort, url_for
 
-bp = Blueprint("courses_api", __name__, url_prefix="/api/courses")
+bp = Blueprint("courses_api", __name__, url_prefix="/api/courses/")
 
 
 @bp.route("", methods=["GET", "POST"])
@@ -32,6 +32,6 @@ def courses_api():
     json_courses = {
         "next_page": next_page_url,
         "prev_page": prev_page_url,
-        "results": [course.to_json() for course in courses],
+        "results": [course.to_dict() for course in courses],
     }
     return jsonify(json_courses)
