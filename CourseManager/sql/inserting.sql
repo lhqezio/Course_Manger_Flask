@@ -6,15 +6,33 @@ insert into coursemanager_users (email, password, name, avatar, role) values ('u
 insert into coursemanager_users (email, password, name, avatar, role) values ('user_ad_two@dawson.com','pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c','UserAdminTwo','','admin_gp_user');
 INSERT INTO coursemanager_users (email, password, name, avatar, role)
 VALUES 
-('user_one@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserOne', '', 'member'),
-('user_two@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTwo', '', 'member'),
-('user_three@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserThree', '', 'member'),
-('user_four@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFour', '', 'member'),
-('user_five@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFive', '', 'member'),
-('user_six@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSix', '', 'member'),
-('user_seven@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSeven', '', 'member'),
-('user_eight@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserEight', '', 'member'),
-('user_nine@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserNine','','member'),
+('user_one@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserOne', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_two@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTwo', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_three@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserThree', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_four@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFour', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_five@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFive', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_six@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSix', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_seven@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSeven', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_eight@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserEight', '', 'member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_nine@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserNine','','member');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
 ('user_ten@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTen','','member');
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
