@@ -310,10 +310,14 @@ class Database:
             #         cursor.execute('insert into courses_elements values(:course_id,:element_id,:elem_hrs)',course_id=course.course_number,element_id=elem.element_id,elem_hrs=elem.hours) 
                        
     def delete_course(self,course=None):
-        if not isinstance(course, Course):
+        if not isinstance(course, Course) and not isinstance(course, str):
             raise TypeError()
+        if isinstance(course, Course):
+            id=course.course_number
+        else:
+            id=course
         with self.__get_cursor() as cursor:
-            cursor.execute('delete from courses where course_id=:id',id=course.course_number)
+            cursor.execute('delete from courses where course_id=:id',id=id)
 
 
     def add_competency(self,competency=None):

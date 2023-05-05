@@ -18,6 +18,7 @@ def courses_api():
             try:
                 course = Course.from_json(result)
                 get_db().add_course(course)
+                return jsonify({"message": "Success"})
             except oracledb.DatabaseError:
                 abort(409)
             except:
@@ -34,18 +35,18 @@ def courses_api():
         courses, prev_page, next_page = get_db().get_courses_api(
             page_num=page_num, page_size=2
         )
-    next_page_url = None
-    prev_page_url = None
-    if prev_page:
-        prev_page_url = url_for("courses_api.courses_api", page=prev_page,_external=True)
-    if next_page:
-        next_page_url = url_for("courses_api.courses_api", page=next_page,_external=True)
-    json_courses = {
-        "next_page": next_page_url,
-        "prev_page": prev_page_url,
-        "courses": [course.to_dict() for course in courses]
-    }
-    return jsonify(json_courses)
+        next_page_url = None
+        prev_page_url = None
+        if prev_page:
+            prev_page_url = url_for("courses_api.courses_api", page=prev_page,_external=True)
+        if next_page:
+            next_page_url = url_for("courses_api.courses_api", page=next_page,_external=True)
+        json_courses = {
+            "next_page": next_page_url,
+            "prev_page": prev_page_url,
+            "courses": [course.to_dict() for course in courses]
+        }
+        return jsonify(json_courses)
 
 @bp.route("courses/<course_id>/", methods=["GET", "PUT", "DELETE"])
 def course_api(course_id):
@@ -56,7 +57,7 @@ def course_api(course_id):
         else:
             abort(404)
     elif request.method == "PUT":
-        result = request.json()
+        result = request.json
         if result:
             try:
                 course = Course.from_json(result)
@@ -77,7 +78,7 @@ def course_api(course_id):
 @bp.route("/competencies/", methods=["GET", "POST"])
 def course_competencies_api():
     if request.method == "POST":
-        result = request.json()
+        result = request.json
         if result:
             try:
                 competency = Competency.from_json(result)
@@ -104,7 +105,7 @@ def course_competency_api(competency_id):
         else:
             abort(404)
     elif request.method == "PUT":
-        result = request.json()
+        result = request.json
         if result:
             try:
                 competency = Competency.from_json(result)
@@ -125,7 +126,7 @@ def course_competency_api(competency_id):
 @bp.route("/competencies/<competency_id>/elements/", methods=["GET", "POST"])
 def course_competency_elements_api(competency_id):
     if request.method == "POST":
-        result = request.json()
+        result = request.json
         if result:
             try:
                 element = Element.from_json(result)
@@ -158,7 +159,7 @@ def course_competency_element_api(competency_id, element_id):
         else:
             abort(404)
     elif request.method == "PUT":
-        result = request.json()
+        result = request.json
         if result:
             try:
                 element = Element.from_json(result)
@@ -188,3 +189,25 @@ def course_competency_element_api(competency_id, element_id):
             abort(400)
         abort(400)
     return jsonify({"message": "Success"})
+
+@bp.route("/terms/", methods=["GET", "POST"])
+def course_terms_api():
+    if request.method == "POST":
+        result = request.json
+        if result:
+            try:
+                term = Term.from_json(result)
+                get_db().add_term(term)
+            except oracledb.DatabaseError:
+                abort(409)
+            except:
+                abort(400)
+        else:
+            abort(400)
+    else:
+        terms = get_db().get_terms()
+        json_terms = {
+            "terms": [term.to_dict() for term in terms]
+        }
+    return jsonify(json_terms)
+
