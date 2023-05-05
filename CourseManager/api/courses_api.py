@@ -32,9 +32,9 @@ def courses_api():
     next_page_url = None
     prev_page_url = None
     if prev_page:
-        prev_page_url = url_for("courses_api.courses_api", page=prev_page)
+        prev_page_url = url_for("courses_api.courses_api", page=prev_page,_external=True)
     if next_page:
-        next_page_url = url_for("courses_api.courses_api", page=next_page)
+        next_page_url = url_for("courses_api.courses_api", page=next_page,_external=True)
     json_courses = {
         "next_page": next_page_url,
         "prev_page": prev_page_url,
