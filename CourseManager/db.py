@@ -300,8 +300,12 @@ class Database:
         with self.__conn.cursor() as cursor:
             results = cursor.execute('select id, email, password, name, avatar, role from coursemanager_users where email=:email', email=email)
             for row in results:
+<<<<<<< HEAD
+                user = User(email=row[1], password=row[2], name=row[3],avatar_path=row[4],role=row[5])
+=======
                 user = User(email=row[1],
                     password=row[2], name=row[3],avatar_path=row[4],role=row[5])
+>>>>>>> b8019612c2e8cb3c523efc9c9c6ed03263ccf3e9
                 return user
         return None
 
