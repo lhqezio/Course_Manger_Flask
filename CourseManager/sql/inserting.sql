@@ -1,4 +1,21 @@
 --Sample Data
+--Users
+insert into coursemanager_users (email, password, name, avatar, role) values ('instructor@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c','Instructor','','admin');
+insert into coursemanager_users (email, password, name, avatar, role) values ('admin@dawson.com','pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c','Admin','','admin');
+insert into coursemanager_users (email, password, name, avatar, role) values ('user_ad@dawson.com','pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c','UserAdmin','','admin_gp_user');
+insert into coursemanager_users (email, password, name, avatar, role) values ('user_ad_two@dawson.com','pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c','UserAdminTwo','','admin_gp_user');
+INSERT INTO coursemanager_users (email, password, name, avatar, role)
+VALUES 
+('user_one@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserOne', '', 'member'),
+('user_two@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTwo', '', 'member'),
+('user_three@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserThree', '', 'member'),
+('user_four@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFour', '', 'member'),
+('user_five@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserFive', '', 'member'),
+('user_six@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSix', '', 'member'),
+('user_seven@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserSeven', '', 'member'),
+('user_eight@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserEight', '', 'member'),
+('user_nine@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserNine','','member'),
+('user_ten@dawson.com', 'pbkdf2:sha256:260000$cn7FZw5OJp4tfnz9$0a22b502f7251c866ca6fa761d51bec0b2a2992d2c31dd1cf13099e91a60626c', 'UserTen','','member'),
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
     --Term
@@ -6,7 +23,7 @@
     --Domain
     insert into domains values (1/*GENERATED*/, 'Programming, Data Structures, and Algorithms',
         --Description
-        'The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are taught object-oriented programming in the context of standalone, event-driven and web-based programs.');
+        'The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are taught object-oriented programming in the context of standalone, event-driven and web-based programs.');
     --Course
     insert into courses values ('420-110-DW', 'Programming I', 3,3,3,
         --Description
