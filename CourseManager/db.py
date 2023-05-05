@@ -317,6 +317,9 @@ class Database:
             id=course
         with self.__get_cursor() as cursor:
             cursor.execute('delete from courses where course_id LIKE :course_id',course_id=id)
+            if cursor.rowcount == 0:
+                raise oracledb.DatabaseError('Course not found')
+             
 
 
     def add_competency(self,competency=None):
@@ -353,6 +356,17 @@ class Database:
             id=competency
         with self.__get_cursor() as cursor:
             cursor.execute('delete from competencies where competency_id=:comp_id',comp_id=id)
+    def delete_element(self,element=None):
+        if not isinstance(element, Element) and not isinstance(element, int):
+            raise TypeError()
+        if isinstance(element, Element):
+            id=element.element_id
+        else:
+            id=element
+        with self.__get_cursor() as cursor:
+            cursor.execute('delete from elements where element_id=:elem_id',elem_id=id)
+            if cursor.rowcount == 0:
+                raise oracledb.DatabaseError('Element not found')
 
     def get_user(self, email):
         if not isinstance(email, str):

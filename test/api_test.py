@@ -90,55 +90,98 @@ class TestApi(flask_unittest.ClientTestCase):
     def test_get_course(self,client):
         response = client.get("/api/courses/420-440-DW/")
         self.assertEqual(response.status_code, 200)
-    
+
+    def test_get_course_404(self, client):
+        response = client.get("/api/courses/420-110-TE/")
+        self.assertEqual(response.status_code, 404)
+
     def test_update_course(self,client):
-        self.maxDiff=None
         response = client.put("/api/courses/420-110-TE/",json=(self.SAMPLE_COURSE_UPDATE))
         self.assertEqual(response.status_code, 200)
         response = client.get("/api/courses/420-110-TE/")
         self.assertEqual(response.json,self.SAMPLE_COURSE_UPDATE)
+
+    def test_update_fail(self,client):
+        response = client.put("/api/courses/420-110-TE/",json=({'junk':'junk'}))
+        self.assertEqual(response.status_code, 400)
+        
 
     def test_delete_course(self,client):
         response = client.delete("/api/courses/420-110-TE/")
         self.assertEqual(response.status_code, 200)
         response = client.get("/api/courses/420-110-TE/")
         self.assertEqual(response.status_code, 404)
-    
+
+    def test_delete_course_400(self,client):
+        response = client.delete("/api/courses/FAIL/")
+        self.assertEqual(response.status_code, 400)
+
     def test_get_competencies(self,client):
         response = client.get("/api/competencies/")
         self.assertEqual(response.status_code, 200)
     
+    def test_get_competencies_fail(self,client):
+        response = client.get("/api/competencies/FAIL")
+        self.assertEqual(response.status_code, 308)
+
     def test_get_competency(self,client):
         response = client.get("/api/competencies/00Q2/")
         self.assertEqual(response.status_code, 200)
+    
+    def test_get_competency_fail(self,client):
+        response = client.get("/api/competencies/FAIL/")
+        self.assertEqual(response.status_code, 404)
     
     def test_add_competency(self,client):
         response = client.post("/api/competencies/",json=(self.SAMPLE_COMPETENCY))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json,{"message": "Success"})
 
+    def test_add_competency_fail(self,client):
+        response = client.post("/api/competencies/",json=({'junk':'junk'}))
+        self.assertEqual(response.status_code, 400)
+
     def test_update_competency(self,client):
         response = client.put("/api/competencies/TEST/",json=(self.SAMPLE_COMPETENCY_UPDATED))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json,{"message": "Success"})
 
-    
+    def test_update_competency_fail(self,client):
+        response = client.put("/api/competencies/TEST/",json=({'junk':'junk'}))
+        self.assertEqual(response.status_code, 400)
 
     def test_get_elements_of_competency(self,client):
         response = client.get("/api/competencies/00Q2/elements/")
         self.assertEqual(response.status_code, 200)
+
+    def test_get_elements_of_competency_fail(self,client):
+        response = client.get("/api/competencies/FAIL/elements/")
+        self.assertEqual(response.status_code, 404)
     
     def test_get_element_of_competency(self,client):
         response = client.get("/api/competencies/00Q2/elements/52/")
         self.assertEqual(response.status_code, 200)
-    
+
+    def test_get_element_of_competency_fail(self,client):
+        response = client.get("/api/competencies/FAIL/elements/52/")
+        self.assertEqual(response.status_code, 404)
+
     def test_add_element_to_competency(self,client):
         response = client.post("/api/competencies/TEST/elements/",json=(self.SAMPLE_ELEMENT))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json,{"message": "Success"})
+
+    def test_add_element_to_competency_fail(self,client):
+        response = client.post("/api/competencies/TEST/elements/",json=({'junk':'junk'}))
+        self.assertEqual(response.status_code, 400)
 
     def test_delete_competency(self,client):
         response = client.delete("/api/competencies/TEST/")
         self.assertEqual(response.status_code, 200)
         response = client.get("/api/competencies/TEST/")
         self.assertEqual(response.status_code, 404)
+
+    def test_delete_competency_fail(self,client):
+        response = client.delete("/api/competencies/FAIL/")
+        self.assertEqual(response.status_code, 400)
+    

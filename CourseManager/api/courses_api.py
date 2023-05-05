@@ -119,8 +119,13 @@ def course_competency_api(competency_id):
             abort(400)
     elif request.method == "DELETE":
         try:
+            competency = get_db().get_competency(competency_id)
+            if not competency:
+                abort(400)
+            for e in competency.elements:
+                get_db().delete_element(e.element_id)
             get_db().delete_competency(competency_id)
-        except oracledb.DatabaseError:
+        except oracledb.DatabaseError or oracledb.IntegrityError:
             abort(400)
     return jsonify({"message": "Success"})
 
@@ -134,18 +139,23 @@ def course_competency_elements_api(competency_id):
             except:
                 abort(400)
             competency = get_db().get_competency(competency_id)
+            if not competency:
+                abort(400)
             for e in competency.elements:
                 if e.id == element.id:
                     abort(400)
             competency.elements.append(element)
             try:
                 get_db().update_competency(competency)
+                return jsonify({"message": "Success"})
             except oracledb.DatabaseError:
                 abort(409)
         else:
             abort(400)
     else:
         elements = get_db().get_elems_of_competency(competency_id)
+        if not elements:
+            abort(404)
         json_elements = {
             "elements": [element.__dict__ for element in elements]
         }
@@ -155,6 +165,8 @@ def course_competency_elements_api(competency_id):
 def course_competency_element_api(competency_id, element_id):
     if request.method == "GET":
         element = get_db().get_element(element_id)
+        if not element or element.competency_id != competency_id:
+            abort(404)
         if element:
             return jsonify(element.__dict__)
         else:
@@ -180,12 +192,7 @@ def course_competency_element_api(competency_id, element_id):
             abort(400)
     elif request.method == "DELETE":
         try:
-            competency = get_db().get_competency(competency_id)
-            for e in competency.elements:
-                if e.element_id == element_id:
-                    competency.elements.remove(e)
-                    get_db().update_competency(competency)
-                    return jsonify({"message": "Success"})
+            get_db().delete_element(element_id)
         except oracledb.DatabaseError:
             abort(400)
         abort(400)
