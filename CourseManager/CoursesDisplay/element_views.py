@@ -48,7 +48,7 @@ def add_element(element_id):
     return redirect(url_for("element.display_elements"))
 
 @bp.route('/edit-element/<element_id>',methods=['POST','GET'])
-def add_element(element_id):
+def edit_element(element_id):
     db=get_db()
     if db and db.get_element(element_id):
         element=db.get_element(element_id)
@@ -73,7 +73,7 @@ def add_element(element_id):
     return redirect(url_for("element.display_elements"))
 
 @bp.route('/delete-element/<element_id>',methods=['POST','GET'])
-def add_element(element_id):
+def delete_element(element_id):
     db=get_db()
     if db and db.get_element(element_id):
         element=db.get_element(element_id)
