@@ -4,13 +4,19 @@
     <h2>{{course.course_title}}</h2>
     <h3>{{comp.competency}}: <i>{{element.element}}</i></h3>
     <form name="form" id="elem-hrs-form" method="POST" class="db_form">
-    <label id="elem-hrs-label" for="form">Edit {{element.element}} Hours Form: </label> <br><br>
-        {{form.csrf}}
-        {{form.csrf_token}}
-        {{form.course_element.label }}
-        {{form.course_element() }}
-        {{form.hours.label }}
-        {{form.hours() }}
+    <label id="elem-hrs-label" for="form">Edit Hours Form: </label> <br><br>
+        <fieldset id="elem-hours-field">
+            {{form.csrf}}
+            {{form.csrf_token}}
+            <div class="elem-div">
+                {{form.course_element.label }}
+                {{form.course_element() }}
+            </div>
+            <div>
+                {{form.hours.label }}
+                {{form.hours() }}
+            </div>
+        </fieldset>
         <button id="elemhrs-button" class="form_btn" type="submit">Set hours</button>
     </form>
 {% endblock %}

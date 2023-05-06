@@ -22,6 +22,13 @@
         {{ form.term_id() }}
         {{ form.competencies.label }}
         {{ form.competencies() }}
-        <button id="editcourse-button" class="form_btn" type="submit">Edit</button>
+        <div>
+            <button id="editcourse-button" class="form_btn" type="submit">Edit</button>
+            <button id="deletecourse-button" class="form_btn" name="delete-course" type="delete">
+                <a href="{{url_for('course.delete_course',course_id=course.course_number)}}">
+                    Delete
+                </a>
+            </button>
+        </div>
     </form>
 {% endblock %}

@@ -7,7 +7,7 @@ from flask_login import current_user
 
 bp = Blueprint('course', __name__, url_prefix='/courses')
 
-@bp.route('/domain/<domain_id>')
+@bp.route('/domain/<domain_id>/')
 def display_courses(domain_id):
     try:
         courses = get_db().get_courses_from_domain(domain_id)
@@ -21,14 +21,22 @@ def display_courses(domain_id):
         flash("Cannot reach the database")
         return redirect(url_for("home.index"))
 
-@bp.route('/<course_id>')
+@bp.route('/<course_id>/')
 def display_course(course_id):
     if get_db().get_course(course_id):
         return render_template("specific_course.html", course=get_db().get_course(course_id),current_user=current_user)
     flash(f"{course_id} course not found!")
     return redirect(url_for("course.display_course"))
 
-@bp.route('/edit-course/<course_id>', methods=['POST','GET'])
+@bp.route('/del-course/<course_id>', methods=['GET','POST'])
+def delete_course(course_id):
+    db=get_db()
+    if db.get_course(course_id):
+        course=db.get_course(course_id)
+        db.delete_course(course)
+    return redirect(url_for("course.display_courses",domain_id="1"))
+
+@bp.route('/edit-course/<course_id>/', methods=['POST','GET','DELETE'])
 def edit_course(course_id):
     course_id=escape(course_id)
     db=get_db()
@@ -51,6 +59,7 @@ def edit_course(course_id):
         form.term_id.choices=terms
         form.competencies.choices=competencies_list
         if request.method == 'POST':
+            flash(request.method)
             if form.validate_on_submit():
                 course_title=form.course_title.data
                 theory_hours=form.theory_hours.data
@@ -66,7 +75,8 @@ def edit_course(course_id):
                 try:
                     db.update_course(course)
                     db.commit()
-                    #return redirect(url_for('course.elementsHours',course_id=course.course_number,course=course))
+                    flash("Update elements hours")
+                    return redirect(url_for('course.elementsHours',course_id=course.course_number))
                 except:
                     flash('Course update DB Error, try again')
             else:
@@ -74,7 +84,7 @@ def edit_course(course_id):
         return render_template("edit_course.html", course=course, form=form)
     else:
         flash('Course doesn\'t exist')
-        return redirect(url_for('course.display_courses'))
+        return redirect(url_for('course.display_courses',domain_id=1))
 
 @bp.route('/new-course/', methods=['POST','GET'])
 def add_course():
@@ -110,6 +120,9 @@ def add_course():
                 db.add_course(course)
                 flash("New course added")
                 db.commit()
+                if(len(course.competencies)!=0):
+                    flash("Update elements hours")
+                    return redirect(url_for('course.elementsHours',course_id=course_id))
                 return redirect(url_for('course.display_course',course_id=course_id))
             except:
                 flash('Course cannot be added')
@@ -118,17 +131,16 @@ def add_course():
     return render_template("add_course.html", form=form)
     
 @bp.route('/elements-hours/<course_id>/', methods=['GET'])
-def elementsHours(course_id,course=None):
+def elementsHours(course_id):
     course_id=escape(course_id)
     db=get_db()
     if db.get_course(course_id):
-        flash(course.competencies)
-        if course is None:
             course = db.get_course(course_id)
     else: 
         flash("Invalid course id")
         return redirect(url_for('course.display_courses',domain_id=1))
     return render_template("course_elems_hrs.html",course=course)
+
 
 
 @bp.route('/elements-hours/<course_id>/<comp_id>/', methods=['GET'])

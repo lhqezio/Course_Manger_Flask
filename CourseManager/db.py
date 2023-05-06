@@ -288,7 +288,7 @@ class Database:
             raise TypeError()
         course_elems = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_courses_elements_competencies e left outer join courses_elements h on e.element_id=h.element_id where e.course_id=:id',id=course_id)
+            results = cursor.execute('select e.element_id, e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from view_courses_elements_competencies e left outer join courses_elements h on e.element_id=h.element_id where e.course_id=:id and h.element_hours!=0',id=course_id)
             for row in results:
                 element = Element(element_id=row[0],element_order=row[1],element=row[2],element_criteria=row[3],competency_id=row[4], hours=row[5])
                 course_elems.append(element)
@@ -303,7 +303,13 @@ class Database:
             cursor.execute('insert into courses values(:id,:title,:thrs,:lhrs,:hhrs,:descr,:dom_id,:term_id)',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             hhrs=course.homework_hours,descr=course.description,dom_id=domain_id,term_id=term_id)
-           
+        #add competencies
+        for comp in course.competencies:
+            with self.__get_cursor() as cursor:
+                elements=self.get_elems_from_competency(comp_id=comp.competency_id)
+                for el in elements:
+                    cursor.execute('insert into courses_elements values(:cid,:eid,0)',cid=course.course_number,eid=el.element_id)
+    
     def update_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
@@ -314,7 +320,22 @@ class Database:
             cursor.execute('update courses set course_title=:title,theory_hours=:thrs,lab_hours=:lhrs,work_hours=:whrs,description=:descr,domain_id=:dom_id,term_id=:t_id WHERE course_id=:id',
                             id=course.course_number,title=course.course_title,thrs=course.theory_hours,lhrs=course.lab_hours,
                             whrs=course.homework_hours,descr=course.description,dom_id=domain_id,t_id=term_id)
-            
+            current_competencies=self.get_competencies_from_courses(course_id=course.course_number)
+        #new competencies
+        for comp in course.competencies:
+            if comp not in current_competencies:
+                with self.__get_cursor() as cursor:
+                    elements=self.get_elems_from_competency(comp_id=comp.competency_id)
+                    for el in elements:
+                        cursor.execute('insert into courses_elements values(:cid,:eid,0)',cid=course.course_number,eid=el.element_id)
+        #remove competencies
+        for comp in current_competencies:
+            if comp not in course.competencies:
+                elements=self.get_elems_of_competency(comp.competency_id)
+                for el in elements:
+                    with self.__get_cursor() as cursor:
+                        cursor.execute('delete from courses_elements where course_id=:cid and element_id=:eid',cid=course.course_number,eids=el.element_id)
+         
     def update_course_elem_hrs(self,course_id,element_id,hours):
         if not isinstance(course_id, str):
             raise TypeError()
@@ -325,9 +346,8 @@ class Database:
                 cursor.execute('delete from courses_elements where course_id=:course_id and element_id=:el_id',course_id=course_id,el_id=element_id)
         if hours>0:
             with self.__get_cursor() as cursor:
-                    cursor.execute('insert into courses_elements values(:course_id,:el_id,:hours)',course_id=course_id,el_id=element_id, hours=hours)  
-        
-                       
+                    cursor.execute('insert into courses_elements values(:course_id,:el_id,:hours)',course_id=course_id,el_id=element_id, hours=hours) 
+
     def delete_course(self,course=None):
         if not isinstance(course, Course):
             raise TypeError()
