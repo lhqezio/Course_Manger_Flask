@@ -79,3 +79,33 @@ table, th, td {
     background-color: black;
     color: white;
 }
+
+.courses-comp-elems, .comp_elems{
+    padding: 0;
+    margin:0;
+}
+
+.courses-comp-elems{
+    border: none;
+    width:100%;
+}
+.elem_hrs{
+    width:20%;
+}
+
+
+#elem-hrs-label{
+    font-size: 1.2em;
+    padding:1%;
+}
+#elem-hours-field{
+    display: flex;
+    align-items: center;
+    height: 3em;
+    justify-content: space-around;
+    font-size: 1.2em;
+}
+
+.elem-div input{
+    width: 30em;
+}

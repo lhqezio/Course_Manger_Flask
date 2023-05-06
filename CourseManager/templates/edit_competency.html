@@ -16,7 +16,14 @@
         {{ form.competency_type(value=competency.competency_type) }}
         {{ form.elements.label }}
         {{ form.elements(value=competency.elements) }}
-        <button id="editcomp-button" class="form_btn" type="submit">Edit</button>
+        <div>
+            <button id="editcomp-button" class="form_btn" type="submit">Edit</button>
+            <button id="deletecomp-button" class="form_btn" name="delete-comp" type="delete">
+                <a href="{{url_for('competency.delete_competency',competency_id=competency.competency_id)}}">
+                    Delete
+                </a>
+            </button>
+        </div>
     </form>
     {%else%}
         <h1>You must be logged in to edit a competency</h1>

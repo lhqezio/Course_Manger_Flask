@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField
-from wtforms.validators import DataRequired
+from wtforms import StringField, IntegerField, SelectField, FieldList, FormField, Form
+from wtforms.validators import DataRequired, NumberRange
 
 class Element:
     def __init__(self,element_id,element_order,element,element_criteria,competency_id, hours): 
@@ -32,7 +32,7 @@ class Element:
     def __eq__(self, other):
         if not isinstance(other,Element):
             raise Exception("Not an element object")
-        return self.__dict__ == other.__dict__
+        return self.element_id == other.element_id
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not an Element")
@@ -40,11 +40,18 @@ class Element:
     def to_json(self):
         return jsonify(self.__dict__)
     
+class ElementForm(FlaskForm):
+    element_id = IntegerField('Element id',validators=[NumberRange(min=0, message='Invalid element id'),DataRequired()])
+    element_order = IntegerField('Element order',validators=[NumberRange(min=0, message='Invalid element order'),DataRequired()])
+    element = StringField('Element',validators=[DataRequired()])
+    element_criteria = StringField('Element criteria',validators=[DataRequired()])
+    competency_id= SelectField('Competency id',validators=[DataRequired()])
 
-    class ElementForm(FlaskForm):
-        element_id = IntegerField('element id',validators=[DataRequired()])
-        element_order = IntegerField('element order',validators=[DataRequired()])
-        element = StringField('element',validators=[DataRequired()])
-        element_criteria = StringField('element criteria',validators=[DataRequired()])
-        competency_id= SelectField('competency id',validators=[DataRequired()])
-        hours = IntegerField('element hours',validators=[DataRequired()])
+#https://stackoverflow.com/questions/30121763/how-to-use-a-wtforms-fieldlist-of-formfields
+#https://stackoverflow.com/questions/49066046/append-entry-to-fieldlist-with-flask-wtforms-using-ajax
+class CourseTeachingElementHoursForm(FlaskForm):
+    course_element = StringField(render_kw={'readonly': True})
+    hours = IntegerField('Teaching hours',validators=[NumberRange(min=0, message='Invalid hours'),DataRequired()])
+    
+
+    

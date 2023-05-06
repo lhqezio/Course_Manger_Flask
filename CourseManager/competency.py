@@ -26,13 +26,13 @@ class Competency:
         return {'competency_id':self.competency_id,'competency':self.competency,'competency_achievement':self.competency_achievement,'competency_type':self.competency_type,'elements':[e.__dict__ for e in self.elements]}
 
     def __str__(self):
-        return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
+        return f'{self.competency_id} {self.competency}'
     def __repr__(self):
         return f'{self.competency_id} {self.competency}: {self.competency_achievement} type:{self.competency_type}'
     def __eq__(self, other):
         if not isinstance(other,Competency):
             raise Exception("Not a competency object")
-        return self.__dict__ == other.__dict__
+        return self.competency_id == other.competency_id
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not a dict")

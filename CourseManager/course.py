@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from flask import jsonify,url_for
-from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from flask import jsonify, url_for
+from wtforms import StringField, IntegerField, SelectField, SelectMultipleField, TextAreaField, widgets
+from wtforms.validators import DataRequired, NumberRange
 from CourseManager.domain import Domain
 from CourseManager.term import Term
 from CourseManager.competency import Competency
@@ -10,24 +10,24 @@ class Course:
     def __init__(self,course_number,course_title,theory_hours,lab_hours,
                  homework_hours,description,domain,term,competencies): 
         if not isinstance(course_number,str):
-            raise TypeError()
+            raise TypeError("bad course id")
         if not isinstance(course_title,str):
-            raise TypeError()
-        if not isinstance(theory_hours,int):
-            raise TypeError()
-        if not isinstance(lab_hours,int):
-            raise TypeError()
-        if not isinstance(homework_hours,int):
-            raise TypeError()
+            raise TypeError("bad course title")
+        if not isinstance(theory_hours,int) or theory_hours<0:
+            raise TypeError("bad theory hours")
+        if not isinstance(lab_hours,int) or lab_hours<0:
+            raise TypeError("bad lab hours")
+        if not isinstance(homework_hours,int) or homework_hours<0:
+            raise TypeError("bad homework hours")
         if not isinstance(description,str):
-            raise TypeError()
+            raise TypeError("bad description")
         if not isinstance(domain,Domain):
-            raise TypeError()
+            raise TypeError("bad domain")
         if not isinstance(term,Term):
-            raise TypeError()
+            raise TypeError("bad term")
         for comp in competencies:
             if not isinstance(comp,Competency):
-                raise TypeError()
+                raise TypeError("not competency")
         self.course_number=course_number
         self.course_title=course_title
         self.theory_hours=theory_hours
@@ -69,9 +69,12 @@ class Course:
 class CourseForm(FlaskForm):
     course_number = StringField('course number',validators=[DataRequired()])
     course_title = StringField('course title',validators=[DataRequired()])
-    theory_hours = IntegerField('theory hours',validators=[DataRequired()])
-    lab_hours = IntegerField('lab hours',validators=[DataRequired()]),
-    homework_hours = IntegerField('homework hours',validators=[DataRequired()])
-    description = StringField('description',validators=[DataRequired()])
-    domain_id = IntegerField('domain id',validators=[DataRequired()])
-    term_id = IntegerField('term id',validators=[DataRequired()])
+    theory_hours = IntegerField('theory hours',validators=[NumberRange(min=0, message='Invalid length'),DataRequired()])
+    lab_hours = IntegerField('lab hours',validators=[NumberRange(min=0, message='Invalid length'),DataRequired()])
+    homework_hours = IntegerField('homework hours',validators=[NumberRange(min=0, message='Invalid length'),DataRequired()])
+    description = TextAreaField('description',validators=[DataRequired()])
+    domain_id = SelectField('domain',validators=[DataRequired()])
+    term_id = SelectField('term',validators=[DataRequired()])
+    competencies = SelectMultipleField('competencies')
+    #,widget = widgets.ListWidget(prefix_label=False),option_widget = widgets.CheckboxInput()
+    

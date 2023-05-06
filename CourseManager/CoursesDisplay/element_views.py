@@ -23,11 +23,11 @@ def display_element(element_id):
     flash(f"{element_id} element not found!")
     return redirect(url_for("element.display_elements"))
 
-@bp.route('/new-element',methods=['POST'])
+@bp.route('/new-element',methods=['GET','POST'])
 def add_element(element_id):
     db=get_db()
     if db:
-        form=ElementForm
+        form=ElementForm()
         dom_ids=[]
         for dom in db.get_domains:
             dom_ids.append(f'{dom.domain_id}',f'{dom.domain}')
@@ -38,7 +38,45 @@ def add_element(element_id):
             element=form.element.data
             element_criteria=form.element_criteria.data
             competency_id=form.competency_id.data
-            element=Element(element_id,element_order,element,element_criteria,competency_id)
+            element=Element(element_id,element_order,element,element_criteria,competency_id,0)
+            try:
+                db.add_element(element=element)
+            except:
+                flash("Cannot add this element")
         return render_template("element_form.html", element=element, form=form)
     flash("DB connection fail")
+    return redirect(url_for("element.display_elements"))
+
+@bp.route('/edit-element/<element_id>',methods=['POST','GET'])
+def add_element(element_id):
+    db=get_db()
+    if db and db.get_element(element_id):
+        element=db.get_element(element_id)
+        form=ElementForm()
+        dom_ids=[]
+        for dom in db.get_domains:
+            dom_ids.append(f'{dom.domain_id}',f'{dom.domain}')
+        form.competency_id.choices=dom_ids
+        if request.method=="POST" and form.validate_on_submit():
+            element_id=form.element_id.data
+            element_order=form.element_order.data
+            element=form.element.data
+            element_criteria=form.element_criteria.data
+            competency_id=form.competency_id.data
+            element=Element(element_id,element_order,element,element_criteria,competency_id,0)
+            try:
+                db.update_element(element=element)
+            except:
+                flash("Cannot edit this element")
+        return render_template("edit_element_form.html", element=element, form=form)
+    flash("DB connection fail")
+    return redirect(url_for("element.display_elements"))
+
+@bp.route('/delete-element/<element_id>',methods=['POST','GET'])
+def add_element(element_id):
+    db=get_db()
+    if db and db.get_element(element_id):
+        element=db.get_element(element_id)
+        db.delete_element(element)
+        flash("Element deleted ",f'{element.element}')
     return redirect(url_for("element.display_elements"))
