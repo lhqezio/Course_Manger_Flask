@@ -4,7 +4,6 @@
     {%if current_user.is_authenticated %}
     <form name="form" id="edit_element" method="POST" class="db_form">
         <label id="add-elem-form-label" for="form">Edit Element Form: </label> <br><br>
-        element_id,element_order,element,element_criteria,competency_id, hours
         {{form.csrf_token}}
         {{ form.element_id.label }}
         {{ form.element_id(value=element.element, readonly=true)}}
