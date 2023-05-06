@@ -21,6 +21,7 @@ def delete_competency(competency_id):
     if db.get_competency(competency_id):
         competency=db.get_competency(competency_id)
         db.delete_competency(competency)
+        db.commit()
         flash("Competency deleted ",f'{competency.competency}')
     return redirect(url_for("course.display_competencies"))
 

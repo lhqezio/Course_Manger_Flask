@@ -34,6 +34,7 @@ def delete_course(course_id):
     if db.get_course(course_id):
         course=db.get_course(course_id)
         db.delete_course(course)
+        db.commit()
     return redirect(url_for("course.display_courses",domain_id="1"))
 
 @bp.route('/edit-course/<course_id>/', methods=['POST','GET','DELETE'])
@@ -135,7 +136,7 @@ def elementsHours(course_id):
     course_id=escape(course_id)
     db=get_db()
     if db.get_course(course_id):
-            course = db.get_course(course_id)
+        course = db.get_course(course_id)
     else: 
         flash("Invalid course id")
         return redirect(url_for('course.display_courses',domain_id=1))
