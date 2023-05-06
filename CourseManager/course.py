@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask import jsonify
+from flask import jsonify, url_for
 from wtforms import StringField, IntegerField, SelectField, SelectMultipleField, TextAreaField, widgets
 from wtforms.validators import DataRequired, NumberRange
 from CourseManager.domain import Domain
@@ -37,6 +37,8 @@ class Course:
         self.domain=domain
         self.term=term
         self.competencies=competencies
+    def to_dict(self):
+        return {'course_number':self.course_number,'course_title':self.course_title,'theory_hours':self.theory_hours,'lab_hours':self.lab_hours,'homework_hours':self.homework_hours,'description':self.description,'domain':self.domain.__dict__,'term':self.term.__dict__,'competencies':[url_for('courses_api.course_competency_api',competency_id=c.competency_id,_external=True) for c in self.competencies]}
     def __str__(self):
         return f'{self.course_number} {self.course_title}: {self.theory_hours}-{self.lab_hours}-{self.homework_hours}'
     def __repr__(self):
@@ -46,18 +48,23 @@ class Course:
             raise Exception("Not a course object")
         return self.__dict__ == other.__dict__
     def from_json(json):
-        if not isinstance(json,dict):
-            raise TypeError("Not a course")
-        term=Term.from_json(json['term'])
-        domain=Domain.from_json(json['domain'])
-        competencies=[]
-        for comp in json['competencies']:
-            comp=Competency.from_json(comp)
-            competencies.append(comp)
-        return Course(json['course_number'],json['course_title'],json['theory_hours'],json['lab_hours'],
-                      json['homework_hours'],json['description'],domain,term,competencies)
+        if not isinstance(json, dict):
+            raise TypeError("Not a dict")
+        term = Term.from_json(json['term'])
+        domain = Domain.from_json(json['domain'])
+        return Course(
+            json['course_number'],
+            json['course_title'],
+            json['theory_hours'],
+            json['lab_hours'],
+            json['homework_hours'],
+            json['description'],
+            domain,
+            term,
+            []
+        )
     def to_json(self):
-        return jsonify(self.__dict__)
+        return jsonify(self.to_dict())
     
 class CourseForm(FlaskForm):
     course_number = StringField('course number',validators=[DataRequired()])

@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint
+import os
+from flask import Flask, current_app, render_template, request, redirect, url_for, flash, Blueprint
 from ..dbmanager import get_db
 from ..user import User, UpdateForm
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
-from .auth_views import get_avatar_path
+from .auth_views import get_avatar_path,remove_avatar
+from werkzeug.datastructures import FileStorage
 
 bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin_dashboard')
 
@@ -22,7 +24,10 @@ def admin_dashboard():
             forms.append(form)
     if request.method == 'POST':
         # Handle form submission
-        form = [form for form in forms if form.old_email.data == request.form['old_email'] ][0]       
+        forms = [form for form in forms if form.old_email.data == request.form['old_email'] ]
+        if len(forms) != 1:
+            flash("Service error,Please contact the admin")
+        form = forms[0]      
         if form.validate_on_submit():
             if form.submit.data:
                 old_email = form.old_email.data
@@ -34,7 +39,9 @@ def admin_dashboard():
                 name = form.name.data
                 role = form.role.data
                 avatar = form.avatar.data
+                print(form.avatar.data)
                 password = form.password.data
+                print(avatar)
                 if not password and not email and not name and (not role or role == '') and not avatar:
                     flash("No change was made")
                     return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
@@ -51,14 +58,25 @@ def admin_dashboard():
                 if not avatar:
                     avatar_path = old_user.avatar_path
                 else:
-                    avatar_path = get_avatar_path(avatar)
-                new_user = User(email, name,password,avatar_path,role)
+                    get_avatar_path(avatar,old_email)
+                    remove_avatar(email,old_email)
+                    avatar_path = remove_avatar(email,old_email)
                 # Update the user's name and role
-                db.update_user(new_user, old_email)
+                new_user = User(email, name, password, avatar_path,role)
+                try:
+                    db.update_user(new_user, old_email)
+                except:
+                    flash('Something went wrong.')
+                    return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
                 flash('User updated successfully.')
             elif form.delete.data:
-                db.remove_user(form.old_email.data)  
-                flash('User deleted')
+                remove_avatar(form.old_email.data)
+                try:
+                    db.remove_user(form.old_email.data)  
+                except:
+                    flash('Something went wrong.')
+                    return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))  
+                flash('User deleted successfully.')         
             return redirect(url_for('.admin_dashboard',current_user=current_user, users=users, forms=forms))
     # Render the admin dashboard with the list of users
     return render_template('admin_dashboard.html',current_user=current_user, users=users, forms=forms)

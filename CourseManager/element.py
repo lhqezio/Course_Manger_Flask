@@ -36,7 +36,7 @@ class Element:
     def from_json(json):
         if not isinstance(json,dict):
             raise TypeError("Not an Element")
-        return Element(json['element_id'],json['element_order'],json['element'],json['element_criteria'],json['competency_id'])
+        return Element(json['element_id'],json['element_order'],json['element'],json['element_criteria'],json['competency_id'],json['hours'])
     def to_json(self):
         return jsonify(self.__dict__)
     
