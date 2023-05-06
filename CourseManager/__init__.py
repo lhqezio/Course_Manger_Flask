@@ -1,6 +1,6 @@
 from flask import Flask
 import secrets
-from flask_login import LoginManager,login_manager
+from flask_login import LoginManager
 from CourseManager.CoursesDisplay.course_views import bp as course_views
 from CourseManager.CoursesDisplay.competency_views import bp as competency_views
 from CourseManager.CoursesDisplay.element_views import bp as element_views
