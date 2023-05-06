@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Course Edit{% endblock %}
 {% block content %}
+    {%if current_user.is_authenticated %}
     <form name="form" id="new_course" method="POST" class="db_form">
         <label id="course-form-label" for="form">New Course Form: </label> <br><br>
         {{form.csrf_token}}
@@ -24,4 +25,7 @@
         {{ form.competencies() }}
         <button id="addcourse-button" class="form_btn" type="submit">Add</button>
     </form>
+    {%else%}
+        <h1>You must be logged in to add a course</h1>
+    {%endif%}
 {% endblock %}

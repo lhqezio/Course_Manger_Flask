@@ -419,6 +419,19 @@ class Database:
             id=competency
         with self.__get_cursor() as cursor:
             cursor.execute('delete from competencies where competency_id=:comp_id',comp_id=id)
+    
+    def add_element(self,element):
+        if not isinstance(element, Element):
+            raise TypeError()
+        with self.__get_cursor() as cursor:
+            cursor.execute('insert into elements values(:element_id,:element_order,:element,:element_criteria,:competency_id)',element_id=element.element_id,element_order=element.element_order,element=element.element,element_criteria=element.element_criteria,competency_id=element.competency_id)
+
+    def update_element(self,element):
+        if not isinstance(element, Element):
+            raise TypeError()
+        with self.__get_cursor() as cursor:
+            cursor.execute('update elements set element_order=:el_order,element=:el,:element_criteria=:el_crit,competency_id=:comp_id where element_id=:id)',id=element.element_id,el_order=element.element_order,el=element.element,el_crit=element.element_criteria,comp_id=element.competency_id)
+
     def delete_element(self,element=None):
         if not isinstance(element, Element) and not isinstance(element, int):
             raise TypeError()

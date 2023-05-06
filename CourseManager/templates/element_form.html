@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}New Element{% endblock %}
+{% block content %}
+    {%if current_user.is_authenticated %}
+    <form name="form" id="new_element" method="POST" class="db_form">
+        <label id="add-elem-form-label" for="form">New Element Form: </label> <br><br>
+        {{form.csrf_token}}
+        {{ form.element_id.label }}
+        {{ form.element_id()}}
+        {{ form.element_order.label }}
+        {{ form.element_order()}}
+        {{ form.element.label }}
+        {{ form.element() }}
+        {{ form.element_criteria.label }}
+        {{ form.element_criteria() }}
+        {{ form.competency_id.label }}
+        {{ form.competency_id() }}
+        <button class="form_btn" type="submit">Add</button>
+    </form>
+    {%else%}
+        <h1>You must be logged in to add an element</h1>
+    {%endif%}
+{% endblock %}

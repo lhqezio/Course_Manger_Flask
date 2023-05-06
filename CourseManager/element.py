@@ -41,12 +41,11 @@ class Element:
         return jsonify(self.__dict__)
     
 class ElementForm(FlaskForm):
-    element_id = IntegerField('element id',validators=[NumberRange(min=0, message='Invalid element id'),DataRequired()])
-    element_order = IntegerField('element order',validators=[NumberRange(min=0, message='Invalid element order'),DataRequired()])
-    element = StringField('element',validators=[DataRequired()])
-    element_criteria = StringField('element criteria',validators=[DataRequired()])
-    competency_id= SelectField('competency id',validators=[DataRequired()])
-    hours = IntegerField('element hours',validators=[NumberRange(min=0, message='Invalid element hours'),DataRequired()])
+    element_id = IntegerField('Element id',validators=[NumberRange(min=0, message='Invalid element id'),DataRequired()])
+    element_order = IntegerField('Element order',validators=[NumberRange(min=0, message='Invalid element order'),DataRequired()])
+    element = StringField('Element',validators=[DataRequired()])
+    element_criteria = StringField('Element criteria',validators=[DataRequired()])
+    competency_id= SelectField('Competency id',validators=[DataRequired()])
 
 #https://stackoverflow.com/questions/30121763/how-to-use-a-wtforms-fieldlist-of-formfields
 #https://stackoverflow.com/questions/49066046/append-entry-to-fieldlist-with-flask-wtforms-using-ajax

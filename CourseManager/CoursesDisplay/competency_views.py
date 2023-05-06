@@ -14,6 +14,15 @@ def display_competencies():
         flash("Something went wrong..")
         flash("Cannot reach the database")
         return redirect(url_for("home.index"))
+    
+@bp.route('/delete-competency/<competency_id>')
+def delete_competency(competency_id):
+    db=get_db()
+    if db.get_competency(competency_id):
+        competency=db.get_competency(competency_id)
+        db.delete_competency(competency)
+        flash("Competency deleted ",f'{competency.competency}')
+    return redirect(url_for("course.display_competencies"))
 
 @bp.route('/<competency_id>')
 def display_competency(competency_id):

@@ -3,6 +3,7 @@
 {% block content %}
     <h2>{{course.course_title}}</h2>
     <h3>{{comp.competency}}: <i>{{element.element}}</i></h3>
+    {%if current_user.is_authenticated %}
     <form name="form" id="elem-hrs-form" method="POST" class="db_form">
     <label id="elem-hrs-label" for="form">Edit Hours Form: </label> <br><br>
         <fieldset id="elem-hours-field">
@@ -19,4 +20,7 @@
         </fieldset>
         <button id="elemhrs-button" class="form_btn" type="submit">Set hours</button>
     </form>
+    {%else%}
+        <h1>You must be logged in to change element hours</h1>
+    {%endif%}
 {% endblock %}
