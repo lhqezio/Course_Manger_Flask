@@ -290,7 +290,7 @@ class Database:
         return course_elems
     
     def get_element(self, elem_id):
-        if not isinstance(elem_id, int):
+        if not isinstance(int(elem_id), int):
             raise TypeError()
         with self.__get_cursor() as cursor:
             results = cursor.execute('select e.element_id,e.element_order, e.element, e.element_criteria, e.competency_id, h.element_hours from elements e left outer join courses_elements h on e.element_id=h.element_id where e.element_id=:id', id=elem_id)
