@@ -9,6 +9,6 @@
         {% endfor %}
     </ol>
     {% if current_user.is_authenticated %}
-        <a href="{{url_for('courses.add_course')}}">Add a New Course</a>
+        <a href="{{url_for('course.add_course')}}">Add a New Course</a>
     {% endif %}
 {% endblock %}
