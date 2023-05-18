@@ -23,7 +23,7 @@ def delete_competency(competency_id):
         db.delete_competency(competency)
         db.commit()
         flash("Competency deleted ",f'{competency.competency}')
-    return redirect(url_for("course.display_competencies"))
+    return redirect(url_for("competency.display_competencies"))
 
 @bp.route('/<competency_id>')
 def display_competency(competency_id):
