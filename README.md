@@ -21,3 +21,7 @@ To access the admin account, use the following credentials:
 2. Run the correct Script file (activate or activate.bat) in .venv/Scripts/
 3. pip install -r requirements.txt to install all the required dependencies
 4. "flask --app CourseMananger run" to deploy
+##Add or Edit course, comptency, or element
+(courses/elements/competencies)/edit-(course/element/competency)/<id> - edit
+(courses/elements/competencies)/new-(course/element/competency) - add
+
