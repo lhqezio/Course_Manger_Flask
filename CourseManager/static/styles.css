@@ -112,3 +112,55 @@ label {
 #dash-usr {
     width: 50%;
 }
+
+.db_form{
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+    justify-content: space-around;
+}
+
+.db_form textarea{
+    resize: vertical;
+    min-height: 5rem;
+}
+
+.form_btn{
+    margin-top: 1%;
+    width: 20%;
+}
+
+.form_btn:hover{
+    background-color: black;
+    color: white;
+}
+
+.courses-comp-elems, .comp_elems{
+    padding: 0;
+    margin:0;
+}
+
+.courses-comp-elems{
+    border: none;
+    width:100%;
+}
+.elem_hrs{
+    width:20%;
+}
+
+
+#elem-hrs-label{
+    font-size: 1.2em;
+    padding:1%;
+}
+#elem-hours-field{
+    display: flex;
+    align-items: center;
+    height: 3em;
+    justify-content: space-around;
+    font-size: 1.2em;
+}
+
+.elem-div input{
+    width: 30em;
+}

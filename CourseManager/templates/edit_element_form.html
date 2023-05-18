@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Edit Element{% endblock %}
+{% block content %}
+    {%if current_user.is_authenticated %}
+    <form name="form" id="edit_element" method="POST" class="db_form">
+        <label id="add-elem-form-label" for="form">Edit Element Form: </label> <br><br>
+        {{form.csrf_token}}
+        {{ form.element_id.label }}
+        {{ form.element_id(value=element.element, readonly=true)}}
+        {{ form.element_order.label }}
+        {{ form.element_order(value=element.element_order)}}
+        {{ form.element.label }}
+        {{ form.element(value=element.element) }}
+        {{ form.element_criteria.label }}
+        {{ form.element_criteria(value=element.element_criteria) }}
+        {{ form.competency_id.label }}
+        {{ form.competency_id(value=element.competency_id) }}
+        <div>
+            <button class="form_btn" type="submit">Edit</button>
+            <button id="deleteelem-button" class="form_btn" name="delete-elem" type="delete">
+                <a href="{{url_for('element.delete_element',element_id=element.element_id)}}">
+                    Delete
+                </a>
+            </button>
+        </div>
+    </form>
+    {%else%}
+        <h1>You must be logged in to edit an element</h1>
+    {%endif%}
+{% endblock %}

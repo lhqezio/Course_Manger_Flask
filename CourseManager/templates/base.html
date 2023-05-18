@@ -9,10 +9,11 @@
     <nav class="navbar">
         <ul class="navbar">
             <li class="navbar"><a href="{{ url_for('home.index') }}">Home</a></li>
-            <li class="navbar"><a href="{{ url_for('course.choose_domain')}}">Courses</a></li>
+            <li class="navbar"><a href="{{ url_for('course.display_courses',domain_id=1)}}">Courses</a></li>
             <li class="navbar"><a href="{{ url_for('competency.display_competencies')}}">Competencies</a></li>
             <li class="navbar"><a href="{{ url_for('element.display_elements')}}">Elements</a></li>
             {% if current_user.is_authenticated %}
+            <li class="navbar"><a href="{{ url_for('profile.profile')}}">Profile</a></li>
             <li class="navbar"><a href="{{ url_for('admin_dashboard.admin_dashboard')}}">Admin Dashboard</a></li>
             {% endif %}
             {% block user %}
