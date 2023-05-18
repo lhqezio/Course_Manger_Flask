@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, abort
 import oracledb
 from CourseManager.dbmanager import *
 from CourseManager.element import *
@@ -20,8 +20,7 @@ def display_element(element_id):
     if get_db().get_element(element_id):
         element = get_db().get_element(element_id)
         return render_template("specific_element.html", element=element,current_user = current_user)
-    flash(f"{element_id} element not found!")
-    return redirect(url_for("element.display_elements"))
+    abort(404)
 
 @bp.route('/new-element',methods=['GET','POST'])
 def add_element():

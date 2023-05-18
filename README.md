@@ -1,7 +1,7 @@
 # Course Manager App Readme
 ## This is a Course Manager App that allows users to manage their courses and its dependencies
 - LINK TO THE REPO: https://gitlab.com/Anastasia_3/serversideproject_w23/
-- Deployment: http://10.172.18.49:5000
+- Deployment: http://10.172.17.248:5002
 ### Instructor Account
 To access the admin account, use the following credentials:
 1. Email: instructor@dawson.com
@@ -21,3 +21,7 @@ To access the admin account, use the following credentials:
 2. Run the correct Script file (activate or activate.bat) in .venv/Scripts/
 3. pip install -r requirements.txt to install all the required dependencies
 4. "flask --app CourseMananger run" to deploy
+##Add or Edit course, comptency, or element
+(courses/elements/competencies)/edit-(course/element/competency)/<id> - edit
+(courses/elements/competencies)/new-(course/element/competency) - add
+
