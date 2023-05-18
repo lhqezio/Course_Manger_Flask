@@ -1,7 +1,7 @@
 # Course Manager App Readme
 ## This is a Course Manager App that allows users to manage their courses and its dependencies
 - LINK TO THE REPO: https://gitlab.com/Anastasia_3/serversideproject_w23/
-- Deployment: http://10.172.17.248:5000
+- Deployment: http://10.172.17.248:5001
 ### Instructor Account
 To access the admin account, use the following credentials:
 1. Email: instructor@dawson.com
