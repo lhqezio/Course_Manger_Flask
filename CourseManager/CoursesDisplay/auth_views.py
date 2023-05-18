@@ -50,7 +50,7 @@ def login():
                     #User can login
                     login_user(user, form.remember_me.data)
                     flash("Logged in successfully")
-                    return redirect(url_for('course.choose_domain'))
+                    return redirect(url_for("home.index"))
                 else:
                     flash("Cannot login")
             else:
