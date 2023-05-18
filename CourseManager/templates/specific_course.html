@@ -24,7 +24,7 @@
             </tr>
         </table>
         {% if current_user.is_authenticated %}
-        <a href="{{url_for('courses.edit_course', course_number=course.course_number)}}">Edit Course</a>
+        <a href="{{url_for('course.edit_course', course_number=course.course_number)}}">Edit Course</a>
         {% endif %}
     </section>
     <h2>Competencies:</h2>
