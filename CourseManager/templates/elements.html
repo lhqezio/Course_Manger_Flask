@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Elements{% endblock %}
+{% block content %}
+    <h1>All Elements</h1>
+    <table class="data" id="elements">
+        <tr>
+            <th>ID</th>
+            <th>Element</th>
+            <th>Criteria</th>
+        </tr>
+        {% for element in elements %}
+        <tr>
+            <td><a href="{{ url_for('element.display_element', element_id=element.element_id)}}">{{element.element_id}}</a></td>
+            <td>{{element.element}}</td>
+            <td>{{element.element_criteria}}</td>
+        </tr>
+        {% endfor %}      
+    </table>
+{% endblock %}

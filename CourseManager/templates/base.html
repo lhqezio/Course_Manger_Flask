@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar">
+            <li class="navbar"><a href="{{ url_for('home.index') }}">Home</a></li>
+            <li class="navbar"><a href="{{ url_for('course.display_courses',domain_id=1)}}">Courses</a></li>
+            <li class="navbar"><a href="{{ url_for('competency.display_competencies')}}">Competencies</a></li>
+            <li class="navbar"><a href="{{ url_for('element.display_elements')}}">Elements</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="navbar"><a href="{{ url_for('profile.profile')}}">Profile</a></li>
+            <li class="navbar"><a href="{{ url_for('admin_dashboard.admin_dashboard')}}">Admin Dashboard</a></li>
+            {% endif %}
+            {% block user %}
+            <li class="navbar" id="user">
+                {% if current_user.is_authenticated %}
+                <img src="{{current_user.avatar_path}}">
+                <p>{{current_user.name}}</p>
+                <a href="{{ url_for('auth.logout')}}">Logout</a>
+                {% else %}
+                <a href="{{ url_for('auth.login')}}">Login</a>
+                <a href="{{ url_for('auth.signup')}}">Create Account</a>
+                {% endif %}
+            </li>
+            {% endblock %}
+        </ul>
+    </nav>
+
+    {% block content %}
+        <section id="content">
+
+        </section>
+    {% endblock %}
+    {% block errors %}
+        <section id="errors">
+            {% for message in get_flashed_messages() %}
+            <div class="message">{{message}}</div>
+            {% endfor %}
+        </section>
+        {% endblock %}
+</body>
+</html>

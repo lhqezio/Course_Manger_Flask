@@ -1,0 +1,111 @@
+.navbar ul {
+    display: flex;
+    list-style-type: none;
+    padding: 1em;
+}
+.navbar li, ol li {
+    padding: 1em;
+}
+.navbar a {
+    text-decoration: none;
+}
+.navbar a:visited {
+    color: blue;
+}
+#user {
+    margin-left: auto;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1em;
+}
+#competency-elements, #competency-elements tr {
+    border: none;
+    display: flex;
+}
+#competency-elements th {
+    border-top: none;
+    border-bottom: none;
+}
+#competency-elements td {
+    border-bottom: none;
+}
+#comp-elems-td, #comp-elems-td * {
+    padding: 0em;
+}
+#comp-elem-id {
+    border-left: none;
+    width: 10%;
+    justify-content: center;
+}
+#comp-elem-el {
+    border-left: none;
+    border-right: none;
+    width: 30%;
+}
+#comp-elem-cr {
+    border-right: none;
+    width: 60%;
+}
+#course-id {
+    width: 10%;
+}
+#course-title {
+    width: 25%;
+}
+#course-desc {
+    width: 65%;
+}
+
+.db_form{
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+    justify-content: space-around;
+}
+
+.db_form textarea{
+    resize: vertical;
+    min-height: 5rem;
+}
+
+.form_btn{
+    margin-top: 1%;
+    width: 20%;
+}
+
+.form_btn:hover{
+    background-color: black;
+    color: white;
+}
+
+.courses-comp-elems, .comp_elems{
+    padding: 0;
+    margin:0;
+}
+
+.courses-comp-elems{
+    border: none;
+    width:100%;
+}
+.elem_hrs{
+    width:20%;
+}
+
+
+#elem-hrs-label{
+    font-size: 1.2em;
+    padding:1%;
+}
+#elem-hours-field{
+    display: flex;
+    align-items: center;
+    height: 3em;
+    justify-content: space-around;
+    font-size: 1.2em;
+}
+
+.elem-div input{
+    width: 30em;
+}
