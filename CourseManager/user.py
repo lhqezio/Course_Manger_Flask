@@ -18,7 +18,7 @@ class User(UserMixin):
         if not isinstance(role, str):
             raise TypeError()
         print(role)
-        if not ( role == 'member' or role == 'admin' or role == 'admin_user_gp' or role == 'blocked'):
+        if not ( role == 'member' or role == 'admin' or role == 'admin_gp_user' or role == 'blocked'):
             raise ValueError()
         self.email = email
         self.password = password

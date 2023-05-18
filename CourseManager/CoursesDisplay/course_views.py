@@ -40,7 +40,6 @@ def choose_domain():
         flash("Cannot reach the database")
         return redirect(url_for("home.index"))
 
-
 @bp.route('/del-course/<course_id>', methods=['GET','POST'])
 def delete_course(course_id):
     db=get_db()
