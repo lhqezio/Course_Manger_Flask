@@ -5,7 +5,7 @@ from ..user import LoginForm, SignupForm, User
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.datastructures import FileStorage
 from flask_login import login_user, logout_user, login_required,current_user,login_user,login_manager
-
+import shutil
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
 @bp.route('/signup/', methods=['GET', 'POST'])
@@ -36,6 +36,10 @@ def signup():
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if current_user.is_authenticated:
+        flash("You're already logged in!")
+        return redirect(url_for('home.index'))
+
     if request.method == 'POST':
         if form.validate_on_submit():
             #Check our user
@@ -50,7 +54,7 @@ def login():
                     #User can login
                     login_user(user, form.remember_me.data)
                     flash("Logged in successfully")
-                    return redirect(url_for("home.index"))
+                    return redirect(url_for('home.index'))
                 else:
                     flash("Cannot login")
             else:
@@ -81,12 +85,16 @@ def get_avatar_path(file,email):
     return avatar_path
 
 def remove_avatar(email,new_email = None):
-    avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], email)
-    if os.path.exists(avatar_dir):
-        if new_email:
-            new_avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], new_email)
-            os.rename(avatar_dir,new_avatar_dir)
-            new_avatar_dir = os.path.join(new_avatar_dir, 'avatar.png')
-            return new_avatar_dir
-        else:
-            os.rmdir(avatar_dir)
+    image_path = current_app.config['IMAGE_PATH']
+    avatar_dir = os.path.join(image_path,email)
+    avatar_path = os.path.join(avatar_dir,'avatar.png')
+    if not new_email:
+        if os.path.exists(avatar_dir):
+            shutil.rmtree(avatar_dir)
+    elif email == new_email:
+        return avatar_path
+    else:
+        new_avatar_dir = os.path.join(image_path,new_email)
+        if os.path.exists(avatar_dir):
+            shutil.move(avatar_path,new_avatar_dir)
+            return os.path.join(new_avatar_dir,'avatar.png')

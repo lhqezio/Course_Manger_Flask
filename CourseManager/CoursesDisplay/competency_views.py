@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, escape
+from flask import Blueprint, render_template, redirect, url_for, flash, request, escape, abort
 from flask_login import current_user
 import oracledb
 from CourseManager.dbmanager import *
@@ -23,15 +23,14 @@ def delete_competency(competency_id):
         db.delete_competency(competency)
         db.commit()
         flash("Competency deleted ",f'{competency.competency}')
-    return redirect(url_for("course.display_competencies"))
+    return redirect(url_for("competency.display_competencies"))
 
 @bp.route('/<competency_id>')
 def display_competency(competency_id):
     if get_db().get_competency(competency_id):
         competency = get_db().get_competency(competency_id)
         return render_template("specific_competency.html", competency=competency,current_user =current_user)
-    flash(f"{competency_id} competency not found!")
-    return redirect(url_for("competency.display_competencies"))
+    abort(404)
 
 @bp.route('/edit-competency/<competency_id>', methods=['POST','GET'])
 def edit_competency(competency_id):

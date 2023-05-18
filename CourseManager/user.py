@@ -17,7 +17,6 @@ class User(UserMixin):
             raise TypeError()
         if not isinstance(role, str):
             raise TypeError()
-        print(role)
         if not ( role == 'member' or role == 'admin' or role == 'admin_gp_user' or role == 'blocked'):
             raise ValueError()
         self.email = email
@@ -31,7 +30,7 @@ class User(UserMixin):
     def get_id(self):
         return self.email
 
-ROLES = [('',''),('member','member'),('admin_gp_user','admin_gp_user'),('admin','admin'),('blocked','blocked')]
+ROLES = [('',''),('member','member'),('admin_user_gp','admin_user_gp'),('admin','admin'),('blocked','blocked')]
 class SignupForm(FlaskForm):
     email = EmailField('email',validators=[DataRequired()])
     password = PasswordField('password',validators=[DataRequired()])

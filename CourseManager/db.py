@@ -450,18 +450,16 @@ class Database:
         with self.__conn.cursor() as cursor:
             results = cursor.execute('select id, email, password, name, avatar, role from coursemanager_users where email=:email', email=email)
             for row in results:
-                user = User(email=row[1],
-                    password=row[2], name=row[3],avatar_path=row[4],role=row[5])
+                user = User(email=row[1], password=row[2], name=row[3],avatar_path=row[4],role=row[5])
                 return user
         return None
 
     def get_users(self):
         users = []
         with self.__conn.cursor() as cursor:
-            results = cursor.execute('select id, email, password, name,avatar,role from coursemanager_users')
+            results = cursor.execute('select email, name, password, avatar, role from coursemanager_users')
             for row in results:
-                user = User(email=row[1],
-                    password=row[2], name=row[3], avatar_path=row[4], role=row[5])
+                user = User(email=row[0], name=row[1], password=row[2], avatar_path=row[3], role=row[4])
                 users.append(user)
         return users
     
