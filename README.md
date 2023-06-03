@@ -17,9 +17,4 @@ Demonstrate the abilty program in Python, as well as the ability to effectively 
 2. Run the correct Script file (activate or activate.bat) in .venv/Scripts/
 3. pip install -r requirements.txt to install all the required dependencies
 4. "flask --app CourseMananger run" to deploy
-## Add or Edit course, comptency, or element
-- Edit
-(courses/elements/competencies)/edit-(course/element/competency)/<id>
-- Add
-(courses/elements/competencies)/new-(course/element/competency)
 
