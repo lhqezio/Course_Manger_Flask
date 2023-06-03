@@ -1,5 +1,7 @@
 # Course Manager App Readme
 ## This is a Course Manager App that allows users to manage their courses and its dependencies
+### Goal
+Demonstrate the abilty program in Python, as well as the ability to effectively use Flask and its tools such as WTForm and Flask-login
 ### Features
 1. User registration and login and avatar
 2. Course creation, editing, and deletion
@@ -16,6 +18,8 @@
 3. pip install -r requirements.txt to install all the required dependencies
 4. "flask --app CourseMananger run" to deploy
 ## Add or Edit course, comptency, or element
-(courses/elements/competencies)/edit-(course/element/competency)/<id> - edit
-(courses/elements/competencies)/new-(course/element/competency) - add
+- Edit
+(courses/elements/competencies)/edit-(course/element/competency)/<id>
+- Add
+(courses/elements/competencies)/new-(course/element/competency)
 
